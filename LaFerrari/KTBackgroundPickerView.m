@@ -41,7 +41,7 @@
 }
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
-    //[super resizeSubviewsWithOldSize:oldSize];
+    [super resizeSubviewsWithOldSize:oldSize];
     [self layoutSubViews];
 }
 

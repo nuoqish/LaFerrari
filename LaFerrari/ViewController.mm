@@ -76,6 +76,7 @@ cv::Rect_<int> extractForegroundRect(Mat& image) {
 @property (nonatomic, strong) NSImage *sourceImage;
 @property (nonatomic, assign) CGFloat scaleRatio;
 @property (nonatomic, assign) CGFloat editingImageViewZoomingScale;
+@property (nonatomic, assign) CGSize viewFrameSize;
 @property (nonatomic, strong) NSMutableArray *brushPoints;
 @property (nonatomic, strong) NSMutableArray<NSURL *> *fileUrls;
 @property (nonatomic, assign) BOOL showFileListView;
@@ -146,14 +147,15 @@ static const CGFloat kFileListWidth = 70;
     [self initSubViews];
     [self commonInit];
     self.fileUrls = @[].mutableCopy;
+    self.viewFrameSize = CGSizeZero;
     self.editingImageViewZoomingScale = 1.0;
     self.selectMode = self.mattingPicker.mattingMode;
     self.brushPoints = [[NSMutableArray alloc] init];
     self.brushView.pointsArray = self.brushPoints;
     self.brushView.lineWith = self.mattingPicker.sliderValue;
-    self.sourceImage = [NSImage imageNamed:@"VOL3_单品_鞋子_11.jpeg"];
-    
-    
+    self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
+    [self setupTimerIfNeeded];
+
 }
 
 
@@ -164,6 +166,18 @@ static const CGFloat kFileListWidth = 70;
     previewBackgroundColor = Vec4b(255, 30, 120, 255);
     
 }
+
+- (void)setupTimerIfNeeded {
+    
+    NSProcessInfo *pInfo = [NSProcessInfo processInfo];
+    NSOperatingSystemVersion version = [pInfo operatingSystemVersion];
+    if (version.majorVersion <= 10 && version.minorVersion <= 11) {
+        
+        [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(layoutSubviews) userInfo:nil repeats:YES];
+        
+    }
+}
+
 
 - (void)initSubViews {
     [self.view addSubview:self.editingView];
@@ -176,17 +190,17 @@ static const CGFloat kFileListWidth = 70;
 
 }
 
-
-
 - (void)viewDidLayout {
     [super viewDidLayout];
     [self layoutSubviews];
 }
 
 - (void)layoutSubviews {
-    if (currentSrcImage.rows == 0) {
+    if (currentSrcImage.rows == 0 || CGSizeEqualToSize(self.viewFrameSize, self.view.frame.size)) {
+        NSLog(@"asdf");
         return;
     }
+    self.viewFrameSize = self.view.frame.size;
     CGFloat viewWidth = self.view.frame.size.width;
     CGFloat viewHeight = self.view.frame.size.height;
     CGFloat fileListViewWidth = (self.showFileListView ? kFileListWidth : 0);
@@ -361,7 +375,6 @@ static const CGFloat kFileListWidth = 70;
             [self.cropView showCloseButton:YES];
             self.colorPicker.hidden = YES;
             
-            [self.view setNeedsLayout:YES];
             [self layoutSubviews];
             
         });
@@ -369,11 +382,6 @@ static const CGFloat kFileListWidth = 70;
     });
     
 
-    
-}
-
-- (void)setSelectMode:(SelectMode)selectMode {
-    _selectMode = selectMode;
     
 }
 
@@ -385,15 +393,11 @@ static const CGFloat kFileListWidth = 70;
             self.maskImageView.hidden = NO;
         }
         self.maskImageView.alphaValue = 0.5;
-        if (self.selectMode == SelectModeForegroundTarget ||
-            self.selectMode == SelectModeBackgroundTarget ||
-            self.selectMode == SelectModeUnknownAreaTarget) {
+        if (self.selectMode == SelectModeForegroundTarget) {
             self.cropView.hidden = NO;
             [self.cropView showCloseButton:(grabcutResult.rows == currentSrcImage.rows && grabcutResult.cols == currentSrcImage.cols)];
         }
-        else if (self.selectMode == SelectModeForegroundFineTuning ||
-                 self.selectMode == SelectModeBackgroundFineTuning ||
-                 self.selectMode == SelectModeUnknownAreaFineTuning) {
+        else {
             self.cropView.hidden = YES;
         }
     }

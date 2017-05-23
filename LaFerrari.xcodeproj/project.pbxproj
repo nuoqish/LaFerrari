@@ -36,6 +36,7 @@
 		B012EF0A1ED27D5000198D87 /* libopencv_flann.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF071ED27D5000198D87 /* libopencv_flann.a */; };
 		B012EF0B1ED27D5000198D87 /* libopencv_imgproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF081ED27D5000198D87 /* libopencv_imgproc.a */; };
 		B012EF0D1ED27D6300198D87 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF0C1ED27D6300198D87 /* libz.tbd */; };
+		B012EF191ED436B000198D87 /* laferrari.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B012EF181ED436B000198D87 /* laferrari.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 		B012EF071ED27D5000198D87 /* libopencv_flann.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_flann.a; path = opencv/lib/libopencv_flann.a; sourceTree = "<group>"; };
 		B012EF081ED27D5000198D87 /* libopencv_imgproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_imgproc.a; path = opencv/lib/libopencv_imgproc.a; sourceTree = "<group>"; };
 		B012EF0C1ED27D6300198D87 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		B012EF181ED436B000198D87 /* laferrari.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = laferrari.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +196,7 @@
 				B012EEE11ED27C4500198D87 /* NSImage+Utils.h */,
 				B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */,
 				B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */,
+				B012EF181ED436B000198D87 /* laferrari.jpg */,
 				B012EEE51ED27C4500198D87 /* WindowController.h */,
 				B012EEE61ED27C4500198D87 /* WindowController.m */,
 				B012EEA51ED27AB700198D87 /* Assets.xcassets */,
@@ -352,6 +355,7 @@
 			files = (
 				B012EEA61ED27AB700198D87 /* Assets.xcassets in Resources */,
 				B012EEEF1ED27C4500198D87 /* KTListViewItem.xib in Resources */,
+				B012EF191ED436B000198D87 /* laferrari.jpg in Resources */,
 				B012EEF41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg in Resources */,
 				B012EEA91ED27AB700198D87 /* Main.storyboard in Resources */,
 			);

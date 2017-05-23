@@ -36,7 +36,6 @@ typedef NS_ENUM(NSInteger, DisplayMode) {
 @protocol KTMattingPickerViewDelegate <NSObject>
 
 - (void)mattingPickerView:(KTMattingPickerView *)pickerView didSelectMattingMode:(SelectMode)mattingMode;
-//- (void)mattingPickerView:(KTMattingPickerView *)pickerView didSelectMarkerIndex:()
 - (void)mattingPickerView:(KTMattingPickerView *)pickerView didSelectPreviewMode:(DisplayMode)previewMode;
 - (void)mattingPickerView:(KTMattingPickerView *)pickerView didChangeSlideValue:(CGFloat)sliderValue;
 
