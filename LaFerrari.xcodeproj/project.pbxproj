@@ -1,0 +1,649 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B012EE9E1ED27AB700198D87 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EE9D1ED27AB700198D87 /* AppDelegate.m */; };
+		B012EEA11ED27AB700198D87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEA01ED27AB700198D87 /* main.m */; };
+		B012EEA61ED27AB700198D87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B012EEA51ED27AB700198D87 /* Assets.xcassets */; };
+		B012EEA91ED27AB700198D87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B012EEA71ED27AB700198D87 /* Main.storyboard */; };
+		B012EEB41ED27AB700198D87 /* LaFerrariTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEB31ED27AB700198D87 /* LaFerrariTests.m */; };
+		B012EEBF1ED27AB700198D87 /* LaFerrariUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEBE1ED27AB700198D87 /* LaFerrariUITests.m */; };
+		B012EEE71ED27C4500198D87 /* KTBackgroundPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EECD1ED27C4500198D87 /* KTBackgroundPickerView.m */; };
+		B012EEE81ED27C4500198D87 /* KTBrushView.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EECF1ED27C4500198D87 /* KTBrushView.m */; };
+		B012EEE91ED27C4500198D87 /* KTButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EED11ED27C4500198D87 /* KTButton.m */; };
+		B012EEEA1ED27C4500198D87 /* KTCropView.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EED31ED27C4500198D87 /* KTCropView.m */; };
+		B012EEEC1ED27C4500198D87 /* KTImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EED71ED27C4500198D87 /* KTImageView.m */; };
+		B012EEED1ED27C4500198D87 /* KTListView.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EED91ED27C4500198D87 /* KTListView.m */; };
+		B012EEEE1ED27C4500198D87 /* KTListViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEDB1ED27C4500198D87 /* KTListViewItem.m */; };
+		B012EEEF1ED27C4500198D87 /* KTListViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = B012EEDC1ED27C4500198D87 /* KTListViewItem.xib */; };
+		B012EEF01ED27C4500198D87 /* KTMattingPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEDE1ED27C4500198D87 /* KTMattingPickerView.m */; };
+		B012EEF11ED27C4500198D87 /* KTToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEE01ED27C4500198D87 /* KTToolbar.m */; };
+		B012EEF21ED27C4500198D87 /* NSImage+Utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */; };
+		B012EEF31ED27C4500198D87 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B012EEE31ED27C4500198D87 /* ViewController.mm */; };
+		B012EEF41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */; };
+		B012EEF51ED27C4500198D87 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEE61ED27C4500198D87 /* WindowController.m */; };
+		B012EF011ED27D0B00198D87 /* AlphaSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EEF71ED27D0B00198D87 /* AlphaSolver.cpp */; };
+		B012EF021ED27D0B00198D87 /* FBSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EEF91ED27D0B00198D87 /* FBSolver.cpp */; };
+		B012EF031ED27D0B00198D87 /* LNSPMattor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EEFB1ED27D0B00198D87 /* LNSPMattor.cpp */; };
+		B012EF041ED27D0B00198D87 /* PLNSPMattor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EEFD1ED27D0B00198D87 /* PLNSPMattor.cpp */; };
+		B012EF051ED27D0B00198D87 /* SSMattor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EEFF1ED27D0B00198D87 /* SSMattor.cpp */; };
+		B012EF091ED27D5000198D87 /* libopencv_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF061ED27D5000198D87 /* libopencv_core.a */; };
+		B012EF0A1ED27D5000198D87 /* libopencv_flann.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF071ED27D5000198D87 /* libopencv_flann.a */; };
+		B012EF0B1ED27D5000198D87 /* libopencv_imgproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF081ED27D5000198D87 /* libopencv_imgproc.a */; };
+		B012EF0D1ED27D6300198D87 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF0C1ED27D6300198D87 /* libz.tbd */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B012EEB01ED27AB700198D87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B012EE911ED27AB700198D87 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B012EE981ED27AB700198D87;
+			remoteInfo = LaFerrari;
+		};
+		B012EEBB1ED27AB700198D87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B012EE911ED27AB700198D87 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B012EE981ED27AB700198D87;
+			remoteInfo = LaFerrari;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B012EE991ED27AB700198D87 /* LaFerrari.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaFerrari.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B012EE9C1ED27AB700198D87 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		B012EE9D1ED27AB700198D87 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		B012EEA01ED27AB700198D87 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B012EEA21ED27AB700198D87 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		B012EEA51ED27AB700198D87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B012EEA81ED27AB700198D87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B012EEAA1ED27AB700198D87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B012EEAF1ED27AB700198D87 /* LaFerrariTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LaFerrariTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B012EEB31ED27AB700198D87 /* LaFerrariTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LaFerrariTests.m; sourceTree = "<group>"; };
+		B012EEB51ED27AB700198D87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B012EEBA1ED27AB700198D87 /* LaFerrariUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LaFerrariUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B012EEBE1ED27AB700198D87 /* LaFerrariUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LaFerrariUITests.m; sourceTree = "<group>"; };
+		B012EEC01ED27AB700198D87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B012EECC1ED27C4500198D87 /* KTBackgroundPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTBackgroundPickerView.h; sourceTree = "<group>"; };
+		B012EECD1ED27C4500198D87 /* KTBackgroundPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTBackgroundPickerView.m; sourceTree = "<group>"; };
+		B012EECE1ED27C4500198D87 /* KTBrushView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTBrushView.h; sourceTree = "<group>"; };
+		B012EECF1ED27C4500198D87 /* KTBrushView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTBrushView.m; sourceTree = "<group>"; };
+		B012EED01ED27C4500198D87 /* KTButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTButton.h; sourceTree = "<group>"; };
+		B012EED11ED27C4500198D87 /* KTButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTButton.m; sourceTree = "<group>"; };
+		B012EED21ED27C4500198D87 /* KTCropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCropView.h; sourceTree = "<group>"; };
+		B012EED31ED27C4500198D87 /* KTCropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCropView.m; sourceTree = "<group>"; };
+		B012EED61ED27C4500198D87 /* KTImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTImageView.h; sourceTree = "<group>"; };
+		B012EED71ED27C4500198D87 /* KTImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTImageView.m; sourceTree = "<group>"; };
+		B012EED81ED27C4500198D87 /* KTListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTListView.h; sourceTree = "<group>"; };
+		B012EED91ED27C4500198D87 /* KTListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTListView.m; sourceTree = "<group>"; };
+		B012EEDA1ED27C4500198D87 /* KTListViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTListViewItem.h; sourceTree = "<group>"; };
+		B012EEDB1ED27C4500198D87 /* KTListViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTListViewItem.m; sourceTree = "<group>"; };
+		B012EEDC1ED27C4500198D87 /* KTListViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KTListViewItem.xib; sourceTree = "<group>"; };
+		B012EEDD1ED27C4500198D87 /* KTMattingPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTMattingPickerView.h; sourceTree = "<group>"; };
+		B012EEDE1ED27C4500198D87 /* KTMattingPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTMattingPickerView.m; sourceTree = "<group>"; };
+		B012EEDF1ED27C4500198D87 /* KTToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTToolbar.h; sourceTree = "<group>"; };
+		B012EEE01ED27C4500198D87 /* KTToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTToolbar.m; sourceTree = "<group>"; };
+		B012EEE11ED27C4500198D87 /* NSImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Utils.h"; sourceTree = "<group>"; };
+		B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSImage+Utils.mm"; sourceTree = "<group>"; };
+		B012EEE31ED27C4500198D87 /* ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "VOL3_单品_鞋子_11.jpeg"; sourceTree = "<group>"; };
+		B012EEE51ED27C4500198D87 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
+		B012EEE61ED27C4500198D87 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
+		B012EEF71ED27D0B00198D87 /* AlphaSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AlphaSolver.cpp; path = AlphaMattor/AlphaMattor/AlphaSolver/AlphaSolver.cpp; sourceTree = SOURCE_ROOT; };
+		B012EEF81ED27D0B00198D87 /* AlphaSolver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AlphaSolver.hpp; path = AlphaMattor/AlphaMattor/AlphaSolver/AlphaSolver.hpp; sourceTree = SOURCE_ROOT; };
+		B012EEF91ED27D0B00198D87 /* FBSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FBSolver.cpp; path = AlphaMattor/AlphaMattor/AlphaSolver/FBSolver.cpp; sourceTree = SOURCE_ROOT; };
+		B012EEFA1ED27D0B00198D87 /* FBSolver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FBSolver.hpp; path = AlphaMattor/AlphaMattor/AlphaSolver/FBSolver.hpp; sourceTree = SOURCE_ROOT; };
+		B012EEFB1ED27D0B00198D87 /* LNSPMattor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LNSPMattor.cpp; path = AlphaMattor/AlphaMattor/AlphaSolver/LNSPMattor.cpp; sourceTree = SOURCE_ROOT; };
+		B012EEFC1ED27D0B00198D87 /* LNSPMattor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LNSPMattor.hpp; path = AlphaMattor/AlphaMattor/AlphaSolver/LNSPMattor.hpp; sourceTree = SOURCE_ROOT; };
+		B012EEFD1ED27D0B00198D87 /* PLNSPMattor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PLNSPMattor.cpp; path = AlphaMattor/AlphaMattor/AlphaSolver/PLNSPMattor.cpp; sourceTree = SOURCE_ROOT; };
+		B012EEFE1ED27D0B00198D87 /* PLNSPMattor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PLNSPMattor.hpp; path = AlphaMattor/AlphaMattor/AlphaSolver/PLNSPMattor.hpp; sourceTree = SOURCE_ROOT; };
+		B012EEFF1ED27D0B00198D87 /* SSMattor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SSMattor.cpp; path = AlphaMattor/AlphaMattor/AlphaSolver/SSMattor.cpp; sourceTree = SOURCE_ROOT; };
+		B012EF001ED27D0B00198D87 /* SSMattor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SSMattor.hpp; path = AlphaMattor/AlphaMattor/AlphaSolver/SSMattor.hpp; sourceTree = SOURCE_ROOT; };
+		B012EF061ED27D5000198D87 /* libopencv_core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_core.a; path = opencv/lib/libopencv_core.a; sourceTree = "<group>"; };
+		B012EF071ED27D5000198D87 /* libopencv_flann.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_flann.a; path = opencv/lib/libopencv_flann.a; sourceTree = "<group>"; };
+		B012EF081ED27D5000198D87 /* libopencv_imgproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_imgproc.a; path = opencv/lib/libopencv_imgproc.a; sourceTree = "<group>"; };
+		B012EF0C1ED27D6300198D87 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B012EE961ED27AB700198D87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B012EF0D1ED27D6300198D87 /* libz.tbd in Frameworks */,
+				B012EF091ED27D5000198D87 /* libopencv_core.a in Frameworks */,
+				B012EF0A1ED27D5000198D87 /* libopencv_flann.a in Frameworks */,
+				B012EF0B1ED27D5000198D87 /* libopencv_imgproc.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B012EEAC1ED27AB700198D87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B012EEB71ED27AB700198D87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B012EE901ED27AB700198D87 = {
+			isa = PBXGroup;
+			children = (
+				B012EF0C1ED27D6300198D87 /* libz.tbd */,
+				B012EF061ED27D5000198D87 /* libopencv_core.a */,
+				B012EF071ED27D5000198D87 /* libopencv_flann.a */,
+				B012EF081ED27D5000198D87 /* libopencv_imgproc.a */,
+				B012EE9B1ED27AB700198D87 /* LaFerrari */,
+				B012EEB21ED27AB700198D87 /* LaFerrariTests */,
+				B012EEBD1ED27AB700198D87 /* LaFerrariUITests */,
+				B012EE9A1ED27AB700198D87 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B012EE9A1ED27AB700198D87 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B012EE991ED27AB700198D87 /* LaFerrari.app */,
+				B012EEAF1ED27AB700198D87 /* LaFerrariTests.xctest */,
+				B012EEBA1ED27AB700198D87 /* LaFerrariUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B012EE9B1ED27AB700198D87 /* LaFerrari */ = {
+			isa = PBXGroup;
+			children = (
+				B012EEF61ED27CD700198D87 /* AlphaSolver */,
+				B012EE9C1ED27AB700198D87 /* AppDelegate.h */,
+				B012EE9D1ED27AB700198D87 /* AppDelegate.m */,
+				B012EEA21ED27AB700198D87 /* ViewController.h */,
+				B012EEE31ED27C4500198D87 /* ViewController.mm */,
+				B012EECC1ED27C4500198D87 /* KTBackgroundPickerView.h */,
+				B012EECD1ED27C4500198D87 /* KTBackgroundPickerView.m */,
+				B012EECE1ED27C4500198D87 /* KTBrushView.h */,
+				B012EECF1ED27C4500198D87 /* KTBrushView.m */,
+				B012EED01ED27C4500198D87 /* KTButton.h */,
+				B012EED11ED27C4500198D87 /* KTButton.m */,
+				B012EED21ED27C4500198D87 /* KTCropView.h */,
+				B012EED31ED27C4500198D87 /* KTCropView.m */,
+				B012EED61ED27C4500198D87 /* KTImageView.h */,
+				B012EED71ED27C4500198D87 /* KTImageView.m */,
+				B012EED81ED27C4500198D87 /* KTListView.h */,
+				B012EED91ED27C4500198D87 /* KTListView.m */,
+				B012EEDA1ED27C4500198D87 /* KTListViewItem.h */,
+				B012EEDB1ED27C4500198D87 /* KTListViewItem.m */,
+				B012EEDC1ED27C4500198D87 /* KTListViewItem.xib */,
+				B012EEDD1ED27C4500198D87 /* KTMattingPickerView.h */,
+				B012EEDE1ED27C4500198D87 /* KTMattingPickerView.m */,
+				B012EEDF1ED27C4500198D87 /* KTToolbar.h */,
+				B012EEE01ED27C4500198D87 /* KTToolbar.m */,
+				B012EEE11ED27C4500198D87 /* NSImage+Utils.h */,
+				B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */,
+				B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */,
+				B012EEE51ED27C4500198D87 /* WindowController.h */,
+				B012EEE61ED27C4500198D87 /* WindowController.m */,
+				B012EEA51ED27AB700198D87 /* Assets.xcassets */,
+				B012EEA71ED27AB700198D87 /* Main.storyboard */,
+				B012EEAA1ED27AB700198D87 /* Info.plist */,
+				B012EE9F1ED27AB700198D87 /* Supporting Files */,
+			);
+			path = LaFerrari;
+			sourceTree = "<group>";
+		};
+		B012EE9F1ED27AB700198D87 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B012EEA01ED27AB700198D87 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B012EEB21ED27AB700198D87 /* LaFerrariTests */ = {
+			isa = PBXGroup;
+			children = (
+				B012EEB31ED27AB700198D87 /* LaFerrariTests.m */,
+				B012EEB51ED27AB700198D87 /* Info.plist */,
+			);
+			path = LaFerrariTests;
+			sourceTree = "<group>";
+		};
+		B012EEBD1ED27AB700198D87 /* LaFerrariUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B012EEBE1ED27AB700198D87 /* LaFerrariUITests.m */,
+				B012EEC01ED27AB700198D87 /* Info.plist */,
+			);
+			path = LaFerrariUITests;
+			sourceTree = "<group>";
+		};
+		B012EEF61ED27CD700198D87 /* AlphaSolver */ = {
+			isa = PBXGroup;
+			children = (
+				B012EEF71ED27D0B00198D87 /* AlphaSolver.cpp */,
+				B012EEF81ED27D0B00198D87 /* AlphaSolver.hpp */,
+				B012EEF91ED27D0B00198D87 /* FBSolver.cpp */,
+				B012EEFA1ED27D0B00198D87 /* FBSolver.hpp */,
+				B012EEFB1ED27D0B00198D87 /* LNSPMattor.cpp */,
+				B012EEFC1ED27D0B00198D87 /* LNSPMattor.hpp */,
+				B012EEFD1ED27D0B00198D87 /* PLNSPMattor.cpp */,
+				B012EEFE1ED27D0B00198D87 /* PLNSPMattor.hpp */,
+				B012EEFF1ED27D0B00198D87 /* SSMattor.cpp */,
+				B012EF001ED27D0B00198D87 /* SSMattor.hpp */,
+			);
+			name = AlphaSolver;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B012EE981ED27AB700198D87 /* LaFerrari */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B012EEC31ED27AB700198D87 /* Build configuration list for PBXNativeTarget "LaFerrari" */;
+			buildPhases = (
+				B012EE951ED27AB700198D87 /* Sources */,
+				B012EE961ED27AB700198D87 /* Frameworks */,
+				B012EE971ED27AB700198D87 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LaFerrari;
+			productName = LaFerrari;
+			productReference = B012EE991ED27AB700198D87 /* LaFerrari.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B012EEAE1ED27AB700198D87 /* LaFerrariTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B012EEC61ED27AB700198D87 /* Build configuration list for PBXNativeTarget "LaFerrariTests" */;
+			buildPhases = (
+				B012EEAB1ED27AB700198D87 /* Sources */,
+				B012EEAC1ED27AB700198D87 /* Frameworks */,
+				B012EEAD1ED27AB700198D87 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B012EEB11ED27AB700198D87 /* PBXTargetDependency */,
+			);
+			name = LaFerrariTests;
+			productName = LaFerrariTests;
+			productReference = B012EEAF1ED27AB700198D87 /* LaFerrariTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B012EEB91ED27AB700198D87 /* LaFerrariUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B012EEC91ED27AB700198D87 /* Build configuration list for PBXNativeTarget "LaFerrariUITests" */;
+			buildPhases = (
+				B012EEB61ED27AB700198D87 /* Sources */,
+				B012EEB71ED27AB700198D87 /* Frameworks */,
+				B012EEB81ED27AB700198D87 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B012EEBC1ED27AB700198D87 /* PBXTargetDependency */,
+			);
+			name = LaFerrariUITests;
+			productName = LaFerrariUITests;
+			productReference = B012EEBA1ED27AB700198D87 /* LaFerrariUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B012EE911ED27AB700198D87 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = stanshen;
+				TargetAttributes = {
+					B012EE981ED27AB700198D87 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					B012EEAE1ED27AB700198D87 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = B012EE981ED27AB700198D87;
+					};
+					B012EEB91ED27AB700198D87 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = B012EE981ED27AB700198D87;
+					};
+				};
+			};
+			buildConfigurationList = B012EE941ED27AB700198D87 /* Build configuration list for PBXProject "LaFerrari" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B012EE901ED27AB700198D87;
+			productRefGroup = B012EE9A1ED27AB700198D87 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B012EE981ED27AB700198D87 /* LaFerrari */,
+				B012EEAE1ED27AB700198D87 /* LaFerrariTests */,
+				B012EEB91ED27AB700198D87 /* LaFerrariUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B012EE971ED27AB700198D87 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B012EEA61ED27AB700198D87 /* Assets.xcassets in Resources */,
+				B012EEEF1ED27C4500198D87 /* KTListViewItem.xib in Resources */,
+				B012EEF41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg in Resources */,
+				B012EEA91ED27AB700198D87 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B012EEAD1ED27AB700198D87 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B012EEB81ED27AB700198D87 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B012EE951ED27AB700198D87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B012EF021ED27D0B00198D87 /* FBSolver.cpp in Sources */,
+				B012EEEA1ED27C4500198D87 /* KTCropView.m in Sources */,
+				B012EF031ED27D0B00198D87 /* LNSPMattor.cpp in Sources */,
+				B012EF051ED27D0B00198D87 /* SSMattor.cpp in Sources */,
+				B012EEF31ED27C4500198D87 /* ViewController.mm in Sources */,
+				B012EEA11ED27AB700198D87 /* main.m in Sources */,
+				B012EEF11ED27C4500198D87 /* KTToolbar.m in Sources */,
+				B012EE9E1ED27AB700198D87 /* AppDelegate.m in Sources */,
+				B012EEF21ED27C4500198D87 /* NSImage+Utils.mm in Sources */,
+				B012EEEC1ED27C4500198D87 /* KTImageView.m in Sources */,
+				B012EEF51ED27C4500198D87 /* WindowController.m in Sources */,
+				B012EEEE1ED27C4500198D87 /* KTListViewItem.m in Sources */,
+				B012EF011ED27D0B00198D87 /* AlphaSolver.cpp in Sources */,
+				B012EEE81ED27C4500198D87 /* KTBrushView.m in Sources */,
+				B012EEF01ED27C4500198D87 /* KTMattingPickerView.m in Sources */,
+				B012EEED1ED27C4500198D87 /* KTListView.m in Sources */,
+				B012EEE91ED27C4500198D87 /* KTButton.m in Sources */,
+				B012EF041ED27D0B00198D87 /* PLNSPMattor.cpp in Sources */,
+				B012EEE71ED27C4500198D87 /* KTBackgroundPickerView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B012EEAB1ED27AB700198D87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B012EEB41ED27AB700198D87 /* LaFerrariTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B012EEB61ED27AB700198D87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B012EEBF1ED27AB700198D87 /* LaFerrariUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B012EEB11ED27AB700198D87 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B012EE981ED27AB700198D87 /* LaFerrari */;
+			targetProxy = B012EEB01ED27AB700198D87 /* PBXContainerItemProxy */;
+		};
+		B012EEBC1ED27AB700198D87 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B012EE981ED27AB700198D87 /* LaFerrari */;
+			targetProxy = B012EEBB1ED27AB700198D87 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B012EEA71ED27AB700198D87 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B012EEA81ED27AB700198D87 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B012EEC11ED27AB700198D87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B012EEC21ED27AB700198D87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B012EEC41ED27AB700198D87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/opencv/include";
+				INFOPLIST_FILE = LaFerrari/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/opencv/lib";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenyanhao.LaFerrari;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B012EEC51ED27AB700198D87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/opencv/include";
+				INFOPLIST_FILE = LaFerrari/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/opencv/lib";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenyanhao.LaFerrari;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		B012EEC71ED27AB700198D87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = LaFerrariTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenyanhao.LaFerrariTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LaFerrari.app/Contents/MacOS/LaFerrari";
+			};
+			name = Debug;
+		};
+		B012EEC81ED27AB700198D87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = LaFerrariTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenyanhao.LaFerrariTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LaFerrari.app/Contents/MacOS/LaFerrari";
+			};
+			name = Release;
+		};
+		B012EECA1ED27AB700198D87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = LaFerrariUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenyanhao.LaFerrariUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = LaFerrari;
+			};
+			name = Debug;
+		};
+		B012EECB1ED27AB700198D87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = LaFerrariUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shenyanhao.LaFerrariUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = LaFerrari;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B012EE941ED27AB700198D87 /* Build configuration list for PBXProject "LaFerrari" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B012EEC11ED27AB700198D87 /* Debug */,
+				B012EEC21ED27AB700198D87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B012EEC31ED27AB700198D87 /* Build configuration list for PBXNativeTarget "LaFerrari" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B012EEC41ED27AB700198D87 /* Debug */,
+				B012EEC51ED27AB700198D87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B012EEC61ED27AB700198D87 /* Build configuration list for PBXNativeTarget "LaFerrariTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B012EEC71ED27AB700198D87 /* Debug */,
+				B012EEC81ED27AB700198D87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B012EEC91ED27AB700198D87 /* Build configuration list for PBXNativeTarget "LaFerrariUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B012EECA1ED27AB700198D87 /* Debug */,
+				B012EECB1ED27AB700198D87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B012EE911ED27AB700198D87 /* Project object */;
+}
