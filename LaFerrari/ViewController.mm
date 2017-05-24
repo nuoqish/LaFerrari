@@ -67,6 +67,87 @@ cv::Rect_<int> extractForegroundRect(Mat& image) {
 }
 
 
+void erodeTrimap(cv::Mat1b &_trimap, int r)
+{
+    if (r <= 0) {
+        return;
+    }
+    
+    cv::Mat1b &trimap = (cv::Mat1b&)_trimap;
+    
+    int w = trimap.cols;
+    int h = trimap.rows;
+    
+    cv::Mat1b foreground(trimap.size(), (uchar)0);
+    cv::Mat1b background(trimap.size(), (uchar)0);
+    
+    for (int y = 0; y < h; ++y)
+        for (int x = 0; x < w; ++x)
+        {
+            if (trimap(y, x) == 0)
+                background(y, x) = 1;
+            else if (trimap(y, x) == 255)
+                foreground(y, x) = 1;
+        }
+    
+    
+    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(r, r));
+    
+    cv::erode(background, background, kernel);
+    cv::erode(foreground, foreground, kernel);
+    
+    for (int y = 0; y < h; ++y)
+        for (int x = 0; x < w; ++x)
+        {
+            if (background(y, x) == 0 && foreground(y, x) == 0)
+                trimap(y, x) = 128;
+        }
+}
+
+
+void localSmooth(Mat3b& srcImage, Mat1b& srcTrimap, Mat1b& dstAlpha, Mat4b& dstForegroundAlpha, int radius) {
+    Mat1b alpha;
+    srcTrimap.copyTo(alpha);
+    erodeTrimap(alpha, radius);
+    double sigma_d2 = radius;
+    double sigma_c2 = 10000;
+    for (int i = 0; i < srcTrimap.rows; i++) {
+        for (int j = 0; j < srcTrimap.cols; j++) {
+            if (alpha(i,j) == 128) {
+                int imin = max(i - radius, 0);
+                int imax = min(i + radius, srcTrimap.rows - 1);
+                int jmin = max(j - radius, 0);
+                int jmax = min(j + radius, srcTrimap.cols - 1);
+                double Wa = 0,Wsum = 0;
+                for (int ii = imin; ii <= imax; ii++) {
+                    for (int jj = jmin; jj <= jmax; jj++) {
+                        double d2 = (ii - i) * (ii - i) + (jj - j) * (jj - j);
+                        double c2 = (srcImage(ii,jj)[0] - srcImage(i,j)[0]) * (srcImage(ii,jj)[0] - srcImage(i,j)[0]) +
+                        (srcImage(ii,jj)[1] - srcImage(i,j)[1]) * (srcImage(ii,jj)[1] - srcImage(i,j)[1]) +
+                        (srcImage(ii,jj)[2] - srcImage(i,j)[2]) * (srcImage(ii,jj)[2] - srcImage(i,j)[2]);
+                        double W = exp(-d2 / sigma_d2 - c2 / sigma_c2);
+                        Wa += W * (srcTrimap(ii,jj));
+                        Wsum += W;
+                        
+                    }
+                }
+
+                Wa /= Wsum;
+                dstForegroundAlpha(i,j)[0] *= Wa / 255;
+                dstForegroundAlpha(i,j)[1] *= Wa / 255;
+                dstForegroundAlpha(i,j)[2] *= Wa / 255;
+                alpha(i,j) = uint8_t(max(0., min(255., Wa)));;
+            }
+            
+            
+            dstForegroundAlpha(i,j)[3] = alpha(i,j);
+            
+        }
+    }
+    alpha.copyTo(dstAlpha);
+    
+}
+
 @interface ViewController () <KTCropViewDelegate, KTListViewDelegate , KTBackgroundPickerViewDelegate, KTMattingPickerViewDelegate>
 
 @property (nonatomic, assign) SelectMode selectMode;
@@ -76,7 +157,7 @@ cv::Rect_<int> extractForegroundRect(Mat& image) {
 @property (nonatomic, strong) NSImage *sourceImage;
 @property (nonatomic, assign) CGFloat scaleRatio;
 @property (nonatomic, assign) CGFloat editingImageViewZoomingScale;
-@property (nonatomic, assign) CGSize viewFrameSize;
+@property (nonatomic, assign) CGSize oldViewFrameSize;
 @property (nonatomic, strong) NSMutableArray *brushPoints;
 @property (nonatomic, strong) NSMutableArray<NSURL *> *fileUrls;
 @property (nonatomic, assign) BOOL showFileListView;
@@ -146,20 +227,20 @@ static const CGFloat kFileListWidth = 70;
     
     [self initSubViews];
     [self commonInit];
-    self.fileUrls = @[].mutableCopy;
-    self.viewFrameSize = CGSizeZero;
-    self.editingImageViewZoomingScale = 1.0;
-    self.selectMode = self.mattingPicker.mattingMode;
-    self.brushPoints = [[NSMutableArray alloc] init];
-    self.brushView.pointsArray = self.brushPoints;
-    self.brushView.lineWith = self.mattingPicker.sliderValue;
-    self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
     [self setupTimerIfNeeded];
-
+    
+    self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
+    
 }
 
 
 - (void)commonInit {
+    self.fileUrls = @[].mutableCopy;
+    self.oldViewFrameSize = CGSizeZero;
+    self.editingImageViewZoomingScale = 1.0;
+    self.brushPoints = [[NSMutableArray alloc] init];
+    self.brushView.pointsArray = self.brushPoints;
+    self.brushView.lineWith = self.mattingPicker.sliderValue;
     maskForeColor = Vec4b(0,255,0,255);
     maskBackColor = Vec4b(255,0,0,255);
     maskUnknownColor = Vec4b(128,128,128,128);
@@ -168,13 +249,11 @@ static const CGFloat kFileListWidth = 70;
 }
 
 - (void)setupTimerIfNeeded {
-    
+    // I know this is stupid, but I donot known how to auto layout subviews when people dragging the window
     NSProcessInfo *pInfo = [NSProcessInfo processInfo];
     NSOperatingSystemVersion version = [pInfo operatingSystemVersion];
     if (version.majorVersion <= 10 && version.minorVersion <= 11) {
-        
-        [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(layoutSubviews) userInfo:nil repeats:YES];
-        
+        [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(layoutSubViewsIfNeeded) userInfo:nil repeats:YES];
     }
 }
 
@@ -195,12 +274,17 @@ static const CGFloat kFileListWidth = 70;
     [self layoutSubviews];
 }
 
+- (void)layoutSubViewsIfNeeded {
+    if (!CGSizeEqualToSize(self.oldViewFrameSize, self.view.frame.size)) {
+        self.oldViewFrameSize = self.view.frame.size;
+        [self layoutSubviews];
+    }
+}
+
 - (void)layoutSubviews {
-    if (currentSrcImage.rows == 0 || CGSizeEqualToSize(self.viewFrameSize, self.view.frame.size)) {
-        NSLog(@"asdf");
+    if (currentSrcImage.rows == 0) {
         return;
     }
-    self.viewFrameSize = self.view.frame.size;
     CGFloat viewWidth = self.view.frame.size.width;
     CGFloat viewHeight = self.view.frame.size.height;
     CGFloat fileListViewWidth = (self.showFileListView ? kFileListWidth : 0);
@@ -267,7 +351,7 @@ static const CGFloat kFileListWidth = 70;
     if (!_maskImageView) {
         _maskImageView = [[NSImageView alloc] init];
         _maskImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
-        _maskImageView.alphaValue = 0.5;
+        _maskImageView.alphaValue = 0.1;
     }
     return _maskImageView;
 }
@@ -563,7 +647,7 @@ static const CGFloat kFileListWidth = 70;
         [self.progressIndictor startAnimation:nil];
         self.view.acceptsTouchEvents = NO;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            Mat image;
+            Mat3b image;
             cvtColor(currentSrcImage, image, CV_RGBA2RGB);
             clock_t tic = clock();
             grabCut(image, grabcutResult, cropRect, bgdModel, fgdModel, 2, GC_EVAL);
@@ -593,7 +677,8 @@ static const CGFloat kFileListWidth = 70;
 #if USE_SSMATTOR
             SSMattor::solveAlphaAndForeground(dstMaskMono, dstForegroundAlpha, image, dstMaskMono, 5);
 #else
-            currentSrcImage.copyTo(dstForegroundAlpha, dstMaskMono);
+            currentSrcImage.copyTo(dstForegroundAlpha);
+            localSmooth(image, dstMaskMono, dstMaskMono, dstForegroundAlpha, 5);
 #endif
             NSLog(@"ssmattor cost time: %.3f", 1000. * (clock() - tic) / NSEC_PER_SEC);
             if (dstMaskColor.rows != dstMaskMono.rows || dstMaskColor.cols != dstMaskMono.cols) {
@@ -812,8 +897,17 @@ static const CGFloat kFileListWidth = 70;
                     Mat1b alpha = dstMaskMono(rect);
                     Mat4b foreground = dstForegroundAlpha(rect);
                     AlphaSolver::computeAlpha(alpha, image, trimap, 0, 1);
-                    FBSolver::computeForeground(foreground, image, alpha);
-                    cvtColor(foreground, foreground, cv::COLOR_RGBA2BGRA);
+                    
+                    for (int i = top; i <= bottom; i++) {
+                        for (int j = left; j <= right; j++) {
+                            dstForegroundAlpha(i,j)[0] = uint8_t(dstForegroundAlpha(i,j)[0] * dstForegroundAlpha(i,j)[3] / 255.);
+                            dstForegroundAlpha(i,j)[1] = uint8_t(dstForegroundAlpha(i,j)[1] * dstForegroundAlpha(i,j)[3] / 255.);
+                            dstForegroundAlpha(i,j)[2] = uint8_t(dstForegroundAlpha(i,j)[2] * dstForegroundAlpha(i,j)[3] / 255.);
+                        }
+                    }
+                    
+                    //FBSolver::computeForeground(foreground, image, alpha);
+                    //cvtColor(foreground, foreground, cv::COLOR_RGBA2BGRA);
                     
                 }
                 
@@ -875,7 +969,7 @@ static const CGFloat kFileListWidth = 70;
     [self.progressIndictor startAnimation:nil];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        Mat image;
+        Mat3b image;
         cvtColor(currentSrcImage, image, cv::COLOR_RGBA2RGB);
         clock_t tic = clock();
         grabCut(image, grabcutResult, cropRect, bgdModel, fgdModel, 2, GC_INIT_WITH_RECT);
@@ -885,8 +979,8 @@ static const CGFloat kFileListWidth = 70;
 #if USE_SSMATTOR
         SSMattor::solveAlphaAndForeground(dstMaskMono, dstForegroundAlpha, image, dstMaskMono, 5);
 #else
-        memset(dstForegroundAlpha.data, 0, dstForegroundAlpha.total() * dstForegroundAlpha.elemSize());
-        currentSrcImage.copyTo(dstForegroundAlpha, dstMaskMono);
+        currentSrcImage.copyTo(dstForegroundAlpha);
+        localSmooth(image, dstMaskMono, dstMaskMono, dstForegroundAlpha, 5);
 #endif
         NSLog(@"ssmattor cost time: %.3f", 1000. * (clock() - tic2) / NSEC_PER_SEC);
         

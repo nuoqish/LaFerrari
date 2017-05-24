@@ -29,7 +29,7 @@
         
         self.mattingMode = SelectModeForegroundTarget;
         self.previewMode = DisplayModeForeground;
-        self.sliderValue = 5;
+        self.sliderValue = 15;
     }
     return self;
 }
@@ -160,9 +160,9 @@
 - (NSSlider *)radiusSlider {
     if (!_radiusSlider) {
         _radiusSlider = [[NSSlider alloc] init];
-        _radiusSlider.maxValue = 20;
+        _radiusSlider.maxValue = 30;
         _radiusSlider.minValue = 1;
-        _radiusSlider.doubleValue = 10;
+        _radiusSlider.doubleValue = 15;
         _radiusSlider.target = self;
         _radiusSlider.action = @selector(sliderValueChanged:);
     }
