@@ -66,7 +66,6 @@ cv::Rect_<int> extractForegroundRect(Mat& image) {
     return Rect_<int>(left, top, right - left, bottom - top);
 }
 
-
 void erodeTrimap(cv::Mat1b &_trimap, int r)
 {
     if (r <= 0) {
@@ -133,9 +132,9 @@ void localSmooth(Mat3b& srcImage, Mat1b& srcTrimap, Mat1b& dstAlpha, Mat4b& dstF
                 }
 
                 Wa /= Wsum;
-                dstForegroundAlpha(i,j)[0] *= Wa / 255;
-                dstForegroundAlpha(i,j)[1] *= Wa / 255;
-                dstForegroundAlpha(i,j)[2] *= Wa / 255;
+                dstForegroundAlpha(i,j)[0] = uint8_t(dstForegroundAlpha(i,j)[0] * Wa / 255);
+                dstForegroundAlpha(i,j)[1] = uint8_t(dstForegroundAlpha(i,j)[1] * Wa / 255);
+                dstForegroundAlpha(i,j)[2] = uint8_t(dstForegroundAlpha(i,j)[2] * Wa / 255);
                 alpha(i,j) = uint8_t(max(0., min(255., Wa)));;
             }
             
@@ -145,6 +144,25 @@ void localSmooth(Mat3b& srcImage, Mat1b& srcTrimap, Mat1b& dstAlpha, Mat4b& dstF
         }
     }
     alpha.copyTo(dstAlpha);
+    
+}
+
+void calcForegroundAlpha(Mat4b& dstForegroundAlpha, Mat1b& dstMaskMono, Mat4b& srcImage,
+                         cv::Rect cropRect, Mat1b& grabcutResult, Mat& fgdModel, Mat& bgdModel, int radius, int mode) {
+    Mat3b image;
+    cvtColor(srcImage, image, cv::COLOR_RGBA2RGB);
+    clock_t tic = clock();
+    grabCut(image, grabcutResult, cropRect, bgdModel, fgdModel, 2, mode);
+    NSLog(@"grab cut cost time: %.3f", 1000. * (clock() - tic) / NSEC_PER_SEC);
+    compare(grabcutResult, GC_PR_FGD, dstMaskMono, CMP_EQ);
+    clock_t tic2 = clock();
+#if USE_SSMATTOR
+    SSMattor::solveAlphaAndForeground(dstMaskMono, dstForegroundAlpha, image, dstMaskMono, radius);
+#else
+    srcImage.copyTo(dstForegroundAlpha);
+    localSmooth(image, dstMaskMono, dstMaskMono, dstForegroundAlpha, radius);
+#endif
+    NSLog(@"ssmattor cost time: %.3f", 1000. * (clock() - tic2) / NSEC_PER_SEC);
     
 }
 
@@ -168,7 +186,6 @@ void localSmooth(Mat3b& srcImage, Mat1b& srcTrimap, Mat1b& dstAlpha, Mat4b& dstF
 @property (nonatomic, strong) KTBrushView *brushView;
 @property (nonatomic, strong) KTCropView *cropView;
 @property (nonatomic, strong) KTListView *fileListView;
-
 @property (nonatomic, strong) KTBackgroundPickerView *colorPicker;
 @property (nonatomic, strong) KTMattingPickerView *mattingPicker;
 @property (nonatomic, strong) NSBox *verticalSeparator;
@@ -178,7 +195,7 @@ void localSmooth(Mat3b& srcImage, Mat1b& srcTrimap, Mat1b& dstAlpha, Mat4b& dstF
 
 static const CGFloat kTabbarHeight = 30;
 static const CGFloat kMiddleWidth = 2;
-static const CGFloat kFileListWidth = 70;
+static const CGFloat kFileListWidth = 140;
 
 
 @implementation ViewController {
@@ -229,7 +246,7 @@ static const CGFloat kFileListWidth = 70;
     [self commonInit];
     [self setupTimerIfNeeded];
     
-    self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
+    //self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
     
 }
 
@@ -261,18 +278,20 @@ static const CGFloat kFileListWidth = 70;
 - (void)initSubViews {
     [self.view addSubview:self.editingView];
     [self.view addSubview:self.previewingView];
-    [self.view addSubview:self.verticalSeparator];
+    
     [self.view addSubview:self.mattingPicker];
+    
     [self.editingView addCustomView:self.maskImageView];
     [self.editingView addCustomView:self.brushView];
     [self.editingView addCustomView:self.cropView];
 
 }
-
-- (void)viewDidLayout {
-    [super viewDidLayout];
-    [self layoutSubviews];
-}
+//
+//- (void)viewDidLayout {
+//    [super viewDidLayout];
+//    [self layoutSubviews];
+//    NSLog(@"viewDidLayout");
+//}
 
 - (void)layoutSubViewsIfNeeded {
     if (!CGSizeEqualToSize(self.oldViewFrameSize, self.view.frame.size)) {
@@ -282,29 +301,31 @@ static const CGFloat kFileListWidth = 70;
 }
 
 - (void)layoutSubviews {
+    
     if (currentSrcImage.rows == 0) {
         return;
     }
+    
     CGFloat viewWidth = self.view.frame.size.width;
     CGFloat viewHeight = self.view.frame.size.height;
     CGFloat fileListViewWidth = (self.showFileListView ? kFileListWidth : 0);
     
     // 根据图片比例计算视图显示比例，通过editView的magnification属性进行editingImageView图片大小缩放，而editingImageView的frame尺寸不变
-    CGFloat editViewMaxWidth = (viewWidth - fileListViewWidth) / 2 - kMiddleWidth;
+    CGFloat editViewMaxWidth = ceil((viewWidth - fileListViewWidth) / 2 - kMiddleWidth);
     CGFloat editViewMaxHeight = viewHeight - kTabbarHeight;
     CGFloat editViewRatio = editViewMaxWidth / editViewMaxHeight;
     CGFloat imageRatio = (CGFloat)currentSrcImage.cols / currentSrcImage.rows;
     CGFloat resizeImageWidth, resizeImageHeight;
     if (imageRatio > editViewRatio) {
         resizeImageWidth = editViewMaxWidth;
-        resizeImageHeight = resizeImageWidth / imageRatio;
+        resizeImageHeight = ceil(resizeImageWidth / imageRatio);
     }
     else {
         resizeImageHeight = editViewMaxHeight;
-        resizeImageWidth = resizeImageHeight * imageRatio;
+        resizeImageWidth = ceil(resizeImageHeight * imageRatio);
     }
-    CGFloat editViewWidth = resizeImageWidth * self.editingImageViewZoomingScale;
-    CGFloat editViewHeight = resizeImageHeight * self.editingImageViewZoomingScale;
+    CGFloat editViewWidth = ceil(resizeImageWidth * self.editingImageViewZoomingScale);
+    CGFloat editViewHeight = ceil(resizeImageHeight * self.editingImageViewZoomingScale);
     if (editViewWidth > editViewMaxWidth) {
         editViewWidth = editViewMaxWidth;
     }
@@ -313,21 +334,35 @@ static const CGFloat kFileListWidth = 70;
     }
     
     self.scaleRatio = currentSrcImage.cols / resizeImageWidth;
-    self.verticalSeparator.frame = NSMakeRect(fileListViewWidth + (viewWidth - fileListViewWidth) / 2, 0, 1, viewHeight - kTabbarHeight);
-    self.progressIndictor.frame = NSMakeRect(viewWidth / 2, viewHeight / 2, 50, 50);
-    if (self.showFileListView) {
-        self.fileListView.frame = NSMakeRect(0, 0, kFileListWidth, editViewMaxHeight);
-    }
-    self.mattingPicker.frame = NSMakeRect(0, viewHeight - kTabbarHeight, viewWidth, kTabbarHeight);
-    self.editingView.frame = NSMakeRect(fileListViewWidth + (editViewMaxWidth - editViewWidth) / 2, (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
-    self.editingView.magnification = self.editingImageViewZoomingScale;
-    self.editingView.maxFrameSize = CGSizeMake(editViewMaxWidth, editViewMaxHeight);
-    self.maskImageView.frame = self.editingView.imageFrame;
-    self.brushView.frame = self.editingView.imageFrame;
-    self.cropView.frame = self.editingView.imageFrame;
-    self.previewingView.frame = NSMakeRect(fileListViewWidth + editViewMaxWidth + kMiddleWidth * 2 + (editViewMaxWidth - editViewWidth) / 2, (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
-    self.previewingView.magnification = self.editingImageViewZoomingScale;
-    self.previewingView.maxFrameSize = CGSizeMake(editViewMaxWidth, editViewMaxHeight);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.verticalSeparator.frame = NSMakeRect(fileListViewWidth + (viewWidth - fileListViewWidth) / 2, 0, 1, viewHeight - kTabbarHeight);
+        self.progressIndictor.frame = NSMakeRect(viewWidth / 2, viewHeight / 2, 50, 50);
+        
+        if (self.showFileListView) {
+            self.fileListView.hidden = NO;
+            self.fileListView.frame = NSMakeRect(0, 0, kFileListWidth, editViewMaxHeight);
+        }
+        else {
+            self.fileListView.hidden = YES;
+        }
+        self.mattingPicker.frame = NSMakeRect(0, viewHeight - kTabbarHeight, viewWidth, kTabbarHeight);
+        
+        self.editingView.frame = NSMakeRect(fileListViewWidth + (editViewMaxWidth - editViewWidth) / 2, (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
+        self.editingView.magnification = self.editingImageViewZoomingScale;
+        self.editingView.maxFrameSize = CGSizeMake(editViewMaxWidth, editViewMaxHeight);
+        self.maskImageView.frame = self.editingView.imageFrame;
+        self.brushView.frame = self.editingView.imageFrame;
+        self.cropView.frame = self.editingView.imageFrame;
+        NSLog(@"self.editingView.imageFrame=(%f,%f,%f,%f), self.maskImageView.frme=(%f,%f,%f,%f), zoomsclae=%f",self.editingView.imageFrame.origin.x, self.editingView.imageFrame.origin.y, self.editingView.imageFrame.size.width, self.editingView.imageFrame.size.height, self.maskImageView.bounds.origin.x, self.maskImageView.bounds.origin.y, self.maskImageView.bounds.size.width, self.maskImageView.bounds.size.height, self.editingImageViewZoomingScale);
+        
+        self.previewingView.frame = NSMakeRect(fileListViewWidth + editViewMaxWidth + kMiddleWidth * 2 + (editViewMaxWidth - editViewWidth) / 2, (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
+        self.previewingView.magnification = self.editingImageViewZoomingScale;
+        self.previewingView.maxFrameSize = CGSizeMake(editViewMaxWidth, editViewMaxHeight);
+        
+        
+
+    });
     
 }
 
@@ -366,6 +401,7 @@ static const CGFloat kFileListWidth = 70;
 - (KTCropView *)cropView {
     if (!_cropView) {
         _cropView = [[KTCropView alloc] init];
+        [_cropView showCloseButton:NO];
         _cropView.delegate = self;
     }
     return _cropView;
@@ -383,8 +419,9 @@ static const CGFloat kFileListWidth = 70;
 
 - (NSBox *)verticalSeparator {
     if (!_verticalSeparator) {
-        _verticalSeparator = [[NSBox alloc] initWithFrame:NSMakeRect(self.view.bounds.size.width / 2, 0, 2, self.view.bounds.size.height - kTabbarHeight)];
+        _verticalSeparator = [[NSBox alloc] init];
         _verticalSeparator.boxType = NSBoxSeparator;
+        [self.view addSubview:_verticalSeparator];
     }
     return _verticalSeparator;
 }
@@ -435,6 +472,7 @@ static const CGFloat kFileListWidth = 70;
     dstForegroundAlpha = Mat4b(0,0);
     dstForegroundAlphaLast = Mat4b(0,0);
     grabcutResult = Mat1b(0, 0);
+    cropRect = Rect_<int>(0,0,0,0);
     
     self.mattingPicker.mattingMode = SelectModeForegroundTarget;
     self.mattingPicker.previewMode = DisplayModeForeground;
@@ -446,20 +484,20 @@ static const CGFloat kFileListWidth = 70;
         
         currentSrcImage = [sourceImage CVMat2];
         
-        cropRect = extractForegroundRect(currentSrcImage);
+        NSLog(@"sourceImage:(%f,%f),srcImage:(%d,%d)",sourceImage.size.width, sourceImage.size.height, currentSrcImage.cols, currentSrcImage.rows);
+        
+        Rect_<int> _cropRect = extractForegroundRect(currentSrcImage);
         dispatch_async(dispatch_get_main_queue(), ^{
             
             self.editingImageViewZoomingScale = 1.0;
-            self.cropView.cropRect = CGRectMake((CGFloat)cropRect.x / currentSrcImage.cols,
-                                                1. - (CGFloat)(cropRect.y + cropRect.height) / currentSrcImage.rows,
-                                                (CGFloat)cropRect.width / currentSrcImage.cols,
-                                                (CGFloat)cropRect.height / currentSrcImage.rows);
-            [self confirmButtonTappedForCropView:self.cropView];
-            self.cropView.hidden = NO;
-            [self.cropView showCloseButton:YES];
-            self.colorPicker.hidden = YES;
-            
             [self layoutSubviews];
+            self.cropView.cropRect = CGRectMake((CGFloat)_cropRect.x / currentSrcImage.cols,
+                                                1. - (CGFloat)(_cropRect.y + _cropRect.height) / currentSrcImage.rows,
+                                                (CGFloat)_cropRect.width / currentSrcImage.cols,
+                                                (CGFloat)_cropRect.height / currentSrcImage.rows);
+            [self confirmButtonTappedForCropView:self.cropView];
+            
+            
             
         });
         
@@ -479,7 +517,6 @@ static const CGFloat kFileListWidth = 70;
         self.maskImageView.alphaValue = 0.5;
         if (self.selectMode == SelectModeForegroundTarget) {
             self.cropView.hidden = NO;
-            [self.cropView showCloseButton:(grabcutResult.rows == currentSrcImage.rows && grabcutResult.cols == currentSrcImage.cols)];
         }
         else {
             self.cropView.hidden = YES;
@@ -515,7 +552,8 @@ static const CGFloat kFileListWidth = 70;
         self.sourceImage = image;
         //[self.fileUrls addObject:fileUrl];
         [self.view.window setTitleWithRepresentedFilename:[imageUrl path]];
-        [self.view setNeedsLayout:YES];
+        self.showFileListView = NO;
+        [self layoutSubviews];
     }
 }
 
@@ -525,7 +563,11 @@ static const CGFloat kFileListWidth = 70;
     self.fileListView.fileUrls = self.fileUrls;
     [self.fileListView reloadData];
     self.showFileListView = YES;
-    [self.view setNeedsLayout:YES];
+    
+    NSImage *image = [[NSImage alloc] initWithContentsOfURL:self.fileUrls[0]];
+    self.sourceImage = image;
+    [self.view.window setTitleWithRepresentedFilename:[self.fileUrls[0] path]];
+    //[self.view setNeedsLayout:YES];
     [self layoutSubviews];
 }
 
@@ -647,40 +689,8 @@ static const CGFloat kFileListWidth = 70;
         [self.progressIndictor startAnimation:nil];
         self.view.acceptsTouchEvents = NO;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            Mat3b image;
-            cvtColor(currentSrcImage, image, CV_RGBA2RGB);
-            clock_t tic = clock();
-            grabCut(image, grabcutResult, cropRect, bgdModel, fgdModel, 2, GC_EVAL);
-            NSLog(@"grab cut cost time: %.3f", 1000. * (clock() - tic) / NSEC_PER_SEC);
-            compare(grabcutResult, GC_PR_FGD, dstMaskMono, CMP_EQ);
+            calcForegroundAlpha(dstForegroundAlpha, dstMaskMono, currentSrcImage, cropRect, grabcutResult, fgdModel, bgdModel, 5, GC_EVAL);
             
-            if (self.selectMode == SelectModeForegroundTarget) {
-                for (int i = 0; i < drawMat.rows; i++) {
-                    for (int j = 0; j < drawMat.cols; j++) {
-                        if (drawMat(i,j) >= 127) {
-                            dstMaskMono(i,j) = 255;
-                        }
-                    }
-                }
-            }
-            else if (self.selectMode == SelectModeBackgroundTarget) {
-                for (int i = 0; i < drawMat.rows; i++) {
-                    for (int j = 0; j < drawMat.cols; j++) {
-                        if (drawMat(i,j) >= 127) {
-                            dstMaskMono(i,j) = 0;
-                        }
-                    }
-                }
-            }
-            
-            tic = clock();
-#if USE_SSMATTOR
-            SSMattor::solveAlphaAndForeground(dstMaskMono, dstForegroundAlpha, image, dstMaskMono, 5);
-#else
-            currentSrcImage.copyTo(dstForegroundAlpha);
-            localSmooth(image, dstMaskMono, dstMaskMono, dstForegroundAlpha, 5);
-#endif
-            NSLog(@"ssmattor cost time: %.3f", 1000. * (clock() - tic) / NSEC_PER_SEC);
             if (dstMaskColor.rows != dstMaskMono.rows || dstMaskColor.cols != dstMaskMono.cols) {
                 dstMaskColor = Mat4b(dstMaskMono.rows, dstMaskMono.cols);
             }
@@ -906,9 +916,6 @@ static const CGFloat kFileListWidth = 70;
                         }
                     }
                     
-                    //FBSolver::computeForeground(foreground, image, alpha);
-                    //cvtColor(foreground, foreground, cv::COLOR_RGBA2BGRA);
-                    
                 }
                 
             }
@@ -919,20 +926,14 @@ static const CGFloat kFileListWidth = 70;
                 [self updateSubViews];
                 
                 self.view.acceptsTouchEvents = YES;
-                [self.brushPoints removeAllObjects];
+                //[self.brushPoints removeAllObjects];
                 [self.brushView setNeedsDisplay:YES];
+                
             });
-            
             
         });
         
-        
-        
-        
     }
-    
-    
-    
     
 }
 
@@ -951,39 +952,33 @@ static const CGFloat kFileListWidth = 70;
         self.editingImageViewZoomingScale = self.editingView.minMagnification;
     }
     
-    [self.view setNeedsLayout:YES];
     [self layoutSubviews];
 }
 
-
+- (void)swipeWithEvent:(NSEvent *)event {
+    NSLog(@"asdf");
+}
 
 #pragma mark - KTCropViewDelegate
 
 - (void)confirmButtonTappedForCropView:(KTCropView *)cropView {
     
-    cropRect = Rect_<int>(int(cropView.cropRect.origin.x * currentSrcImage.cols),
+    self.cropView.hidden = YES;
+    
+    Rect_<int> _cropRect = Rect_<int>(int(cropView.cropRect.origin.x * currentSrcImage.cols),
                           int((1. - cropView.cropRect.origin.y - cropView.cropRect.size.height) * currentSrcImage.rows),
                           int(cropView.cropRect.size.width * currentSrcImage.cols),
                           int(cropView.cropRect.size.height * currentSrcImage.rows));
-    self.cropView.hidden = YES;
-    [self.progressIndictor startAnimation:nil];
     
+    if (cropRect.x == _cropRect.x && cropRect.y == _cropRect.y && cropRect.size() == _cropRect.size()) {
+        return;
+    }
+    cropRect = _cropRect;
+    
+    [self.progressIndictor startAnimation:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        Mat3b image;
-        cvtColor(currentSrcImage, image, cv::COLOR_RGBA2RGB);
-        clock_t tic = clock();
-        grabCut(image, grabcutResult, cropRect, bgdModel, fgdModel, 2, GC_INIT_WITH_RECT);
-        NSLog(@"grab cut cost time: %.3f", 1000. * (clock() - tic) / NSEC_PER_SEC);
-        compare(grabcutResult, GC_PR_FGD, dstMaskMono, CMP_EQ);
-        clock_t tic2 = clock();
-#if USE_SSMATTOR
-        SSMattor::solveAlphaAndForeground(dstMaskMono, dstForegroundAlpha, image, dstMaskMono, 5);
-#else
-        currentSrcImage.copyTo(dstForegroundAlpha);
-        localSmooth(image, dstMaskMono, dstMaskMono, dstForegroundAlpha, 5);
-#endif
-        NSLog(@"ssmattor cost time: %.3f", 1000. * (clock() - tic2) / NSEC_PER_SEC);
         
+        calcForegroundAlpha(dstForegroundAlpha, dstMaskMono, currentSrcImage, cropRect, grabcutResult, fgdModel, bgdModel, 5, GC_INIT_WITH_RECT);
         
         if (dstMaskColor.rows != dstMaskMono.rows || dstMaskColor.cols != dstMaskMono.cols) {
             dstMaskColor = Mat4b(dstMaskMono.rows, dstMaskMono.cols);
@@ -1004,7 +999,7 @@ static const CGFloat kFileListWidth = 70;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressIndictor stopAnimation:nil];
-            
+            self.editViewDisplayMode = DisplayModeEditImage;
             [self updateSubViews];
         });
         
@@ -1067,7 +1062,14 @@ static const CGFloat kFileListWidth = 70;
 
 - (void)listView:(KTListView *)listView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths {
     
-    
+    NSArray<NSIndexPath *> *indices = [indexPaths allObjects];
+    NSIndexPath *index = indices[0];
+    NSURL *imageUrl = self.fileUrls[index.item];
+    NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageUrl];
+    self.sourceImage = image;
+    [self.view.window setTitleWithRepresentedFilename:[imageUrl path]];
+    //[self.view setNeedsLayout:YES];
+    [self layoutSubviews];
     
     
     

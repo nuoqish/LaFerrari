@@ -62,12 +62,13 @@
     CGFloat resizeImageWidth, resizeImageHeight;
     if (imageRatio > viewRatio) {
         resizeImageWidth = self.maxFrameSize.width;
-        resizeImageHeight = resizeImageWidth / imageRatio;
+        resizeImageHeight = ceil(resizeImageWidth / imageRatio);
     }
     else {
         resizeImageHeight = self.maxFrameSize.height;
-        resizeImageWidth = resizeImageHeight * imageRatio;
+        resizeImageWidth = ceil(resizeImageHeight * imageRatio);
     }
+    
     self.imageView.frame = NSMakeRect(0, 0, resizeImageWidth, resizeImageHeight);
     
 }

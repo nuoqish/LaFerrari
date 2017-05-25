@@ -42,8 +42,9 @@
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
     [super resizeSubviewsWithOldSize:oldSize];
-    [self layoutSubViews];
+    //[self layoutSubViews];
 }
+
 
 - (void)setNeedsLayout:(BOOL)needsLayout {
     [super setNeedsLayout:needsLayout];
@@ -63,7 +64,7 @@
     [super drawRect:dirtyRect];
     
     // Drawing code here.
-    [[NSColor colorWithWhite:0.4 alpha:0.5] set];
+    [[NSColor colorWithWhite:0.2 alpha:0.4] set];
     NSRectFillUsingOperation(dirtyRect, NSCompositeSourceOver);
     
 }

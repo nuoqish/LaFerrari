@@ -30,7 +30,7 @@
 
 - (void)setupListView {
     NSCollectionViewFlowLayout *layout = [NSCollectionViewFlowLayout new];
-    layout.itemSize = CGSizeMake(60, 80);
+    layout.itemSize = CGSizeMake(120, 120);
     layout.minimumLineSpacing = 5;
     layout.minimumInteritemSpacing = 5;
     layout.sectionInset = NSEdgeInsetsMake(5, 5, 5, 5);
@@ -50,10 +50,18 @@
     
 }
 
+- (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
+    [super resizeSubviewsWithOldSize:oldSize];
+    [self layoutSubViews];
+}
 
-- (void)layout {
+- (void)layoutSubViews {
     self.scrollView.frame = self.bounds;
 }
+//- (void)layout {
+//    [super layout];
+//    self.scrollView.frame = self.bounds;
+//}
 
 - (void)reloadData {
     [self.listView reloadData];

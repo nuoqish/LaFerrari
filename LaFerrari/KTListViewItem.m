@@ -26,6 +26,7 @@
 }
 
 - (void)viewDidLayout {
+    [super viewDidLayout];
     self.imageView.frame = self.view.bounds;
 }
 
@@ -38,11 +39,6 @@
         self.view.layer.backgroundColor = [NSColor clearColor].CGColor;
     [self.view setNeedsDisplay:YES];
     NSLog(@"sekected");
-}
-
-- (void)mouseDown:(NSEvent *)event {
-    [super mouseDown:event];
-    [self setSelected:!self.selected];
 }
 
 
