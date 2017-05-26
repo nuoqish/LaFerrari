@@ -9,162 +9,19 @@
 #import "ViewController.h"
 
 #import "NSImage+Utils.h"
-#import <opencv2/imgproc.hpp>
-#import <opencv2/highgui.hpp>
+
 #include "AlphaSolver.hpp"
 #include "FBSolver.hpp"
-#include "SSMattor.hpp"
+#include "GCMattor.hpp"
 
 #import "KTImageView.h"
 #import "KTBrushView.h"
 #import "KTCropView.h"
 #import "KTListView.h"
-
 #import "KTBackgroundPickerView.h"
 #import "KTMattingPickerView.h"
 
-
 #define MAX_IMAGE_NUM 10
-#define USE_AUTO_SEGMENT 0
-#define USE_SSMATTOR 0
-
-
-cv::Rect_<int> extractForegroundRect(Mat& image) {
-    
-    cv::Rect_<int> rect;
-    
-    Mat gray;
-    cvtColor(image, gray, COLOR_BGR2GRAY);
-    Mat1b result;
-    double thresh = 0;
-    threshold(gray, result, thresh, 255, THRESH_BINARY_INV + THRESH_OTSU);
-    
-    int top = image.rows - 1;
-    int bottom = 0;
-    int left = image.cols - 1;
-    int right = 0;
-    
-    for (int i = 0; i < image.rows; i++) {
-        for (int j = 0; j < image.cols; j++) {
-            if (result(i,j) == 255) {
-                if (i < top) {
-                    top = i;
-                }
-                if (i > bottom) {
-                    bottom = i;
-                }
-                if (j < left) {
-                    left = j;
-                }
-                if (j > right) {
-                    right = j;
-                }
-            }
-        }
-    }
-    
-    return Rect_<int>(left, top, right - left, bottom - top);
-}
-
-void erodeTrimap(cv::Mat1b &_trimap, int r)
-{
-    if (r <= 0) {
-        return;
-    }
-    
-    cv::Mat1b &trimap = (cv::Mat1b&)_trimap;
-    
-    int w = trimap.cols;
-    int h = trimap.rows;
-    
-    cv::Mat1b foreground(trimap.size(), (uchar)0);
-    cv::Mat1b background(trimap.size(), (uchar)0);
-    
-    for (int y = 0; y < h; ++y)
-        for (int x = 0; x < w; ++x)
-        {
-            if (trimap(y, x) == 0)
-                background(y, x) = 1;
-            else if (trimap(y, x) == 255)
-                foreground(y, x) = 1;
-        }
-    
-    
-    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(r, r));
-    
-    cv::erode(background, background, kernel);
-    cv::erode(foreground, foreground, kernel);
-    
-    for (int y = 0; y < h; ++y)
-        for (int x = 0; x < w; ++x)
-        {
-            if (background(y, x) == 0 && foreground(y, x) == 0)
-                trimap(y, x) = 128;
-        }
-}
-
-
-void localSmooth(Mat3b& srcImage, Mat1b& srcTrimap, Mat1b& dstAlpha, Mat4b& dstForegroundAlpha, int radius) {
-    Mat1b alpha;
-    srcTrimap.copyTo(alpha);
-    erodeTrimap(alpha, radius);
-    double sigma_d2 = radius;
-    double sigma_c2 = 10000;
-    for (int i = 0; i < srcTrimap.rows; i++) {
-        for (int j = 0; j < srcTrimap.cols; j++) {
-            if (alpha(i,j) == 128) {
-                int imin = max(i - radius, 0);
-                int imax = min(i + radius, srcTrimap.rows - 1);
-                int jmin = max(j - radius, 0);
-                int jmax = min(j + radius, srcTrimap.cols - 1);
-                double Wa = 0,Wsum = 0;
-                for (int ii = imin; ii <= imax; ii++) {
-                    for (int jj = jmin; jj <= jmax; jj++) {
-                        double d2 = (ii - i) * (ii - i) + (jj - j) * (jj - j);
-                        double c2 = (srcImage(ii,jj)[0] - srcImage(i,j)[0]) * (srcImage(ii,jj)[0] - srcImage(i,j)[0]) +
-                        (srcImage(ii,jj)[1] - srcImage(i,j)[1]) * (srcImage(ii,jj)[1] - srcImage(i,j)[1]) +
-                        (srcImage(ii,jj)[2] - srcImage(i,j)[2]) * (srcImage(ii,jj)[2] - srcImage(i,j)[2]);
-                        double W = exp(-d2 / sigma_d2 - c2 / sigma_c2);
-                        Wa += W * (srcTrimap(ii,jj));
-                        Wsum += W;
-                        
-                    }
-                }
-
-                Wa /= Wsum;
-                dstForegroundAlpha(i,j)[0] = uint8_t(dstForegroundAlpha(i,j)[0] * Wa / 255);
-                dstForegroundAlpha(i,j)[1] = uint8_t(dstForegroundAlpha(i,j)[1] * Wa / 255);
-                dstForegroundAlpha(i,j)[2] = uint8_t(dstForegroundAlpha(i,j)[2] * Wa / 255);
-                alpha(i,j) = uint8_t(max(0., min(255., Wa)));;
-            }
-            
-            
-            dstForegroundAlpha(i,j)[3] = alpha(i,j);
-            
-        }
-    }
-    alpha.copyTo(dstAlpha);
-    
-}
-
-void calcForegroundAlpha(Mat4b& dstForegroundAlpha, Mat1b& dstMaskMono, Mat4b& srcImage,
-                         cv::Rect cropRect, Mat1b& grabcutResult, Mat& fgdModel, Mat& bgdModel, int radius, int mode) {
-    Mat3b image;
-    cvtColor(srcImage, image, cv::COLOR_RGBA2RGB);
-    clock_t tic = clock();
-    grabCut(image, grabcutResult, cropRect, bgdModel, fgdModel, 2, mode);
-    NSLog(@"grab cut cost time: %.3f", 1000. * (clock() - tic) / NSEC_PER_SEC);
-    compare(grabcutResult, GC_PR_FGD, dstMaskMono, CMP_EQ);
-    clock_t tic2 = clock();
-#if USE_SSMATTOR
-    SSMattor::solveAlphaAndForeground(dstMaskMono, dstForegroundAlpha, image, dstMaskMono, radius);
-#else
-    srcImage.copyTo(dstForegroundAlpha);
-    localSmooth(image, dstMaskMono, dstMaskMono, dstForegroundAlpha, radius);
-#endif
-    NSLog(@"ssmattor cost time: %.3f", 1000. * (clock() - tic2) / NSEC_PER_SEC);
-    
-}
 
 @interface ViewController () <KTCropViewDelegate, KTListViewDelegate , KTBackgroundPickerViewDelegate, KTMattingPickerViewDelegate>
 
@@ -201,24 +58,20 @@ static const CGFloat kFileListWidth = 140;
 @implementation ViewController {
     
     Mat4b currentSrcImage; // 当前处理图像
-    Mat4b currentBckImage;
     
-    Mat1b dstMaskMono;
-    Mat4b dstMaskColor; // 输出mask，彩色
     Mat4b dstForegroundAlpha;
-    
-    Mat1b dstMaskMonoLast;
-    Mat4b dstMaskColorLast;
+    Mat1b dstAlpha;
+    Mat4b dstMaskColor; // 输出mask，彩色
     Mat4b dstForegroundAlphaLast;
+    Mat1b dstAlphaLast;
+    Mat4b dstMaskColorLast;
     
+    GCMattor gcMattor;
     Rect_<int> cropRect;
-    Mat fgdModel;
-    Mat bgdModel;
-    Mat1b grabcutResult;
     
     map<string, int> fileIndexMap;
     
-    Vec4b previewBackgroundColor;
+    
     Vec4b maskForeColor;
     Vec4b maskBackColor;
     Vec4b maskUnknownColor;
@@ -246,7 +99,7 @@ static const CGFloat kFileListWidth = 140;
     [self commonInit];
     [self setupTimerIfNeeded];
     
-    //self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
+    self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
     
 }
 
@@ -261,7 +114,6 @@ static const CGFloat kFileListWidth = 140;
     maskForeColor = Vec4b(0,255,0,255);
     maskBackColor = Vec4b(255,0,0,255);
     maskUnknownColor = Vec4b(128,128,128,128);
-    previewBackgroundColor = Vec4b(255, 30, 120, 255);
     
 }
 
@@ -354,7 +206,6 @@ static const CGFloat kFileListWidth = 140;
         self.maskImageView.frame = self.editingView.imageFrame;
         self.brushView.frame = self.editingView.imageFrame;
         self.cropView.frame = self.editingView.imageFrame;
-        NSLog(@"self.editingView.imageFrame=(%f,%f,%f,%f), self.maskImageView.frme=(%f,%f,%f,%f), zoomsclae=%f",self.editingView.imageFrame.origin.x, self.editingView.imageFrame.origin.y, self.editingView.imageFrame.size.width, self.editingView.imageFrame.size.height, self.maskImageView.bounds.origin.x, self.maskImageView.bounds.origin.y, self.maskImageView.bounds.size.width, self.maskImageView.bounds.size.height, self.editingImageViewZoomingScale);
         
         self.previewingView.frame = NSMakeRect(fileListViewWidth + editViewMaxWidth + kMiddleWidth * 2 + (editViewMaxWidth - editViewWidth) / 2, (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
         self.previewingView.magnification = self.editingImageViewZoomingScale;
@@ -386,7 +237,7 @@ static const CGFloat kFileListWidth = 140;
     if (!_maskImageView) {
         _maskImageView = [[NSImageView alloc] init];
         _maskImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
-        _maskImageView.alphaValue = 0.1;
+        _maskImageView.alphaValue = 0.5;
     }
     return _maskImageView;
 }
@@ -466,12 +317,12 @@ static const CGFloat kFileListWidth = 140;
     _sourceImage = sourceImage;
     
     dstMaskColor = Mat4b(0,0);
-    dstMaskMono = Mat1b(0,0);
-    dstMaskMonoLast = Mat1b(0,0);
+    dstAlpha = Mat1b(0,0);
+    dstAlphaLast = Mat1b(0,0);
     dstMaskColorLast = Mat4b(0,0);
     dstForegroundAlpha = Mat4b(0,0);
     dstForegroundAlphaLast = Mat4b(0,0);
-    grabcutResult = Mat1b(0, 0);
+    
     cropRect = Rect_<int>(0,0,0,0);
     
     self.mattingPicker.mattingMode = SelectModeForegroundTarget;
@@ -483,10 +334,8 @@ static const CGFloat kFileListWidth = 140;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         currentSrcImage = [sourceImage CVMat2];
-        
-        NSLog(@"sourceImage:(%f,%f),srcImage:(%d,%d)",sourceImage.size.width, sourceImage.size.height, currentSrcImage.cols, currentSrcImage.rows);
-        
-        Rect_<int> _cropRect = extractForegroundRect(currentSrcImage);
+        NSImage *img = [NSImage imageWithCVMat:currentSrcImage];
+        Rect_<int> _cropRect = GCMattor::extractForegroundRect(currentSrcImage);
         dispatch_async(dispatch_get_main_queue(), ^{
             
             self.editingImageViewZoomingScale = 1.0;
@@ -528,13 +377,13 @@ static const CGFloat kFileListWidth = 140;
     }
     
     if (self.previewViewDisplayMode == DisplayModeSegmentImage) {
-        if (dstMaskMono.rows > 0) {
-            self.previewingView.image = [NSImage imageWithCVMat:dstMaskMono];
+        if (dstAlpha.rows > 0) {
+            self.previewingView.image = [NSImage imageWithCVMat:dstAlpha];
         }
         self.colorPicker.hidden = YES;
     }
     else if (self.previewViewDisplayMode == DisplayModeForeground) {
-        if (dstMaskMono.rows > 0) {
+        if (dstAlpha.rows > 0) {
             
             NSImage *image = [NSImage imageWithCVMat:dstForegroundAlpha];
             self.previewingView.image = image;
@@ -574,7 +423,7 @@ static const CGFloat kFileListWidth = 140;
 - (void)saveImageUrl:(NSURL *)imageUrl {
     NSString *filePath = [imageUrl path];
     if (self.previewViewDisplayMode == DisplayModeSegmentImage) {
-        NSImage *image = [NSImage imageWithCVMat:dstMaskMono];
+        NSImage *image = [NSImage imageWithCVMat:dstAlpha];
         [image saveToFile:filePath];
     }
     else {
@@ -585,11 +434,11 @@ static const CGFloat kFileListWidth = 140;
 }
 
 - (void)undo {
-    if (dstMaskMonoLast.rows > 0 && dstMaskColorLast.rows > 0 && dstForegroundAlphaLast.rows > 0) {
+    if (dstAlphaLast.rows > 0 && dstMaskColorLast.rows > 0 && dstForegroundAlphaLast.rows > 0) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             dstMaskColorLast.copyTo(dstMaskColor);
-            dstMaskMonoLast.copyTo(dstMaskMono);
+            dstAlphaLast.copyTo(dstAlpha);
             dstForegroundAlphaLast.copyTo(dstForegroundAlpha);
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -652,13 +501,13 @@ static const CGFloat kFileListWidth = 140;
     
     if (self.selectMode == SelectModeForegroundTarget || self.selectMode == SelectModeBackgroundTarget) {
         
-        if (currentSrcImage.rows == 0 || grabcutResult.rows == 0) {
+        if (currentSrcImage.rows == 0 || !gcMattor.isFinished()) {
             [self.brushPoints removeAllObjects];
             [self.brushView setNeedsDisplay:YES];
             return;
         }
         
-        dstMaskMono.copyTo(dstMaskMonoLast);
+        dstAlpha.copyTo(dstAlphaLast);
         dstMaskColor.copyTo(dstMaskColorLast);
         dstForegroundAlpha.copyTo(dstForegroundAlphaLast);
         
@@ -670,7 +519,7 @@ static const CGFloat kFileListWidth = 140;
                 for (int x = 0; x < drawMat.cols; x++) {
                     uint8 value = drawMat(y,x);
                     if (value >= 127) {
-                        grabcutResult(y,x) = GC_PR_FGD;
+                        gcMattor.setValue(y, x, GC_PR_FGD);
                     }
                 }
             }
@@ -680,7 +529,7 @@ static const CGFloat kFileListWidth = 140;
                 for (int x = 0; x < drawMat.cols; x++) {
                     uint8 value = drawMat(y,x);
                     if (value >= 127) {
-                        grabcutResult(y,x) = GC_BGD;
+                        gcMattor.setValue(y, x, GC_BGD);
                     }
                 }
             }
@@ -689,22 +538,23 @@ static const CGFloat kFileListWidth = 140;
         [self.progressIndictor startAnimation:nil];
         self.view.acceptsTouchEvents = NO;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            calcForegroundAlpha(dstForegroundAlpha, dstMaskMono, currentSrcImage, cropRect, grabcutResult, fgdModel, bgdModel, 5, GC_EVAL);
             
-            if (dstMaskColor.rows != dstMaskMono.rows || dstMaskColor.cols != dstMaskMono.cols) {
-                dstMaskColor = Mat4b(dstMaskMono.rows, dstMaskMono.cols);
+            gcMattor.process(dstForegroundAlpha, dstAlpha, currentSrcImage, cropRect, 5, GC_EVAL);
+            
+            if (dstMaskColor.rows != dstAlpha.rows || dstMaskColor.cols != dstAlpha.cols) {
+                dstMaskColor = Mat4b(dstAlpha.rows, dstAlpha.cols);
             }
-            for (int i = 0; i < dstMaskMono.rows; i++) {
-                for (int j = 0; j < dstMaskMono.cols; j++) {
+            for (int i = 0; i < dstAlpha.rows; i++) {
+                for (int j = 0; j < dstAlpha.cols; j++) {
                     
-                    if (dstMaskMono(i,j) >= 250) {
+                    if (dstAlpha(i,j) >= 250) {
                         dstMaskColor(i,j) = maskForeColor;
-                        dstMaskMono(i,j) = 255;
+                        dstAlpha(i,j) = 255;
                         dstForegroundAlpha(i,j) = currentSrcImage(i,j);
                     }
-                    else if (dstMaskMono(i, j) <= 5) {
+                    else if (dstAlpha(i, j) <= 5) {
                         dstMaskColor(i,j) = maskBackColor;
-                        dstMaskMono(i,j) = 0;
+                        dstAlpha(i,j) = 0;
                         dstForegroundAlpha(i,j)[3] = 0;
                     }
                     else {
@@ -746,26 +596,26 @@ static const CGFloat kFileListWidth = 140;
             if (dstMaskColor.rows != currentSrcImage.rows || dstMaskColor.cols != currentSrcImage.cols) {
                 
                 dstMaskColor = Mat4b(currentSrcImage.rows, currentSrcImage.cols);
-                dstMaskMono = Mat1b(currentSrcImage.rows, currentSrcImage.cols);
+                dstAlpha = Mat1b(currentSrcImage.rows, currentSrcImage.cols);
                 currentSrcImage.copyTo(dstForegroundAlpha);
                 for (int y = 0; y < drawMat.rows; y++) {
                     for (int x = 0; x < drawMat.cols; x++) {
                         uint8 value = drawMat(y,x);
                         if (value >= 127) {
                             dstMaskColor(y,x) = maskForeColor;
-                            dstMaskMono(y,x) = 255;
+                            dstAlpha(y,x) = 255;
                             dstForegroundAlpha(y,x) = currentSrcImage(y,x);
                         }
                         else {
                             dstMaskColor(y,x) = maskBackColor;
-                            dstMaskMono(y,x) = 0;
+                            dstAlpha(y,x) = 0;
                             dstForegroundAlpha(y,x)[3] = 0;
                         }
                     }
                 }
             }
             else {
-                dstMaskMono.copyTo(dstMaskMonoLast);
+                dstAlpha.copyTo(dstAlphaLast);
                 dstMaskColor.copyTo(dstMaskColorLast);
                 dstForegroundAlpha.copyTo(dstForegroundAlphaLast);
                 if (self.selectMode == SelectModeForegroundFineTuning) {
@@ -774,7 +624,7 @@ static const CGFloat kFileListWidth = 140;
                             uint8 value = drawMat(y,x);
                             if (value >= 127) {
                                 dstMaskColor(y,x) = maskForeColor;
-                                dstMaskMono(y,x) = 255;
+                                dstAlpha(y,x) = 255;
                                 dstForegroundAlpha(y,x) = currentSrcImage(y,x);
                                 
                             }
@@ -788,7 +638,7 @@ static const CGFloat kFileListWidth = 140;
                             uint8 value = drawMat(y,x);
                             if (value >= 127) {
                                 dstMaskColor(y,x) = maskBackColor;
-                                dstMaskMono(y,x) = 0;
+                                dstAlpha(y,x) = 0;
                                 dstForegroundAlpha(y,x)[3] = 0;
                             }
                         }
@@ -804,7 +654,7 @@ static const CGFloat kFileListWidth = 140;
                             uint8 value = drawMat(y,x);
                             if (value >= 127) {
                                 dstMaskColor(y,x) = maskUnknownColor;
-                                dstMaskMono(y,x) = 128;
+                                dstAlpha(y,x) = 128;
                                 if (left > x) {
                                     left = x;
                                 }
@@ -827,7 +677,7 @@ static const CGFloat kFileListWidth = 140;
                         uint8_t value;
                         
                         if ((top - expandRadius) >= 0 && (left - expandRadius) >= 0) {
-                            value = dstMaskMono(top - expandRadius, left - expandRadius);
+                            value = dstAlpha(top - expandRadius, left - expandRadius);
                             if(value == 0) {
                                 flag0 = true;
                             }
@@ -837,7 +687,7 @@ static const CGFloat kFileListWidth = 140;
                         }
                         
                         if ((bottom + expandRadius) < currentSrcImage.rows && (right + expandRadius) < currentSrcImage.cols) {
-                            value = dstMaskMono(bottom + expandRadius, right + expandRadius);
+                            value = dstAlpha(bottom + expandRadius, right + expandRadius);
                             if(value == 0) {
                                 flag0 = true;
                             }
@@ -851,7 +701,7 @@ static const CGFloat kFileListWidth = 140;
                         }
                         
                         if ((top - expandRadius) >= 0 && (right + expandRadius) < currentSrcImage.cols) {
-                            value = dstMaskMono(top - expandRadius, right + expandRadius);
+                            value = dstAlpha(top - expandRadius, right + expandRadius);
                             if(value == 0) {
                                 flag0 = true;
                             }
@@ -865,7 +715,7 @@ static const CGFloat kFileListWidth = 140;
                         }
                         
                         if ((bottom + expandRadius) < currentSrcImage.rows && (left - expandRadius) >= 0) {
-                            value = dstMaskMono(bottom + expandRadius, left - expandRadius);
+                            value = dstAlpha(bottom + expandRadius, left - expandRadius);
                             if(value == 0) {
                                 flag0 = true;
                             }
@@ -903,8 +753,8 @@ static const CGFloat kFileListWidth = 140;
                     
                     
                     Rect_<int> rect(left, top, cols, rows);NSLog(@"rect==(%d,%d,%d,%d)", rect.x, rect.y, rect.width, rect.height);
-                    Mat1b trimap = dstMaskMono(rect);
-                    Mat1b alpha = dstMaskMono(rect);
+                    Mat1b trimap = dstAlpha(rect);
+                    Mat1b alpha = dstAlpha(rect);
                     Mat4b foreground = dstForegroundAlpha(rect);
                     AlphaSolver::computeAlpha(alpha, image, trimap, 0, 1);
                     
@@ -926,7 +776,7 @@ static const CGFloat kFileListWidth = 140;
                 [self updateSubViews];
                 
                 self.view.acceptsTouchEvents = YES;
-                //[self.brushPoints removeAllObjects];
+                [self.brushPoints removeAllObjects];
                 [self.brushView setNeedsDisplay:YES];
                 
             });
@@ -978,17 +828,17 @@ static const CGFloat kFileListWidth = 140;
     [self.progressIndictor startAnimation:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        calcForegroundAlpha(dstForegroundAlpha, dstMaskMono, currentSrcImage, cropRect, grabcutResult, fgdModel, bgdModel, 5, GC_INIT_WITH_RECT);
+        gcMattor.process(dstForegroundAlpha, dstAlpha, currentSrcImage, cropRect, 5, GC_INIT_WITH_RECT);
         
-        if (dstMaskColor.rows != dstMaskMono.rows || dstMaskColor.cols != dstMaskMono.cols) {
-            dstMaskColor = Mat4b(dstMaskMono.rows, dstMaskMono.cols);
+        if (dstMaskColor.rows != dstAlpha.rows || dstMaskColor.cols != dstAlpha.cols) {
+            dstMaskColor = Mat4b(dstAlpha.rows, dstAlpha.cols);
         }
-        for (int i = 0; i < dstMaskMono.rows; i++) {
-            for (int j = 0; j < dstMaskMono.cols; j++) {
-                if (dstMaskMono(i,j) == 255) {
+        for (int i = 0; i < dstAlpha.rows; i++) {
+            for (int j = 0; j < dstAlpha.cols; j++) {
+                if (dstAlpha(i,j) == 255) {
                     dstMaskColor(i,j) = maskForeColor;
                 }
-                else if (dstMaskMono(i,j) == 0){
+                else if (dstAlpha(i,j) == 0){
                     dstMaskColor(i,j) = maskBackColor;
                 }
                 else {

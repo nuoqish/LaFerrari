@@ -92,7 +92,8 @@ static void ProviderReleaseDataNOP(void *info, const void *data, size_t size)
 -(cv::Mat)CVMat2
 {
     CGImageRef imageRef = [self CGImageForProposedRect:NULL context:nil hints:nil];
-    CGColorSpaceRef colorSpace = CGImageGetColorSpace(imageRef);
+    // https://stackoverflow.com/questions/28519274/ios-unsupported-color-space-error
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();//CGImageGetColorSpace(imageRef);
     CGFloat cols = CGImageGetWidth(imageRef);
     CGFloat rows = CGImageGetHeight(imageRef);
     cv::Mat4b cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels

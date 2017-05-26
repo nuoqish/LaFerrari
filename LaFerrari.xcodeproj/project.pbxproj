@@ -37,6 +37,7 @@
 		B012EF0B1ED27D5000198D87 /* libopencv_imgproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF081ED27D5000198D87 /* libopencv_imgproc.a */; };
 		B012EF0D1ED27D6300198D87 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF0C1ED27D6300198D87 /* libz.tbd */; };
 		B012EF191ED436B000198D87 /* laferrari.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B012EF181ED436B000198D87 /* laferrari.jpg */; };
+		B012EF1C1ED6D59300198D87 /* GCMattor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EF1A1ED6D59300198D87 /* GCMattor.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +112,8 @@
 		B012EF081ED27D5000198D87 /* libopencv_imgproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_imgproc.a; path = opencv/lib/libopencv_imgproc.a; sourceTree = "<group>"; };
 		B012EF0C1ED27D6300198D87 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		B012EF181ED436B000198D87 /* laferrari.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = laferrari.jpg; sourceTree = "<group>"; };
+		B012EF1A1ED6D59300198D87 /* GCMattor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GCMattor.cpp; path = AlphaMattor/AlphaMattor/AlphaSolver/GCMattor.cpp; sourceTree = SOURCE_ROOT; };
+		B012EF1B1ED6D59300198D87 /* GCMattor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GCMattor.hpp; path = AlphaMattor/AlphaMattor/AlphaSolver/GCMattor.hpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +249,8 @@
 				B012EEFE1ED27D0B00198D87 /* PLNSPMattor.hpp */,
 				B012EEFF1ED27D0B00198D87 /* SSMattor.cpp */,
 				B012EF001ED27D0B00198D87 /* SSMattor.hpp */,
+				B012EF1A1ED6D59300198D87 /* GCMattor.cpp */,
+				B012EF1B1ED6D59300198D87 /* GCMattor.hpp */,
 			);
 			name = AlphaSolver;
 			sourceTree = "<group>";
@@ -384,6 +389,7 @@
 			files = (
 				B012EF021ED27D0B00198D87 /* FBSolver.cpp in Sources */,
 				B012EEEA1ED27C4500198D87 /* KTCropView.m in Sources */,
+				B012EF1C1ED6D59300198D87 /* GCMattor.cpp in Sources */,
 				B012EF031ED27D0B00198D87 /* LNSPMattor.cpp in Sources */,
 				B012EF051ED27D0B00198D87 /* SSMattor.cpp in Sources */,
 				B012EEF31ED27C4500198D87 /* ViewController.mm in Sources */,
