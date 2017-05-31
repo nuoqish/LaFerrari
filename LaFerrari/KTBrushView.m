@@ -90,5 +90,14 @@
     return image;
 }
 
+- (NSImage *)genereateMaskWithSize:(CGSize)size {
+    CGContextRef contextRef = [self drawWithContext:NULL];
+    CGImageRef imageRef = CGBitmapContextCreateImage(contextRef);
+    NSImage *image = [[NSImage alloc] initWithCGImage:imageRef size: size];
+    CGImageRelease(imageRef);
+    CGContextRelease(contextRef);
+    return image;
+}
+
 
 @end

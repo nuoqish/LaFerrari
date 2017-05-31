@@ -22,7 +22,7 @@
 @property(nonatomic, readonly) cv::Mat CVMat2;
 @property(nonatomic, readonly) cv::Mat CVGrayscaleMat;
 
-
+@property (nonatomic, readonly) CGSize sizeInPixels;
 
 
 @end

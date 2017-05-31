@@ -10,7 +10,7 @@
 
 class GCMattorInfo {
 public:
-    GCMattorInfo(){isFinished = false;}
+    GCMattorInfo(){reset();}
     ~GCMattorInfo(){}
     Mat& getFgdModel() {
         return fgdModel;
@@ -23,6 +23,11 @@ public:
     }
     Rect& getCropRect() {
         return cropRect;
+    }
+    void reset() {
+        isFinished = false;
+        grabcutResult = Mat1b(0,0);
+        cropRect = Rect_<int>(0,0,0,0);
     }
 
 public:
@@ -199,6 +204,18 @@ void GCMattor::process(Mat4b &dstForegroundAlpha, Mat1b &dstMaskMono, Mat4b &src
     
 }
 
+void GCMattor::process(Mat4b &dstForegroundAlpha, Mat1b &dstMaskMono, Mat4b &srcImage, int radius, int gc_mode) {
+    
+    Mat& fgdModel = _mattorInfo->getFgdModel();
+    Mat& bgdModel = _mattorInfo->getBgdModel();
+    Mat1b& grabcutResult = _mattorInfo->getGrabcutResult();
+    Rect& cropRect = _mattorInfo->getCropRect();
+    _mattorInfo->isFinished = false;
+    calcForegroundAlpha(dstForegroundAlpha, dstMaskMono, srcImage, cropRect, grabcutResult, fgdModel, bgdModel, radius, gc_mode);
+    _mattorInfo->isFinished = true;
+    
+}
+
 bool GCMattor::isFinished() {
     return _mattorInfo->isFinished;
 }
@@ -210,3 +227,31 @@ void GCMattor::setValue(int row, int col, uint8_t value) {
     Mat1b grabcutResult = _mattorInfo->getGrabcutResult();
     grabcutResult(row, col) = value;
 }
+
+void GCMattor::setCropRect(cv::Rect cropRect) {
+    if (!isFinished()) {
+        return;
+    }
+    Rect& rect = _mattorInfo->getCropRect();
+    rect = Rect_<int>(cropRect.x, cropRect.y, cropRect.width, cropRect.height);
+}
+
+cv::Rect GCMattor::getCropRect() {
+    return _mattorInfo->getCropRect();
+}
+
+void GCMattor::reset() {
+    if (!isFinished()) {
+        return;
+    }
+    _mattorInfo->reset();
+}
+
+
+
+
+
+
+
+
+

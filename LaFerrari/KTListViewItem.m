@@ -38,7 +38,6 @@
     else
         self.view.layer.backgroundColor = [NSColor clearColor].CGColor;
     [self.view setNeedsDisplay:YES];
-    NSLog(@"sekected");
 }
 
 

@@ -19,6 +19,7 @@
 - (instancetype)initWithFrame:(NSRect)frameRect {
     self = [super initWithFrame:frameRect];
     if (self) {
+        
         self.image = [NSImage imageNamed:@"blue_dot"];
         self.imageScaling = NSImageScaleProportionallyDown;
     }
@@ -116,7 +117,7 @@
     CGContextFillRect(contextRef, dirtyRect);
     
     CGContextSetRGBStrokeColor(contextRef, 18. / 255., 173. / 255., 251. / 255., 0.7);
-    CGContextSetLineWidth(contextRef, 1.0);
+    CGContextSetLineWidth(contextRef, 5.0);
     CGContextBeginPath(contextRef);
     CGContextAddRect(contextRef, cropRect);
     CGContextDrawPath(contextRef, kCGPathStroke);

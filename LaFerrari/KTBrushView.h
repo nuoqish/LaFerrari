@@ -18,6 +18,7 @@
 
 
 - (NSImage *)generateMaskWithScale:(CGFloat)scale;
+- (NSImage *)genereateMaskWithSize:(CGSize)size;
 
 - (void)reset;
 

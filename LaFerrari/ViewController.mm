@@ -8,11 +8,11 @@
 
 #import "ViewController.h"
 
-#import "NSImage+Utils.h"
+#import <opencv2/core.hpp>
+using namespace cv;
 
-#include "AlphaSolver.hpp"
-#include "FBSolver.hpp"
-#include "GCMattor.hpp"
+#import "NSImage+Utils.h"
+#import "KTMatteProcessor.h"
 
 #import "KTImageView.h"
 #import "KTBrushView.h"
@@ -20,8 +20,7 @@
 #import "KTListView.h"
 #import "KTBackgroundPickerView.h"
 #import "KTMattingPickerView.h"
-
-#define MAX_IMAGE_NUM 10
+#import "KTProgressIndicator.h"
 
 @interface ViewController () <KTCropViewDelegate, KTListViewDelegate , KTBackgroundPickerViewDelegate, KTMattingPickerViewDelegate>
 
@@ -36,6 +35,8 @@
 @property (nonatomic, strong) NSMutableArray *brushPoints;
 @property (nonatomic, strong) NSMutableArray<NSURL *> *fileUrls;
 @property (nonatomic, assign) BOOL showFileListView;
+@property (nonatomic, strong) NSMutableDictionary *processInfoMap;
+@property (nonatomic, strong) KTMatteProcessor *matteProcessor;
 
 @property (nonatomic, strong) KTImageView *editingView;
 @property (nonatomic, strong) NSImageView *maskImageView;
@@ -46,7 +47,7 @@
 @property (nonatomic, strong) KTBackgroundPickerView *colorPicker;
 @property (nonatomic, strong) KTMattingPickerView *mattingPicker;
 @property (nonatomic, strong) NSBox *verticalSeparator;
-@property (nonatomic, strong) NSProgressIndicator *progressIndictor;
+@property (nonatomic, strong) KTProgressIndicator *progressIndictor;
 
 @end
 
@@ -55,29 +56,7 @@ static const CGFloat kMiddleWidth = 2;
 static const CGFloat kFileListWidth = 140;
 
 
-@implementation ViewController {
-    
-    Mat4b currentSrcImage; // 当前处理图像
-    
-    Mat4b dstForegroundAlpha;
-    Mat1b dstAlpha;
-    Mat4b dstMaskColor; // 输出mask，彩色
-    Mat4b dstForegroundAlphaLast;
-    Mat1b dstAlphaLast;
-    Mat4b dstMaskColorLast;
-    
-    GCMattor gcMattor;
-    Rect_<int> cropRect;
-    
-    map<string, int> fileIndexMap;
-    
-    
-    Vec4b maskForeColor;
-    Vec4b maskBackColor;
-    Vec4b maskUnknownColor;
-    
-    
-}
+@implementation ViewController
 
 - (void)dealloc {
     
@@ -105,15 +84,15 @@ static const CGFloat kFileListWidth = 140;
 
 
 - (void)commonInit {
+    self.matteProcessor = [KTMatteProcessor new];
+    self.processInfoMap = @{}.mutableCopy;
     self.fileUrls = @[].mutableCopy;
     self.oldViewFrameSize = CGSizeZero;
     self.editingImageViewZoomingScale = 1.0;
     self.brushPoints = [[NSMutableArray alloc] init];
     self.brushView.pointsArray = self.brushPoints;
     self.brushView.lineWith = self.mattingPicker.sliderValue;
-    maskForeColor = Vec4b(0,255,0,255);
-    maskBackColor = Vec4b(255,0,0,255);
-    maskUnknownColor = Vec4b(128,128,128,128);
+
     
 }
 
@@ -130,7 +109,6 @@ static const CGFloat kFileListWidth = 140;
 - (void)initSubViews {
     [self.view addSubview:self.editingView];
     [self.view addSubview:self.previewingView];
-    
     [self.view addSubview:self.mattingPicker];
     
     [self.editingView addCustomView:self.maskImageView];
@@ -138,12 +116,7 @@ static const CGFloat kFileListWidth = 140;
     [self.editingView addCustomView:self.cropView];
 
 }
-//
-//- (void)viewDidLayout {
-//    [super viewDidLayout];
-//    [self layoutSubviews];
-//    NSLog(@"viewDidLayout");
-//}
+
 
 - (void)layoutSubViewsIfNeeded {
     if (!CGSizeEqualToSize(self.oldViewFrameSize, self.view.frame.size)) {
@@ -154,10 +127,10 @@ static const CGFloat kFileListWidth = 140;
 
 - (void)layoutSubviews {
     
-    if (currentSrcImage.rows == 0) {
+    if (self.sourceImage.size.width == 0) {
         return;
     }
-    
+    CGSize imageSizeInPixels = [self.sourceImage sizeInPixels];
     CGFloat viewWidth = self.view.frame.size.width;
     CGFloat viewHeight = self.view.frame.size.height;
     CGFloat fileListViewWidth = (self.showFileListView ? kFileListWidth : 0);
@@ -166,7 +139,7 @@ static const CGFloat kFileListWidth = 140;
     CGFloat editViewMaxWidth = ceil((viewWidth - fileListViewWidth) / 2 - kMiddleWidth);
     CGFloat editViewMaxHeight = viewHeight - kTabbarHeight;
     CGFloat editViewRatio = editViewMaxWidth / editViewMaxHeight;
-    CGFloat imageRatio = (CGFloat)currentSrcImage.cols / currentSrcImage.rows;
+    CGFloat imageRatio = imageSizeInPixels.width /imageSizeInPixels.height;
     CGFloat resizeImageWidth, resizeImageHeight;
     if (imageRatio > editViewRatio) {
         resizeImageWidth = editViewMaxWidth;
@@ -185,11 +158,11 @@ static const CGFloat kFileListWidth = 140;
         editViewHeight = editViewMaxHeight;
     }
     
-    self.scaleRatio = currentSrcImage.cols / resizeImageWidth;
+    self.scaleRatio = imageSizeInPixels.width / resizeImageWidth;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.verticalSeparator.frame = NSMakeRect(fileListViewWidth + (viewWidth - fileListViewWidth) / 2, 0, 1, viewHeight - kTabbarHeight);
-        self.progressIndictor.frame = NSMakeRect(viewWidth / 2, viewHeight / 2, 50, 50);
+        self.progressIndictor.frame = NSMakeRect(fileListViewWidth, 0, viewWidth - fileListViewWidth, 30);
         
         if (self.showFileListView) {
             self.fileListView.hidden = NO;
@@ -210,8 +183,6 @@ static const CGFloat kFileListWidth = 140;
         self.previewingView.frame = NSMakeRect(fileListViewWidth + editViewMaxWidth + kMiddleWidth * 2 + (editViewMaxWidth - editViewWidth) / 2, (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
         self.previewingView.magnification = self.editingImageViewZoomingScale;
         self.previewingView.maxFrameSize = CGSizeMake(editViewMaxWidth, editViewMaxHeight);
-        
-        
 
     });
     
@@ -296,11 +267,11 @@ static const CGFloat kFileListWidth = 140;
 }
 
 
-- (NSProgressIndicator *)progressIndictor {
+- (KTProgressIndicator *)progressIndictor {
     if (!_progressIndictor) {
-        _progressIndictor = [[NSProgressIndicator alloc] init];
-        _progressIndictor.style = NSProgressIndicatorSpinningStyle;
-        _progressIndictor.displayedWhenStopped = NO;
+        _progressIndictor = [[KTProgressIndicator alloc] init];
+        
+        
         [self.view addSubview:_progressIndictor];
     }
     return _progressIndictor;
@@ -315,52 +286,59 @@ static const CGFloat kFileListWidth = 140;
 - (void)setSourceImage:(NSImage *)sourceImage {
     
     _sourceImage = sourceImage;
-    
-    dstMaskColor = Mat4b(0,0);
-    dstAlpha = Mat1b(0,0);
-    dstAlphaLast = Mat1b(0,0);
-    dstMaskColorLast = Mat4b(0,0);
-    dstForegroundAlpha = Mat4b(0,0);
-    dstForegroundAlphaLast = Mat4b(0,0);
-    
-    cropRect = Rect_<int>(0,0,0,0);
+    self.editingImageViewZoomingScale = 1.0;
+    [self layoutSubviews];
     
     self.mattingPicker.mattingMode = SelectModeForegroundTarget;
     self.mattingPicker.previewMode = DisplayModeForeground;
+    
     self.editingView.image = sourceImage;
     self.previewingView.image = sourceImage;
     self.maskImageView.image = nil;
+    self.maskImageView.hidden = YES;
+    self.cropView.hidden = YES;
     
+    [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        currentSrcImage = [sourceImage CVMat2];
-        NSImage *img = [NSImage imageWithCVMat:currentSrcImage];
-        Rect_<int> _cropRect = GCMattor::extractForegroundRect(currentSrcImage);
+        [self.matteProcessor processImage:_sourceImage andMode:MatteModeInitRect andRadius:5];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressIndictor stopAnimation:nil];
+            self.cropView.cropRect = self.matteProcessor.cropRect;
+            self.cropView.hidden = NO;
             
-            self.editingImageViewZoomingScale = 1.0;
-            [self layoutSubviews];
-            self.cropView.cropRect = CGRectMake((CGFloat)_cropRect.x / currentSrcImage.cols,
-                                                1. - (CGFloat)(_cropRect.y + _cropRect.height) / currentSrcImage.rows,
-                                                (CGFloat)_cropRect.width / currentSrcImage.cols,
-                                                (CGFloat)_cropRect.height / currentSrcImage.rows);
-            [self confirmButtonTappedForCropView:self.cropView];
-            
-            
-            
+            [self updateSubViews];
         });
         
     });
-    
 
-    
 }
 
 - (void)updateSubViews {
     if (self.editViewDisplayMode == DisplayModeEditImage) {
-        if (dstMaskColor.rows > 0) {
-            NSImage *image = [NSImage imageWithCVMat:dstMaskColor];
-            self.maskImageView.image = image;
+        NSImage *alpha = self.matteProcessor.alphaImage;
+        if (alpha) {
+            Vec4b maskForeColor = Vec4b(0,255,0,255);
+            Vec4b maskBackColor = Vec4b(255,0,0,255);
+            Vec4b maskUnknownColor = Vec4b(128,128,128,128);
+            Mat1b mask = [alpha CVGrayscaleMat];
+            Mat4b maskColor(mask.rows, mask.cols);
+            for (int i = 0; i < mask.rows; i++) {
+                for (int j = 0; j < mask.cols; j++) {
+                    uint8_t value = mask(i, j);
+                    if (value == 255) {
+                        maskColor(i,j) = maskForeColor;
+                    }
+                    else if (value == 0) {
+                        maskColor(i,j) = maskBackColor;
+                    }
+                    else {
+                        maskColor(i,j) = maskUnknownColor;
+                    }
+                }
+            }
+            self.maskImageView.image = [NSImage imageWithCVMat:maskColor];
             self.maskImageView.hidden = NO;
         }
         self.maskImageView.alphaValue = 0.5;
@@ -377,75 +355,83 @@ static const CGFloat kFileListWidth = 140;
     }
     
     if (self.previewViewDisplayMode == DisplayModeSegmentImage) {
-        if (dstAlpha.rows > 0) {
-            self.previewingView.image = [NSImage imageWithCVMat:dstAlpha];
-        }
+        self.previewingView.image = self.matteProcessor.alphaImage;
         self.colorPicker.hidden = YES;
     }
     else if (self.previewViewDisplayMode == DisplayModeForeground) {
-        if (dstAlpha.rows > 0) {
-            
-            NSImage *image = [NSImage imageWithCVMat:dstForegroundAlpha];
-            self.previewingView.image = image;
-            self.colorPicker.hidden = NO;
-            
-        }
+        self.previewingView.image = self.matteProcessor.foregroundImage;
+        self.colorPicker.hidden = NO;
     }
 }
 
 #pragma mark - Actions
 
 - (void)openImageUrl:(NSURL *)imageUrl {
-    NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageUrl];
-    if (image) {
-        self.sourceImage = image;
-        //[self.fileUrls addObject:fileUrl];
-        [self.view.window setTitleWithRepresentedFilename:[imageUrl path]];
-        self.showFileListView = NO;
-        [self layoutSubviews];
-    }
+    
+    [self.view.window setTitleWithRepresentedFilename:[imageUrl path]];
+    self.sourceImage = [[NSImage alloc] initWithContentsOfURL:imageUrl];
+    
+    //[self openImageUrls:@[imageUrl]];
 }
 
 - (void)openImageUrls:(NSArray<NSURL *> *)imageUrls {
+    [self.fileUrls removeAllObjects];
     [self.fileUrls addObjectsFromArray:imageUrls];
-    
     self.fileListView.fileUrls = self.fileUrls;
     [self.fileListView reloadData];
-    self.showFileListView = YES;
-    
-    NSImage *image = [[NSImage alloc] initWithContentsOfURL:self.fileUrls[0]];
-    self.sourceImage = image;
-    [self.view.window setTitleWithRepresentedFilename:[self.fileUrls[0] path]];
-    //[self.view setNeedsLayout:YES];
+    self.showFileListView = self.fileUrls.count > 1;
     [self layoutSubviews];
+
+    [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        
+        [self.fileUrls enumerateObjectsUsingBlock:^(NSURL * _Nonnull imageUrl, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            KTMatteProcessor *matteProcessor = [[KTMatteProcessor alloc] init];
+            [matteProcessor processImageWithUrl:imageUrl andMode:MatteModeInitRect andRadius:5];
+            [self.processInfoMap setObject:matteProcessor forKey:[imageUrl path]];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.view.window setTitleWithRepresentedFilename:[imageUrl path]];
+                NSString *text = [NSString stringWithFormat:@"正在进行抠图处理(%zu/%zu): %@", idx + 1, self.fileUrls.count, [imageUrl lastPathComponent]];
+                [self.progressIndictor setHintText:text];
+                
+                NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageUrl];
+                _sourceImage = image;
+                self.editingImageViewZoomingScale = 1.0;
+                [self layoutSubviews];
+                self.editingView.image = image;
+                self.previewingView.image = matteProcessor.foregroundImage;
+                self.maskImageView.hidden = YES;
+                self.cropView.cropRect = matteProcessor.cropRect;
+                
+            });
+            
+        }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressIndictor stopAnimation:nil];
+        });
+    });
+    
+    
 }
 
 - (void)saveImageUrl:(NSURL *)imageUrl {
     NSString *filePath = [imageUrl path];
+    if (![filePath hasSuffix:@"png"]) {
+        filePath = [filePath stringByAppendingPathExtension:@"png"];
+    }
     if (self.previewViewDisplayMode == DisplayModeSegmentImage) {
-        NSImage *image = [NSImage imageWithCVMat:dstAlpha];
-        [image saveToFile:filePath];
+        [self.matteProcessor.alphaImage saveToFile:filePath];
     }
     else {
-        NSImage *image = [NSImage imageWithCVMat:dstForegroundAlpha];
-        [image saveToFile:filePath];
-        
+        [self.matteProcessor.foregroundImage saveToFile:filePath];
     }
 }
 
 - (void)undo {
-    if (dstAlphaLast.rows > 0 && dstMaskColorLast.rows > 0 && dstForegroundAlphaLast.rows > 0) {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dstMaskColorLast.copyTo(dstMaskColor);
-            dstAlphaLast.copyTo(dstAlpha);
-            dstForegroundAlphaLast.copyTo(dstForegroundAlpha);
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateSubViews];
-            });
-        });
-    }
+    
 }
 
 
@@ -501,67 +487,27 @@ static const CGFloat kFileListWidth = 140;
     
     if (self.selectMode == SelectModeForegroundTarget || self.selectMode == SelectModeBackgroundTarget) {
         
-        if (currentSrcImage.rows == 0 || !gcMattor.isFinished()) {
+        if (!self.matteProcessor.completed) {
             [self.brushPoints removeAllObjects];
             [self.brushView setNeedsDisplay:YES];
             return;
         }
         
-        dstAlpha.copyTo(dstAlphaLast);
-        dstMaskColor.copyTo(dstMaskColorLast);
-        dstForegroundAlpha.copyTo(dstForegroundAlphaLast);
-        
         NSImage *drawImage = [self.brushView generateMaskWithScale:self.scaleRatio];
-        Mat1b drawMat = [drawImage CVGrayscaleMat];
         
         if (self.selectMode == SelectModeForegroundTarget) {
-            for (int y = 0; y < drawMat.rows; y++) {
-                for (int x = 0; x < drawMat.cols; x++) {
-                    uint8 value = drawMat(y,x);
-                    if (value >= 127) {
-                        gcMattor.setValue(y, x, GC_PR_FGD);
-                    }
-                }
-            }
+            [self.matteProcessor updateMaskWithImage:drawImage andPixelMode:PixelModeForeground];
+            
         }
         else if (self.selectMode == SelectModeBackgroundTarget) {
-            for (int y = 0; y < drawMat.rows; y++) {
-                for (int x = 0; x < drawMat.cols; x++) {
-                    uint8 value = drawMat(y,x);
-                    if (value >= 127) {
-                        gcMattor.setValue(y, x, GC_BGD);
-                    }
-                }
-            }
+            [self.matteProcessor updateMaskWithImage:drawImage andPixelMode:PixelModeBackground];
         }
         
-        [self.progressIndictor startAnimation:nil];
+        [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
         self.view.acceptsTouchEvents = NO;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            gcMattor.process(dstForegroundAlpha, dstAlpha, currentSrcImage, cropRect, 5, GC_EVAL);
-            
-            if (dstMaskColor.rows != dstAlpha.rows || dstMaskColor.cols != dstAlpha.cols) {
-                dstMaskColor = Mat4b(dstAlpha.rows, dstAlpha.cols);
-            }
-            for (int i = 0; i < dstAlpha.rows; i++) {
-                for (int j = 0; j < dstAlpha.cols; j++) {
-                    
-                    if (dstAlpha(i,j) >= 250) {
-                        dstMaskColor(i,j) = maskForeColor;
-                        dstAlpha(i,j) = 255;
-                        dstForegroundAlpha(i,j) = currentSrcImage(i,j);
-                    }
-                    else if (dstAlpha(i, j) <= 5) {
-                        dstMaskColor(i,j) = maskBackColor;
-                        dstAlpha(i,j) = 0;
-                        dstForegroundAlpha(i,j)[3] = 0;
-                    }
-                    else {
-                        dstMaskColor(i,j) = maskUnknownColor;
-                    }
-                }
-            }
+            [self.matteProcessor processImage:self.sourceImage andMode:MatteModeEVal andRadius:5];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressIndictor stopAnimation:nil];
@@ -581,200 +527,28 @@ static const CGFloat kFileListWidth = 140;
              self.selectMode == SelectModeBackgroundFineTuning ||
              self.selectMode == SelectModeUnknownAreaFineTuning){
         
-        if (currentSrcImage.rows == 0) {
-            return;
-        }
-        
-        
-        [self.progressIndictor startAnimation:nil];
+        [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
         NSImage *drawImage = [self.brushView generateMaskWithScale:self.scaleRatio];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-            Mat1b drawMat = [drawImage CVGrayscaleMat];
             
-            if (dstMaskColor.rows != currentSrcImage.rows || dstMaskColor.cols != currentSrcImage.cols) {
-                
-                dstMaskColor = Mat4b(currentSrcImage.rows, currentSrcImage.cols);
-                dstAlpha = Mat1b(currentSrcImage.rows, currentSrcImage.cols);
-                currentSrcImage.copyTo(dstForegroundAlpha);
-                for (int y = 0; y < drawMat.rows; y++) {
-                    for (int x = 0; x < drawMat.cols; x++) {
-                        uint8 value = drawMat(y,x);
-                        if (value >= 127) {
-                            dstMaskColor(y,x) = maskForeColor;
-                            dstAlpha(y,x) = 255;
-                            dstForegroundAlpha(y,x) = currentSrcImage(y,x);
-                        }
-                        else {
-                            dstMaskColor(y,x) = maskBackColor;
-                            dstAlpha(y,x) = 0;
-                            dstForegroundAlpha(y,x)[3] = 0;
-                        }
-                    }
-                }
+            if (self.selectMode == SelectModeForegroundFineTuning) {
+                [self.matteProcessor updateMaskWithImage:drawImage andPixelMode:PixelModeForeground];
+                [self.matteProcessor updateForegroundAndAlphaWithImage:drawImage andPixelMode:PixelModeForeground];
             }
-            else {
-                dstAlpha.copyTo(dstAlphaLast);
-                dstMaskColor.copyTo(dstMaskColorLast);
-                dstForegroundAlpha.copyTo(dstForegroundAlphaLast);
-                if (self.selectMode == SelectModeForegroundFineTuning) {
-                    for (int y = 0; y < drawMat.rows; y++) {
-                        for (int x = 0; x < drawMat.cols; x++) {
-                            uint8 value = drawMat(y,x);
-                            if (value >= 127) {
-                                dstMaskColor(y,x) = maskForeColor;
-                                dstAlpha(y,x) = 255;
-                                dstForegroundAlpha(y,x) = currentSrcImage(y,x);
-                                
-                            }
-                        }
-                    }
-                }
-                else if (self.selectMode == SelectModeBackgroundFineTuning) {
-                    for (int y = 0; y < drawMat.rows; y++) {
-                        for (int x = 0; x < drawMat.cols; x++) {
-                          
-                            uint8 value = drawMat(y,x);
-                            if (value >= 127) {
-                                dstMaskColor(y,x) = maskBackColor;
-                                dstAlpha(y,x) = 0;
-                                dstForegroundAlpha(y,x)[3] = 0;
-                            }
-                        }
-                    }
-                }
-                else if (self.selectMode == SelectModeUnknownAreaFineTuning) {
-                    int left = currentSrcImage.cols - 1;
-                    int right = 0;
-                    int top = currentSrcImage.rows - 1;
-                    int bottom = 0;
-                    for (int y = 0; y < drawMat.rows; y++) {
-                        for (int x = 0; x < drawMat.cols; x++) {
-                            uint8 value = drawMat(y,x);
-                            if (value >= 127) {
-                                dstMaskColor(y,x) = maskUnknownColor;
-                                dstAlpha(y,x) = 128;
-                                if (left > x) {
-                                    left = x;
-                                }
-                                if (right < x) {
-                                    right = x;
-                                }
-                                if (top > y) {
-                                    top = y;
-                                }
-                                if (bottom < y) {
-                                    bottom = y;
-                                }
-                            }
-                        }
-                    }
-
-                    int expandRadius = 2;
-                    for(expandRadius = 2; expandRadius < 10; expandRadius++) {
-                        bool flag0 = false, flag255 = false;
-                        uint8_t value;
-                        
-                        if ((top - expandRadius) >= 0 && (left - expandRadius) >= 0) {
-                            value = dstAlpha(top - expandRadius, left - expandRadius);
-                            if(value == 0) {
-                                flag0 = true;
-                            }
-                            else if (value == 255) {
-                                flag255 = true;
-                            }
-                        }
-                        
-                        if ((bottom + expandRadius) < currentSrcImage.rows && (right + expandRadius) < currentSrcImage.cols) {
-                            value = dstAlpha(bottom + expandRadius, right + expandRadius);
-                            if(value == 0) {
-                                flag0 = true;
-                            }
-                            else if (value == 255) {
-                                flag255 = true;
-                            }
-                        }
-                        
-                        if (flag0 && flag255) {
-                            break;
-                        }
-                        
-                        if ((top - expandRadius) >= 0 && (right + expandRadius) < currentSrcImage.cols) {
-                            value = dstAlpha(top - expandRadius, right + expandRadius);
-                            if(value == 0) {
-                                flag0 = true;
-                            }
-                            else if (value == 255) {
-                                flag255 = true;
-                            }
-                        }
-                        
-                        if (flag0 && flag255) {
-                            break;
-                        }
-                        
-                        if ((bottom + expandRadius) < currentSrcImage.rows && (left - expandRadius) >= 0) {
-                            value = dstAlpha(bottom + expandRadius, left - expandRadius);
-                            if(value == 0) {
-                                flag0 = true;
-                            }
-                            else if (value == 255) {
-                                flag255 = true;
-                            }
-                        }
-                        
-                        if (flag0 && flag255) {
-                            break;
-                        }
-                        
-                        
-                    }
-                    
-                    NSLog(@"expandRadius == %d, left = %d, top = %d, right = %d, bottom = %d", expandRadius, left, top, right, bottom);
-                    
-                    top = max(0,top - expandRadius);
-                    left = max(0, left - expandRadius);
-                    bottom = min(currentSrcImage.rows - 1, bottom + expandRadius);
-                    right = min(currentSrcImage.cols - 1, right + expandRadius);
-                    
-                    
-                    int rows = bottom - top;
-                    int cols = right - left;
-                    Mat3b image(rows, cols);
-                    for (int i = 0; i < rows; i++) {
-                        for (int j = 0; j < cols; j++) {
-                            image(i, j)[0] = currentSrcImage(top + i, left + j)[2];
-                            image(i, j)[1] = currentSrcImage(top + i, left + j)[1];
-                            image(i, j)[2] = currentSrcImage(top + i, left + j)[0];
-                        }
-                    }
-                    
-                    
-                    
-                    Rect_<int> rect(left, top, cols, rows);NSLog(@"rect==(%d,%d,%d,%d)", rect.x, rect.y, rect.width, rect.height);
-                    Mat1b trimap = dstAlpha(rect);
-                    Mat1b alpha = dstAlpha(rect);
-                    Mat4b foreground = dstForegroundAlpha(rect);
-                    AlphaSolver::computeAlpha(alpha, image, trimap, 0, 1);
-                    
-                    for (int i = top; i <= bottom; i++) {
-                        for (int j = left; j <= right; j++) {
-                            dstForegroundAlpha(i,j)[0] = uint8_t(dstForegroundAlpha(i,j)[0] * dstForegroundAlpha(i,j)[3] / 255.);
-                            dstForegroundAlpha(i,j)[1] = uint8_t(dstForegroundAlpha(i,j)[1] * dstForegroundAlpha(i,j)[3] / 255.);
-                            dstForegroundAlpha(i,j)[2] = uint8_t(dstForegroundAlpha(i,j)[2] * dstForegroundAlpha(i,j)[3] / 255.);
-                        }
-                    }
-                    
-                }
-                
+            else if (self.selectMode == SelectModeBackgroundFineTuning) {
+                [self.matteProcessor updateMaskWithImage:drawImage andPixelMode:PixelModeBackground];
+                [self.matteProcessor updateForegroundAndAlphaWithImage:drawImage andPixelMode:PixelModeBackground];
+            }
+            else if (self.selectMode == SelectModeUnknownAreaFineTuning){
+                [self.matteProcessor updateForegroundAndAlphaWithImage:drawImage andPixelMode:PixelModeUnknown];
+                [self.matteProcessor processImage:self.sourceImage andMode:MatteModeCF andRadius:5];
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
 
                 [self.progressIndictor stopAnimation:nil];
                 [self updateSubViews];
-                
                 self.view.acceptsTouchEvents = YES;
                 [self.brushPoints removeAllObjects];
                 [self.brushView setNeedsDisplay:YES];
@@ -805,48 +579,23 @@ static const CGFloat kFileListWidth = 140;
     [self layoutSubviews];
 }
 
-- (void)swipeWithEvent:(NSEvent *)event {
-    NSLog(@"asdf");
-}
-
 #pragma mark - KTCropViewDelegate
 
 - (void)confirmButtonTappedForCropView:(KTCropView *)cropView {
     
     self.cropView.hidden = YES;
     
-    Rect_<int> _cropRect = Rect_<int>(int(cropView.cropRect.origin.x * currentSrcImage.cols),
-                          int((1. - cropView.cropRect.origin.y - cropView.cropRect.size.height) * currentSrcImage.rows),
-                          int(cropView.cropRect.size.width * currentSrcImage.cols),
-                          int(cropView.cropRect.size.height * currentSrcImage.rows));
     
-    if (cropRect.x == _cropRect.x && cropRect.y == _cropRect.y && cropRect.size() == _cropRect.size()) {
+    if (CGRectEqualToRect(cropView.cropRect, self.matteProcessor.cropRect)) {
         return;
     }
-    cropRect = _cropRect;
+    self.matteProcessor.cropRect = cropView.cropRect;
     
-    [self.progressIndictor startAnimation:nil];
+    [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        gcMattor.process(dstForegroundAlpha, dstAlpha, currentSrcImage, cropRect, 5, GC_INIT_WITH_RECT);
-        
-        if (dstMaskColor.rows != dstAlpha.rows || dstMaskColor.cols != dstAlpha.cols) {
-            dstMaskColor = Mat4b(dstAlpha.rows, dstAlpha.cols);
-        }
-        for (int i = 0; i < dstAlpha.rows; i++) {
-            for (int j = 0; j < dstAlpha.cols; j++) {
-                if (dstAlpha(i,j) == 255) {
-                    dstMaskColor(i,j) = maskForeColor;
-                }
-                else if (dstAlpha(i,j) == 0){
-                    dstMaskColor(i,j) = maskBackColor;
-                }
-                else {
-                    dstMaskColor(i,j) = maskUnknownColor;
-                }
-            }
-        }
-        
+       
+        [self.matteProcessor processImage:self.sourceImage andMode:MatteModeInitRect andRadius:5];
+
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressIndictor stopAnimation:nil];
             self.editViewDisplayMode = DisplayModeEditImage;
@@ -915,11 +664,23 @@ static const CGFloat kFileListWidth = 140;
     NSArray<NSIndexPath *> *indices = [indexPaths allObjects];
     NSIndexPath *index = indices[0];
     NSURL *imageUrl = self.fileUrls[index.item];
-    NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageUrl];
-    self.sourceImage = image;
     [self.view.window setTitleWithRepresentedFilename:[imageUrl path]];
-    //[self.view setNeedsLayout:YES];
-    [self layoutSubviews];
+    
+    KTMatteProcessor *processor = [self.processInfoMap objectForKey:[imageUrl path]];
+    if (!processor) {
+        NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageUrl];
+        self.sourceImage = image;
+    }
+    else {
+        self.matteProcessor = processor;
+        self.editingImageViewZoomingScale = 1.;
+        self.cropView.cropRect = processor.cropRect;
+        _sourceImage = [[NSImage alloc] initWithContentsOfURL:imageUrl];
+        self.editingView.image = _sourceImage;
+        self.previewingView.image = [[NSImage alloc] initWithContentsOfFile:processor.foregroundLocalPath];
+        [self layoutSubviews];
+    }
+    
     
     
     

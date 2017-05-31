@@ -38,6 +38,8 @@
 		B012EF0D1ED27D6300198D87 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B012EF0C1ED27D6300198D87 /* libz.tbd */; };
 		B012EF191ED436B000198D87 /* laferrari.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B012EF181ED436B000198D87 /* laferrari.jpg */; };
 		B012EF1C1ED6D59300198D87 /* GCMattor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EF1A1ED6D59300198D87 /* GCMattor.cpp */; };
+		B012EF1F1ED918D200198D87 /* KTProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF1E1ED918D200198D87 /* KTProgressIndicator.m */; };
+		B012EF221ED9837C00198D87 /* KTMatteProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = B012EF211ED9837C00198D87 /* KTMatteProcessor.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +116,10 @@
 		B012EF181ED436B000198D87 /* laferrari.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = laferrari.jpg; sourceTree = "<group>"; };
 		B012EF1A1ED6D59300198D87 /* GCMattor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GCMattor.cpp; path = AlphaMattor/AlphaMattor/AlphaSolver/GCMattor.cpp; sourceTree = SOURCE_ROOT; };
 		B012EF1B1ED6D59300198D87 /* GCMattor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GCMattor.hpp; path = AlphaMattor/AlphaMattor/AlphaSolver/GCMattor.hpp; sourceTree = SOURCE_ROOT; };
+		B012EF1D1ED918D200198D87 /* KTProgressIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTProgressIndicator.h; sourceTree = "<group>"; };
+		B012EF1E1ED918D200198D87 /* KTProgressIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTProgressIndicator.m; sourceTree = "<group>"; };
+		B012EF201ED9837C00198D87 /* KTMatteProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTMatteProcessor.h; sourceTree = "<group>"; };
+		B012EF211ED9837C00198D87 /* KTMatteProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KTMatteProcessor.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,8 +204,12 @@
 				B012EEDE1ED27C4500198D87 /* KTMattingPickerView.m */,
 				B012EEDF1ED27C4500198D87 /* KTToolbar.h */,
 				B012EEE01ED27C4500198D87 /* KTToolbar.m */,
+				B012EF1D1ED918D200198D87 /* KTProgressIndicator.h */,
+				B012EF1E1ED918D200198D87 /* KTProgressIndicator.m */,
 				B012EEE11ED27C4500198D87 /* NSImage+Utils.h */,
 				B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */,
+				B012EF201ED9837C00198D87 /* KTMatteProcessor.h */,
+				B012EF211ED9837C00198D87 /* KTMatteProcessor.mm */,
 				B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */,
 				B012EF181ED436B000198D87 /* laferrari.jpg */,
 				B012EEA51ED27AB700198D87 /* Assets.xcassets */,
@@ -396,6 +406,7 @@
 				B012EEA11ED27AB700198D87 /* main.m in Sources */,
 				B012EEF11ED27C4500198D87 /* KTToolbar.m in Sources */,
 				B012EE9E1ED27AB700198D87 /* AppDelegate.m in Sources */,
+				B012EF1F1ED918D200198D87 /* KTProgressIndicator.m in Sources */,
 				B012EEF21ED27C4500198D87 /* NSImage+Utils.mm in Sources */,
 				B012EEEC1ED27C4500198D87 /* KTImageView.m in Sources */,
 				B012EEF51ED27C4500198D87 /* WindowController.m in Sources */,
@@ -405,6 +416,7 @@
 				B012EEF01ED27C4500198D87 /* KTMattingPickerView.m in Sources */,
 				B012EEED1ED27C4500198D87 /* KTListView.m in Sources */,
 				B012EEE91ED27C4500198D87 /* KTButton.m in Sources */,
+				B012EF221ED9837C00198D87 /* KTMatteProcessor.mm in Sources */,
 				B012EF041ED27D0B00198D87 /* PLNSPMattor.cpp in Sources */,
 				B012EEE71ED27C4500198D87 /* KTBackgroundPickerView.m in Sources */,
 			);

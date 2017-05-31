@@ -21,7 +21,11 @@ class GCMattor {
 public:
     GCMattor();
     ~GCMattor();
+    void reset();
     void setValue(int row, int col, uint8_t value);
+    void setCropRect(cv::Rect cropRect);
+    cv::Rect getCropRect();
+    void process(Mat4b& dstForegroundAlpha, Mat1b& dstMaskMono, Mat4b& srcImage, int radius, int gc_mode);
     void process(Mat4b& dstForegroundAlpha, Mat1b& dstMaskMono, Mat4b& srcImage, cv::Rect& cropRect, int radius, int gc_mode);
     bool isFinished();
     

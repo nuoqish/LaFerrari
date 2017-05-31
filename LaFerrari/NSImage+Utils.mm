@@ -203,7 +203,12 @@ static void ProviderReleaseDataNOP(void *info, const void *data, size_t size)
     return image;
 }
 
-
+- (CGSize)sizeInPixels {
+    CGImageRef imageRef = [self CGImageForProposedRect:NULL context:nil hints:nil];
+    CGFloat width = CGImageGetWidth(imageRef);
+    CGFloat height = CGImageGetHeight(imageRef);
+    return CGSizeMake(width, height);
+}
 
 
 @end
