@@ -25,16 +25,15 @@ typedef NS_ENUM(NSInteger, PixelMode) {
 @interface KTMatteProcessor : NSObject
 
 @property (nonatomic, assign) CGRect cropRect;
-
-- (void)processImage:(NSImage *)image andMode:(MatteMode)mode andRadius:(int)radius;
-- (void)processImageWithUrl:(NSURL *)imageUrl andMode:(MatteMode)mode andRadius:(int)radius;
-@property (nonatomic, readonly) NSString *foregroundLocalPath;
-@property (nonatomic, readonly) NSString *alphaLocalPath;
 @property (nonatomic, readonly) NSImage *foregroundImage;
 @property (nonatomic, readonly) NSImage *alphaImage;
 @property (nonatomic, readonly) BOOL completed;
 
+- (void)processImage:(NSImage *)image andMode:(MatteMode)mode andRadius:(int)radius;
+- (void)processImageWithUrl:(NSURL *)imageUrl andMode:(MatteMode)mode andRadius:(int)radius;
 - (void)updateMaskWithImage:(NSImage *)drawImage andPixelMode:(PixelMode)pixelMode;
 - (void)updateForegroundAndAlphaWithImage:(NSImage *)drawImage andPixelMode:(PixelMode)pixelMode;
+- (void)reset;
+- (void)undo;
 
 @end

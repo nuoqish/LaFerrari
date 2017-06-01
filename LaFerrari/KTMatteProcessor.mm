@@ -11,20 +11,13 @@
 #include "GCMattor.hpp"
 #include "AlphaSolver.hpp"
 
-
-
-@interface KTMatteProcessor ()
-
-@property (nonatomic, strong) NSString *foregroundLocalPath;
-@property (nonatomic, strong) NSString *alphaLocalPath;
-
-@end
-
 @implementation KTMatteProcessor {
     GCMattor mattor;
     Mat4b srcImageMat;
     Mat4b foregroundMat;
     Mat1b alphaMat;
+    Mat4b foregroundMatLast;
+    Mat1b alphaMatLast;
 }
 
 - (instancetype)init {
@@ -44,9 +37,11 @@
 }
 
 - (void)processImage:(NSImage *)image andMode:(MatteMode)mode andRadius:(int)radius {
+    
+    [self saveToCacheIfNeeded];
+    
     srcImageMat = [image CVMat2];
     if (mode == MatteModeInitRect) {
-        mattor.reset();
         mattor.process(foregroundMat, alphaMat, srcImageMat, radius, GC_INIT_WITH_RECT);
     }
     else if (mode == MatteModeInitMask) {
@@ -60,14 +55,6 @@
         cv::cvtColor(srcImageMat, image2, cv::COLOR_RGBA2RGB);
         AlphaSolver::computeAlpha(alphaMat, image2, alphaMat);
     }
-    
-    NSString *cacheName = [self.class createRandomName];
-    self.foregroundLocalPath = [NSString stringWithFormat:@"%@%@%@", NSTemporaryDirectory(), cacheName, @"-foreground.png"];
-    self.alphaLocalPath = [NSString stringWithFormat:@"%@%@%@", NSTemporaryDirectory(), cacheName, @"-alpha.png"];
-    NSImage *foregroundImage= [NSImage imageWithCVMat:foregroundMat];
-    [foregroundImage saveToFile:self.foregroundLocalPath];
-    NSImage *alphaImage = [NSImage imageWithCVMat:alphaMat];
-    [alphaImage saveToFile:self.alphaLocalPath];
 }
 
 - (void)processImageWithUrl:(NSURL *)imageUrl andMode:(MatteMode)mode andRadius:(int)radius{
@@ -82,14 +69,18 @@
                                      int(cropRect.size.width * srcImageMat.cols),
                                      int(cropRect.size.height * srcImageMat.rows));
     mattor.setCropRect(rect);
+
+    
 }
 
 - (CGRect)cropRect {
+    
     cv::Rect croprect = mattor.getCropRect();
     CGRect rect = CGRectMake((CGFloat)croprect.x / srcImageMat.cols,
                           1. - (CGFloat)(croprect.y + croprect.height) / srcImageMat.rows,
                           (CGFloat)croprect.width / srcImageMat.cols,
                           (CGFloat)croprect.height / srcImageMat.rows);
+    
     return rect;
 }
 
@@ -126,8 +117,10 @@
 
 
 - (void)updateForegroundAndAlphaWithImage:(NSImage *)drawImage andPixelMode:(PixelMode)pixelMode{
-    Mat1b drawMat = [drawImage CVGrayscaleMat];
     
+    [self saveToCacheIfNeeded];
+    
+    Mat1b drawMat = [drawImage CVGrayscaleMat];
     if (pixelMode == PixelModeForeground) {
         for (int i = 0; i < drawMat.rows; i++) {
             for (int j = 0; j < drawMat.cols; j++) {
@@ -181,9 +174,33 @@
     return [NSImage imageWithCVMat:alphaMat];
 }
 
+- (void)reset {
+    mattor.reset();
+    srcImageMat = Mat4b(0,0);
+    foregroundMat = Mat4b(0,0);
+    alphaMat = Mat1b(0,0);
+    foregroundMatLast = Mat4b(0,0);
+    alphaMatLast = Mat1b(0,0);
+    
+}
 
+- (void)saveToCacheIfNeeded {
+    if (foregroundMat.rows > 0 && foregroundMat.cols > 0) {
+        foregroundMat.copyTo(foregroundMatLast);
+    }
+    if (alphaMat.rows > 0 && alphaMat.cols > 0) {
+        alphaMat.copyTo(alphaMatLast);
+    }
 
+}
 
-
+- (void)undo {
+    if (foregroundMatLast.rows > 0 && foregroundMatLast.cols > 0) {
+        foregroundMatLast.copyTo(foregroundMat);
+    }
+    if (alphaMatLast.rows > 0 && alphaMatLast.cols > 0) {
+        alphaMatLast.copyTo(alphaMat);
+    }
+}
 
 @end

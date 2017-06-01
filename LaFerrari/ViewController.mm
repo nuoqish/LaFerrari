@@ -54,6 +54,7 @@ using namespace cv;
 static const CGFloat kTabbarHeight = 30;
 static const CGFloat kMiddleWidth = 2;
 static const CGFloat kFileListWidth = 140;
+static const CGFloat kBottomIndicatorHeight = 20;
 
 
 @implementation ViewController
@@ -79,9 +80,13 @@ static const CGFloat kFileListWidth = 140;
     [self setupTimerIfNeeded];
     
     self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
-    
+    [self.view.window setTitleWithRepresentedFilename:@"LaFerrari"];
 }
 
+- (void)viewDidLayout {
+    [super viewDidLayout];
+    [self layoutSubviews];
+}
 
 - (void)commonInit {
     self.matteProcessor = [KTMatteProcessor new];
@@ -137,7 +142,7 @@ static const CGFloat kFileListWidth = 140;
     
     // 根据图片比例计算视图显示比例，通过editView的magnification属性进行editingImageView图片大小缩放，而editingImageView的frame尺寸不变
     CGFloat editViewMaxWidth = ceil((viewWidth - fileListViewWidth) / 2 - kMiddleWidth);
-    CGFloat editViewMaxHeight = viewHeight - kTabbarHeight;
+    CGFloat editViewMaxHeight = viewHeight - kTabbarHeight - kBottomIndicatorHeight;
     CGFloat editViewRatio = editViewMaxWidth / editViewMaxHeight;
     CGFloat imageRatio = imageSizeInPixels.width /imageSizeInPixels.height;
     CGFloat resizeImageWidth, resizeImageHeight;
@@ -162,7 +167,7 @@ static const CGFloat kFileListWidth = 140;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.verticalSeparator.frame = NSMakeRect(fileListViewWidth + (viewWidth - fileListViewWidth) / 2, 0, 1, viewHeight - kTabbarHeight);
-        self.progressIndictor.frame = NSMakeRect(fileListViewWidth, 0, viewWidth - fileListViewWidth, 30);
+        self.progressIndictor.frame = NSMakeRect(fileListViewWidth, 0, viewWidth - fileListViewWidth, kBottomIndicatorHeight);
         
         if (self.showFileListView) {
             self.fileListView.hidden = NO;
@@ -173,14 +178,14 @@ static const CGFloat kFileListWidth = 140;
         }
         self.mattingPicker.frame = NSMakeRect(0, viewHeight - kTabbarHeight, viewWidth, kTabbarHeight);
         
-        self.editingView.frame = NSMakeRect(fileListViewWidth + (editViewMaxWidth - editViewWidth) / 2, (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
+        self.editingView.frame = NSMakeRect(fileListViewWidth + (editViewMaxWidth - editViewWidth) / 2, kBottomIndicatorHeight + (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
         self.editingView.magnification = self.editingImageViewZoomingScale;
         self.editingView.maxFrameSize = CGSizeMake(editViewMaxWidth, editViewMaxHeight);
         self.maskImageView.frame = self.editingView.imageFrame;
         self.brushView.frame = self.editingView.imageFrame;
         self.cropView.frame = self.editingView.imageFrame;
         
-        self.previewingView.frame = NSMakeRect(fileListViewWidth + editViewMaxWidth + kMiddleWidth * 2 + (editViewMaxWidth - editViewWidth) / 2, (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
+        self.previewingView.frame = NSMakeRect(fileListViewWidth + editViewMaxWidth + kMiddleWidth * 2 + (editViewMaxWidth - editViewWidth) / 2, kBottomIndicatorHeight + (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
         self.previewingView.magnification = self.editingImageViewZoomingScale;
         self.previewingView.maxFrameSize = CGSizeMake(editViewMaxWidth, editViewMaxHeight);
 
@@ -300,14 +305,18 @@ static const CGFloat kFileListWidth = 140;
     
     [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
+        [self.matteProcessor reset];
         [self.matteProcessor processImage:_sourceImage andMode:MatteModeInitRect andRadius:5];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressIndictor stopAnimation:nil];
+//            CGRect cropRect = self.matteProcessor.cropRect;
+//            CGSize imageSize = [_sourceImage sizeInPixels];
+//            self.cropView.cropRect = CGRectMake(cropRect.origin.x / imageSize.width, 1. - (cropRect.origin.y + cropRect.size.height) / imageSize.height,
+//                                                cropRect.size.width / imageSize.width, cropRect.size.height / imageSize.height);
+//            
             self.cropView.cropRect = self.matteProcessor.cropRect;
             self.cropView.hidden = NO;
-            
             [self updateSubViews];
         });
         
@@ -317,6 +326,7 @@ static const CGFloat kFileListWidth = 140;
 
 - (void)updateSubViews {
     if (self.editViewDisplayMode == DisplayModeEditImage) {
+        self.editingView.image = self.sourceImage;
         NSImage *alpha = self.matteProcessor.alphaImage;
         if (alpha) {
             Vec4b maskForeColor = Vec4b(0,255,0,255);
@@ -408,7 +418,7 @@ static const CGFloat kFileListWidth = 140;
             });
             
         }];
-        
+        self.matteProcessor = [self.processInfoMap objectForKey:self.fileUrls[self.fileUrls.count - 1]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressIndictor stopAnimation:nil];
         });
@@ -431,7 +441,8 @@ static const CGFloat kFileListWidth = 140;
 }
 
 - (void)undo {
-    
+    [self.matteProcessor undo];
+    [self updateSubViews];
 }
 
 
@@ -589,6 +600,10 @@ static const CGFloat kFileListWidth = 140;
     if (CGRectEqualToRect(cropView.cropRect, self.matteProcessor.cropRect)) {
         return;
     }
+    
+    CGRect croprect = self.matteProcessor.cropRect;
+    NSLog(@"cropView:(%f,%f,%f,%f),matteProcessor:(%f,%f,%f,%f)", cropView.cropRect.origin.x, cropView.cropRect.origin.y, cropView.cropRect.size.width,cropView.cropRect.size.height,croprect.origin.x, croprect.origin.y, croprect.size.width,croprect.size.height);
+    
     self.matteProcessor.cropRect = cropView.cropRect;
     
     [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
@@ -676,9 +691,8 @@ static const CGFloat kFileListWidth = 140;
         self.editingImageViewZoomingScale = 1.;
         self.cropView.cropRect = processor.cropRect;
         _sourceImage = [[NSImage alloc] initWithContentsOfURL:imageUrl];
-        self.editingView.image = _sourceImage;
-        self.previewingView.image = [[NSImage alloc] initWithContentsOfFile:processor.foregroundLocalPath];
         [self layoutSubviews];
+        [self updateSubViews];
     }
     
     
