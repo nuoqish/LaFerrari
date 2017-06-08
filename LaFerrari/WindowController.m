@@ -62,6 +62,14 @@
     }
 }
 
+- (void)toolbar:(KTToolbar *)toolbar didSaveImageUrls:(NSURL *)imageDirPath {
+    if ([self.contentViewController isKindOfClass:[ViewController class]]) {
+        ViewController *vc = (ViewController *)self.contentViewController;
+        [vc saveImagesToDir:imageDirPath];
+    }
+}
+
+
 - (void)undoButtonTappedForToolbar:(KTToolbar *)toolbar {
     if ([self.contentViewController isKindOfClass:[ViewController class]]) {
         ViewController *vc = (ViewController *)self.contentViewController;

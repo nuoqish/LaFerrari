@@ -14,6 +14,7 @@
 - (void)openImageUrl:(NSURL *)imageUrl;
 - (void)openImageUrls:(NSArray<NSURL *> *)imageUrls;
 - (void)saveImageUrl:(NSURL *)imageUrl;
+- (void)saveImagesToDir:(NSURL *)dirUrl;
 - (void)undo;
 
 @end

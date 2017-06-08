@@ -430,6 +430,19 @@ static const CGFloat kBottomIndicatorHeight = 20;
     }
 }
 
+- (void)saveImagesToDir:(NSURL *)dirUrl {
+    
+    [self.fileUrls enumerateObjectsUsingBlock:^(NSURL * _Nonnull imageUrl, NSUInteger idx, BOOL * _Nonnull stop) {
+        KTMatteProcessor *processor = [self.processInfoMap objectForKey:[imageUrl path]];
+        
+        if (processor) {
+            NSString *fileUrl = [NSString stringWithFormat:@"%@/%@.png",[dirUrl path], [imageUrl lastPathComponent]];
+            [processor.foregroundImage saveToFile:fileUrl];
+        }
+    }];
+    
+}
+
 - (void)undo {
     [self.matteProcessor undo];
     [self updateSubViews];

@@ -13,6 +13,7 @@ NS_ENUM(NSInteger, KTToolbarTag) {
     kToolbarUndo,
     kToolbarRedo,
     kToolbarSave,
+    kToolbarSaveAll,
     kToolbarHelp
 };
 
@@ -43,11 +44,11 @@ NS_ENUM(NSInteger, KTToolbarTag) {
 #pragma mark - NSToolbarDelegate methods
 
 - (NSArray<NSString *> *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
-    return @[@"Open",@"Undo",@"Redo",@"Save",@"Help"];
+    return @[@"Open",@"Undo",@"Redo",@"Save",@"SaveAll",@"Help"];
 }
 
 - (NSArray<NSString *> *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-    return @[@"Open",@"Undo",@"Redo",@"Save",@"Help"];
+    return @[@"Open",@"Undo",@"Redo",@"Save",@"SaveAll", @"Help"];
 }
 
 -(BOOL)validateToolbarItem:(NSToolbarItem *)theItem {
@@ -83,11 +84,18 @@ NS_ENUM(NSInteger, KTToolbarTag) {
         toolbarItem.tag = kToolbarRedo;
     }
     else if ([itemIdentifier isEqualToString:@"Save"]) {
-        [toolbarItem setLabel:@"保存"];
-        [toolbarItem setPaletteLabel:@"保存"];
+        [toolbarItem setLabel:@"保存当前"];
+        [toolbarItem setPaletteLabel:@"保存当前"];
         [toolbarItem setToolTip:@"保存当前文件"];
         [toolbarItem setImage:[NSImage imageNamed:@"document_4"]];
         toolbarItem.tag = kToolbarSave;
+    }
+    else if ([itemIdentifier isEqualToString:@"SaveAll"]) {
+        [toolbarItem setLabel:@"保存全部"];
+        [toolbarItem setPaletteLabel:@"保存全部"];
+        [toolbarItem setToolTip:@"保存所有文件"];
+        [toolbarItem setImage:[NSImage imageNamed:@"document_4"]];
+        toolbarItem.tag = kToolbarSaveAll;
     }
     else if ([itemIdentifier isEqualToString:@"Help"]) {
         [toolbarItem setLabel:@"帮助"];
@@ -151,6 +159,21 @@ NS_ENUM(NSInteger, KTToolbarTag) {
             }
         }
     }
+    else if (tag == kToolbarSaveAll) {
+        NSSavePanel *savePanel = [NSSavePanel savePanel];
+        savePanel.nameFieldStringValue = @"*.png";
+        savePanel.canCreateDirectories = YES;
+        NSInteger modalType = [savePanel runModal];
+        if (modalType == NSFileHandlingPanelOKButton) {
+            NSURL *dirUrl = [savePanel directoryURL];
+            if (self.ktDelegate && [self.ktDelegate respondsToSelector:@selector(toolbar:didOpenImageUrls:)]) {
+                [self.ktDelegate toolbar:self didSaveImageUrls:dirUrl];
+            }
+        }
+    }
+    
+    
+    
 }
 
 @end
