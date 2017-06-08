@@ -14,8 +14,10 @@
 
 - (void)toolbar:(KTToolbar *)toolbar didOpenImageUrl:(NSURL *)imagePath;
 - (void)toolbar:(KTToolbar *)toolbar didSaveImageUrl:(NSURL *)imagePath;
+- (void)toolbar:(KTToolbar *)toolbar didSaveImageUrls:(NSURL *)imageDirPath;
 - (void)toolbar:(KTToolbar *)toolbar didOpenImageUrls:(NSArray<NSURL *> *)imageUrls;
 - (void)undoButtonTappedForToolbar:(KTToolbar *)toolbar;
+
 - (NSString *)fileNameForToolbar:(KTToolbar *)toolbar;
 
 @end
