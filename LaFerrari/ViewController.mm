@@ -171,7 +171,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
         
         if (self.showFileListView) {
             self.fileListView.hidden = NO;
-            self.fileListView.frame = NSMakeRect(0, 0, kFileListWidth, editViewMaxHeight);
+            self.fileListView.frame = NSMakeRect(0, 0, kFileListWidth, viewHeight - kTabbarHeight - 1);
         }
         else {
             self.fileListView.hidden = YES;
@@ -228,7 +228,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
 - (KTCropView *)cropView {
     if (!_cropView) {
         _cropView = [[KTCropView alloc] init];
-        [_cropView showCloseButton:NO];
+        [_cropView showCloseButton:YES];
         _cropView.delegate = self;
     }
     return _cropView;
@@ -310,11 +310,6 @@ static const CGFloat kBottomIndicatorHeight = 20;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressIndictor stopAnimation:nil];
-//            CGRect cropRect = self.matteProcessor.cropRect;
-//            CGSize imageSize = [_sourceImage sizeInPixels];
-//            self.cropView.cropRect = CGRectMake(cropRect.origin.x / imageSize.width, 1. - (cropRect.origin.y + cropRect.size.height) / imageSize.height,
-//                                                cropRect.size.width / imageSize.width, cropRect.size.height / imageSize.height);
-//            
             self.cropView.cropRect = self.matteProcessor.cropRect;
             self.cropView.hidden = NO;
             [self updateSubViews];
@@ -352,12 +347,6 @@ static const CGFloat kBottomIndicatorHeight = 20;
             self.maskImageView.hidden = NO;
         }
         self.maskImageView.alphaValue = 0.5;
-        if (self.selectMode == SelectModeForegroundTarget) {
-            self.cropView.hidden = NO;
-        }
-        else {
-            self.cropView.hidden = YES;
-        }
     }
     else if (self.editViewDisplayMode == DisplayModeSourceImage) {
         self.maskImageView.hidden = YES;
@@ -379,6 +368,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
 - (void)openImageUrl:(NSURL *)imageUrl {
     
     [self.view.window setTitleWithRepresentedFilename:[imageUrl path]];
+    self.showFileListView = NO;
     self.sourceImage = [[NSImage alloc] initWithContentsOfURL:imageUrl];
     
     //[self openImageUrls:@[imageUrl]];
@@ -496,9 +486,9 @@ static const CGFloat kBottomIndicatorHeight = 20;
     [self.brushPoints addObject:[NSValue valueWithPoint:position]];
     [self.brushView setNeedsDisplay:YES];
     
-    if (self.selectMode == SelectModeForegroundTarget || self.selectMode == SelectModeBackgroundTarget) {
+    if (self.selectMode == SelectModeForegroundTarget || self.selectMode == SelectModeBackgroundTarget || self.selectMode == SelectModeUnknownAreaTarget) {
         
-        if (!self.matteProcessor.completed) {
+        if (!self.matteProcessor.completed || self.selectMode == SelectModeUnknownAreaTarget) {
             [self.brushPoints removeAllObjects];
             [self.brushView setNeedsDisplay:YES];
             return;
@@ -615,6 +605,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
             [self.progressIndictor stopAnimation:nil];
             self.editViewDisplayMode = DisplayModeEditImage;
             [self updateSubViews];
+            self.cropView.hidden = YES;
         });
         
         
@@ -647,6 +638,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
     self.selectMode = mattingMode;
     
     [self updateSubViews];
+    self.cropView.hidden = (mattingMode != SelectModeForegroundTarget);
     
 }
 
@@ -654,6 +646,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
     
     if (previewMode == DisplayModeEditImage) {
         self.editViewDisplayMode = DisplayModeEditImage;
+        self.cropView.hidden = (self.selectMode != SelectModeForegroundTarget);
     }
     else if (previewMode == DisplayModeSourceImage) {
         self.editViewDisplayMode = DisplayModeSourceImage;

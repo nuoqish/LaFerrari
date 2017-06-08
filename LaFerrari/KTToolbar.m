@@ -140,6 +140,8 @@ NS_ENUM(NSInteger, KTToolbarTag) {
     }
     else if (tag == kToolbarSave) {
         NSSavePanel *savePanel = [NSSavePanel savePanel];
+        NSString *fileName = [[self.ktDelegate fileNameForToolbar:self] lastPathComponent];
+        savePanel.nameFieldStringValue = [NSString stringWithFormat:@"%@.png", fileName != nil ? fileName : @"Untitled"];
         savePanel.canCreateDirectories = YES;
         NSInteger modalType = [savePanel runModal];
         if (modalType == NSFileHandlingPanelOKButton) {

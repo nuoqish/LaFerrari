@@ -69,4 +69,12 @@
     }
 }
 
+- (NSString *)fileNameForToolbar:(KTToolbar *)toolbar {
+    if ([self.contentViewController isKindOfClass:[ViewController class]]) {
+        ViewController *vc = (ViewController *)self.contentViewController;
+        return vc.view.window.representedFilename;
+    }
+    return nil;
+}
+
 @end

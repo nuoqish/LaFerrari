@@ -54,6 +54,26 @@
         Mat3b image2;
         cv::cvtColor(srcImageMat, image2, cv::COLOR_RGBA2RGB);
         AlphaSolver::computeAlpha(alphaMat, image2, alphaMat);
+        
+        for (int i = 0; i < alphaMat.rows; i++) {
+            for (int j = 0; j < alphaMat.cols; j++) {
+                uint8_t alpha = alphaMat(i,j);
+                if (alpha > 250) {
+                    foregroundMat(i,j) = srcImageMat(i,j);
+                }
+                else if (alpha < 5) {
+                    foregroundMat(i,j)[3] = 0;
+                }
+                else {
+                    double _alpha = alpha / 255.;
+                    foregroundMat(i,j)[0] = uint8_t(srcImageMat(i,j)[0] * _alpha);
+                    foregroundMat(i,j)[1] = uint8_t(srcImageMat(i,j)[1] * _alpha);
+                    foregroundMat(i,j)[2] = uint8_t(srcImageMat(i,j)[2] * _alpha);
+                    foregroundMat(i,j)[3] = alpha;
+                }
+            }
+        }
+        
     }
 }
 
