@@ -53,7 +53,7 @@
     else if (mode == MatteModeCF) {
         Mat3b image2;
         cv::cvtColor(srcImageMat, image2, cv::COLOR_RGBA2RGB);
-        AlphaSolver::computeAlpha(alphaMat, image2, alphaMat);
+        AlphaSolver::computeAlpha(alphaMat, image2, alphaMat, 5, 2);
         
         for (int i = 0; i < alphaMat.rows; i++) {
             for (int j = 0; j < alphaMat.cols; j++) {
