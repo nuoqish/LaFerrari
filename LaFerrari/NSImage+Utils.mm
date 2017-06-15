@@ -211,4 +211,94 @@ static void ProviderReleaseDataNOP(void *info, const void *data, size_t size)
 }
 
 
+- (void)drawToFillRect:(CGRect)bounds {
+    float   wScale = CGRectGetWidth(bounds) / self.size.width;
+    float   hScale = CGRectGetHeight(bounds) / self.size.height;
+    float   scale = MAX(wScale, hScale);
+    float   hOffset = 0.0f, vOffset = 0.0f;
+    
+    CGRect  rect = CGRectMake(CGRectGetMinX(bounds), CGRectGetMinY(bounds), self.size.width * scale, self.size.height * scale);
+    
+    if (CGRectGetWidth(rect) > CGRectGetWidth(bounds)) {
+        hOffset = CGRectGetWidth(rect) - CGRectGetWidth(bounds);
+        hOffset /= -2;
+    }
+    
+    if (CGRectGetHeight(rect) > CGRectGetHeight(bounds)) {
+        vOffset = CGRectGetHeight(rect) - CGRectGetHeight(bounds);
+        vOffset /= -2;
+    }
+    
+    rect = CGRectOffset(rect, hOffset, vOffset);
+    
+    [self drawInRect:rect];
+}
+
+- (NSImage *)rotatedImage:(int)rotation {
+    CGSize size = self.size;
+    CGSize rotatedSize = (rotation % 2 == 1 ? CGSizeMake(size.height, size.width) : size);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef ctx = CGBitmapContextCreate(NULL,                 // Pointer to backing data
+                                                    rotatedSize.width,                      // Width of bitmap
+                                                    rotatedSize.height,                     // Height of bitmap
+                                                    8,                          // Bits per component
+                                                    rotatedSize.width * 4,              // Bytes per row
+                                                    colorSpace,                 // Colorspace
+                                                    kCGImageAlphaPremultipliedLast |
+                                                    kCGBitmapByteOrderDefault); // Bitmap info flags
+    
+    if (rotation == 1) {
+        CGContextTranslateCTM(ctx, size.height, 0.0f);
+    } else if (rotation == 2) {
+        CGContextTranslateCTM(ctx, size.width, size.height);
+    } else if (rotation == 3) {
+        CGContextTranslateCTM(ctx, 0.0f, size.width);
+    }
+    
+    CGContextRotateCTM(ctx, (M_PI / 2.0f) * rotation);
+    
+    [self drawInRect:NSMakeRect(0, 0, rotatedSize.width, rotatedSize.height)]; //?
+    
+    CGImageRef imageRef = CGBitmapContextCreateImage(ctx);
+    NSImage *image = [[NSImage alloc] initWithCGImage:imageRef size: size];
+    
+    CGContextRelease(ctx);
+    CGColorSpaceRelease(colorSpace);
+    
+    return image;
+}
+
+- (NSImage *)downsampleWithMaxDimension:(float)constraint {
+    CGSize newSize, size = self.size;
+    
+    if (size.width <= constraint && size.height <= constraint) {
+        return self;
+    }
+    
+    if (size.width > size.height) {
+        newSize.height = size.height / size.width * constraint;
+        newSize.width = constraint;
+    } else {
+        newSize.width = size.width / size.height * constraint;
+        newSize.height = constraint;
+    }
+    
+    newSize = CGSizeMake(round(size.width), size.height);
+    
+    return [self resizeTo:newSize];
+}
+
+- (NSImage *)downsampleWithMaxArea:(float)maxArea {
+    CGSize  size = self.size;
+    double  area = size.width * size.height;
+    
+    if (area > maxArea) {
+        double scale = sqrt(maxArea) / sqrt(area);
+        size = CGSizeMake(round(size.width * scale), round(size.height * scale));
+        return [self resizeTo:size];
+    }
+    return self;
+    
+}
+
 @end

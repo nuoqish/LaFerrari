@@ -8,6 +8,8 @@
 
 #import "KTBrushView.h"
 
+#import "KTGLUtilities.h"
+
 @implementation KTBrushView
 - (instancetype)initWithFrame:(NSRect)frameRect {
     self = [super initWithFrame:frameRect];
@@ -39,7 +41,6 @@
     CGContextRef ref = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
     [self drawWithContext:ref];
     
-    
 }
 
 - (CGContextRef)drawWithContext:(CGContextRef)contextRef {
@@ -60,23 +61,10 @@
         
     }
     
-    CGFloat red = 1.0, green = 1., blue = 1., alpha = 1.0;
-    CGContextSetRGBStrokeColor(contextRef, red, green, blue, alpha);
-    CGContextSetLineWidth(contextRef, self.lineWith);
-    CGContextSetLineCap(contextRef, kCGLineCapRound);
-    CGContextSetLineJoin(contextRef, kCGLineJoinRound);
-    NSPoint point = [[self.pointsArray objectAtIndex:0] pointValue];
-    CGContextBeginPath(contextRef);
-    CGContextMoveToPoint(contextRef, point.x, point.y);
-    for (NSUInteger i = 1; i < self.pointsArray.count; i++) {
-        point = [[self.pointsArray objectAtIndex:i] pointValue];
-        CGContextAddLineToPoint(contextRef, point.x, point.y);
-    }
-    CGContextDrawPath(contextRef, kCGPathStroke);
+    KTCGDrawBrushWithPoints(contextRef, self.pointsArray, self.lineWith);
     
     return contextRef;
 }
-
 
 - (NSImage *)generateMaskWithScale:(CGFloat)scale {
     CGContextRef contextRef = [self drawWithContext:NULL];

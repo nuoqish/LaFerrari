@@ -24,7 +24,6 @@
 @property(nonatomic, assign) CGFloat controlPointSize;
 @property(nonatomic, assign) CGFloat minControlPointDistance;
 
-
 @property(nonatomic, assign) CGRect cropRect;
 
 @property(nonatomic, weak) id<KTCropViewDelegate> delegate;

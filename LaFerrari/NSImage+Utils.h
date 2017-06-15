@@ -24,5 +24,10 @@
 
 @property (nonatomic, readonly) CGSize sizeInPixels;
 
+- (void)drawToFillRect:(CGRect)bounds;
+- (NSImage *)rotatedImage:(int)rotation;
+- (NSImage *)downsampleWithMaxDimension:(float)constraint;
+- (NSImage *)downsampleWithMaxArea:(float)constraint;
+- (NSImage *)jpegify:(float)compressionFactor;
 
 @end

@@ -40,6 +40,50 @@
 		B012EF1C1ED6D59300198D87 /* GCMattor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EF1A1ED6D59300198D87 /* GCMattor.cpp */; };
 		B012EF1F1ED918D200198D87 /* KTProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF1E1ED918D200198D87 /* KTProgressIndicator.m */; };
 		B012EF221ED9837C00198D87 /* KTMatteProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = B012EF211ED9837C00198D87 /* KTMatteProcessor.mm */; };
+		B012EF251EE968A000198D87 /* KTCurveFit.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF241EE968A000198D87 /* KTCurveFit.m */; };
+		B012EF281EE96D4B00198D87 /* KTElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF271EE96D4B00198D87 /* KTElement.m */; };
+		B012EF301EEA17AC00198D87 /* KTUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF2F1EEA17AC00198D87 /* KTUtilities.m */; };
+		B012EF331EEA19E300198D87 /* KTBezierSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF321EEA19E300198D87 /* KTBezierSegment.m */; };
+		B012EF361EEA466900198D87 /* KTBezierNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF351EEA466900198D87 /* KTBezierNode.m */; };
+		B012EF391EEA788800198D87 /* KTLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF381EEA788800198D87 /* KTLayer.m */; };
+		B012EF3C1EEA7A3A00198D87 /* KTDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF3B1EEA7A3A00198D87 /* KTDrawing.m */; };
+		B012EF3F1EEA87AC00198D87 /* KTXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF3E1EEA87AC00198D87 /* KTXMLElement.m */; };
+		B012EF421EEA891900198D87 /* KTSVGHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EF411EEA891900198D87 /* KTSVGHelper.m */; };
+		B02F65411EEF9877008196F9 /* KTText.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F65401EEF9877008196F9 /* KTText.m */; };
+		B02F65441EEFAB77008196F9 /* KTUserFont.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F65431EEFAB77008196F9 /* KTUserFont.m */; };
+		B02F65471EEFB6DF008196F9 /* KTFontManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F65461EEFB6DF008196F9 /* KTFontManager.m */; };
+		B02F65491EEFD360008196F9 /* BlendModes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B02F65481EEFD360008196F9 /* BlendModes.plist */; };
+		B02F654C1EEFE618008196F9 /* KTDrawingController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F654B1EEFE618008196F9 /* KTDrawingController.m */; };
+		B02F654F1EEFEFEA008196F9 /* KTImageData.mm in Sources */ = {isa = PBXBuildFile; fileRef = B02F654E1EEFEFEA008196F9 /* KTImageData.mm */; };
+		B02F65521EF0C6C1008196F9 /* KTImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F65511EF0C6C1008196F9 /* KTImage.m */; };
+		B02F65551EF0DCA4008196F9 /* KTCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F65541EF0DCA4008196F9 /* KTCanvas.m */; };
+		B02F655B1EF13056008196F9 /* KTSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F655A1EF13056008196F9 /* KTSelectionView.m */; };
+		B08027941EED8B1D001851BB /* KTCompoundPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B08027931EED8B1D001851BB /* KTCompoundPath.m */; };
+		B0FE8D161EEAA8B2004AD639 /* KTColor.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D151EEAA8B2004AD639 /* KTColor.m */; };
+		B0FE8D1B1EEAF458004AD639 /* KTPickResult.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D1A1EEAF458004AD639 /* KTPickResult.m */; };
+		B0FE8D1E1EEAF6C6004AD639 /* KTGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D1D1EEAF6C6004AD639 /* KTGroup.m */; };
+		B0FE8D211EEB66A2004AD639 /* KTShadow.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D201EEB66A2004AD639 /* KTShadow.m */; };
+		B0FE8D241EEB6F23004AD639 /* KTGLUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D231EEB6F23004AD639 /* KTGLUtilities.m */; };
+		B0FE8D2A1EEBADA6004AD639 /* NSColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D291EEBADA6004AD639 /* NSColor+Utils.m */; };
+		B0FE8D2D1EEBB287004AD639 /* KTInspectableProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D2C1EEBB287004AD639 /* KTInspectableProperties.m */; };
+		B0FE8D301EECDBC8004AD639 /* KTPropertyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D2F1EECDBC8004AD639 /* KTPropertyManager.m */; };
+		B0FE8D331EECE57C004AD639 /* KTFillTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D321EECE57C004AD639 /* KTFillTransform.m */; };
+		B0FE8D361EECEFB8004AD639 /* KTStrokeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D351EECEFB8004AD639 /* KTStrokeStyle.m */; };
+		B0FE8D391EED1758004AD639 /* KTGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D381EED1758004AD639 /* KTGradient.m */; };
+		B0FE8D3C1EED1B39004AD639 /* KTGradientStop.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D3B1EED1B39004AD639 /* KTGradientStop.m */; };
+		B0FE8D3F1EED5C9C004AD639 /* KTStylable.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D3E1EED5C9C004AD639 /* KTStylable.m */; };
+		B0FE8D421EED6DF9004AD639 /* KTAbstractPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D411EED6DF9004AD639 /* KTAbstractPath.m */; };
+		B0FE8D451EED7170004AD639 /* KTPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D441EED7170004AD639 /* KTPath.m */; };
+		B0FE8D481EED7A34004AD639 /* KTArrowhead.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D471EED7A34004AD639 /* KTArrowhead.m */; };
+		B0FE8D4B1EED812D004AD639 /* KTPathFinder.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D4A1EED812D004AD639 /* KTPathFinder.mm */; };
+		B0FE8D5C1EED87EE004AD639 /* AVL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D4D1EED87EE004AD639 /* AVL.cpp */; };
+		B0FE8D5D1EED87EE004AD639 /* DblLinked.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D4F1EED87EE004AD639 /* DblLinked.cpp */; };
+		B0FE8D5E1EED87EE004AD639 /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D531EED87EE004AD639 /* Path.cpp */; };
+		B0FE8D5F1EED87EE004AD639 /* PathConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D551EED87EE004AD639 /* PathConversion.cpp */; };
+		B0FE8D601EED87EE004AD639 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D561EED87EE004AD639 /* Shape.cpp */; };
+		B0FE8D611EED87EE004AD639 /* ShapeMisc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D581EED87EE004AD639 /* ShapeMisc.cpp */; };
+		B0FE8D621EED87EE004AD639 /* ShapeSweep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D591EED87EE004AD639 /* ShapeSweep.cpp */; };
+		B0FE8D631EED87EE004AD639 /* ShapeSweepUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D5A1EED87EE004AD639 /* ShapeSweepUtils.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +164,94 @@
 		B012EF1E1ED918D200198D87 /* KTProgressIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTProgressIndicator.m; sourceTree = "<group>"; };
 		B012EF201ED9837C00198D87 /* KTMatteProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTMatteProcessor.h; sourceTree = "<group>"; };
 		B012EF211ED9837C00198D87 /* KTMatteProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KTMatteProcessor.mm; sourceTree = "<group>"; };
+		B012EF231EE968A000198D87 /* KTCurveFit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCurveFit.h; sourceTree = "<group>"; };
+		B012EF241EE968A000198D87 /* KTCurveFit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCurveFit.m; sourceTree = "<group>"; };
+		B012EF261EE96D4B00198D87 /* KTElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTElement.h; sourceTree = "<group>"; };
+		B012EF271EE96D4B00198D87 /* KTElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTElement.m; sourceTree = "<group>"; };
+		B012EF2E1EEA17AC00198D87 /* KTUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTUtilities.h; sourceTree = "<group>"; };
+		B012EF2F1EEA17AC00198D87 /* KTUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTUtilities.m; sourceTree = "<group>"; };
+		B012EF311EEA19E300198D87 /* KTBezierSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTBezierSegment.h; sourceTree = "<group>"; };
+		B012EF321EEA19E300198D87 /* KTBezierSegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTBezierSegment.m; sourceTree = "<group>"; };
+		B012EF341EEA466900198D87 /* KTBezierNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTBezierNode.h; sourceTree = "<group>"; };
+		B012EF351EEA466900198D87 /* KTBezierNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTBezierNode.m; sourceTree = "<group>"; };
+		B012EF371EEA788800198D87 /* KTLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTLayer.h; sourceTree = "<group>"; };
+		B012EF381EEA788800198D87 /* KTLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTLayer.m; sourceTree = "<group>"; };
+		B012EF3A1EEA7A3A00198D87 /* KTDrawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTDrawing.h; sourceTree = "<group>"; };
+		B012EF3B1EEA7A3A00198D87 /* KTDrawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTDrawing.m; sourceTree = "<group>"; };
+		B012EF3D1EEA87AC00198D87 /* KTXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTXMLElement.h; sourceTree = "<group>"; };
+		B012EF3E1EEA87AC00198D87 /* KTXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTXMLElement.m; sourceTree = "<group>"; };
+		B012EF401EEA891900198D87 /* KTSVGHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTSVGHelper.h; sourceTree = "<group>"; };
+		B012EF411EEA891900198D87 /* KTSVGHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTSVGHelper.m; sourceTree = "<group>"; };
+		B02F653F1EEF9877008196F9 /* KTText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTText.h; sourceTree = "<group>"; };
+		B02F65401EEF9877008196F9 /* KTText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTText.m; sourceTree = "<group>"; };
+		B02F65421EEFAB77008196F9 /* KTUserFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTUserFont.h; sourceTree = "<group>"; };
+		B02F65431EEFAB77008196F9 /* KTUserFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTUserFont.m; sourceTree = "<group>"; };
+		B02F65451EEFB6DF008196F9 /* KTFontManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTFontManager.h; sourceTree = "<group>"; };
+		B02F65461EEFB6DF008196F9 /* KTFontManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTFontManager.m; sourceTree = "<group>"; };
+		B02F65481EEFD360008196F9 /* BlendModes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BlendModes.plist; sourceTree = "<group>"; };
+		B02F654A1EEFE618008196F9 /* KTDrawingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTDrawingController.h; sourceTree = "<group>"; };
+		B02F654B1EEFE618008196F9 /* KTDrawingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTDrawingController.m; sourceTree = "<group>"; };
+		B02F654D1EEFEFEA008196F9 /* KTImageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTImageData.h; sourceTree = "<group>"; };
+		B02F654E1EEFEFEA008196F9 /* KTImageData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KTImageData.mm; sourceTree = "<group>"; };
+		B02F65501EF0C6C1008196F9 /* KTImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTImage.h; sourceTree = "<group>"; };
+		B02F65511EF0C6C1008196F9 /* KTImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTImage.m; sourceTree = "<group>"; };
+		B02F65531EF0DCA4008196F9 /* KTCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCanvas.h; sourceTree = "<group>"; };
+		B02F65541EF0DCA4008196F9 /* KTCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCanvas.m; sourceTree = "<group>"; };
+		B02F65591EF13056008196F9 /* KTSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTSelectionView.h; sourceTree = "<group>"; };
+		B02F655A1EF13056008196F9 /* KTSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTSelectionView.m; sourceTree = "<group>"; };
+		B08027921EED8B1D001851BB /* KTCompoundPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCompoundPath.h; sourceTree = "<group>"; };
+		B08027931EED8B1D001851BB /* KTCompoundPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCompoundPath.m; sourceTree = "<group>"; };
+		B0FE8D141EEAA8B2004AD639 /* KTColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTColor.h; sourceTree = "<group>"; };
+		B0FE8D151EEAA8B2004AD639 /* KTColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTColor.m; sourceTree = "<group>"; };
+		B0FE8D171EEAA935004AD639 /* KTPathPainter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTPathPainter.h; sourceTree = "<group>"; };
+		B0FE8D181EEAAA18004AD639 /* KTTextRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTTextRenderer.h; sourceTree = "<group>"; };
+		B0FE8D191EEAF458004AD639 /* KTPickResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTPickResult.h; sourceTree = "<group>"; };
+		B0FE8D1A1EEAF458004AD639 /* KTPickResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTPickResult.m; sourceTree = "<group>"; };
+		B0FE8D1C1EEAF6C6004AD639 /* KTGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTGroup.h; sourceTree = "<group>"; };
+		B0FE8D1D1EEAF6C6004AD639 /* KTGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTGroup.m; sourceTree = "<group>"; };
+		B0FE8D1F1EEB66A2004AD639 /* KTShadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTShadow.h; sourceTree = "<group>"; };
+		B0FE8D201EEB66A2004AD639 /* KTShadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTShadow.m; sourceTree = "<group>"; };
+		B0FE8D221EEB6F23004AD639 /* KTGLUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTGLUtilities.h; sourceTree = "<group>"; };
+		B0FE8D231EEB6F23004AD639 /* KTGLUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTGLUtilities.m; sourceTree = "<group>"; };
+		B0FE8D281EEBADA6004AD639 /* NSColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+Utils.h"; sourceTree = "<group>"; };
+		B0FE8D291EEBADA6004AD639 /* NSColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+Utils.m"; sourceTree = "<group>"; };
+		B0FE8D2B1EEBB287004AD639 /* KTInspectableProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTInspectableProperties.h; sourceTree = "<group>"; };
+		B0FE8D2C1EEBB287004AD639 /* KTInspectableProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTInspectableProperties.m; sourceTree = "<group>"; };
+		B0FE8D2E1EECDBC8004AD639 /* KTPropertyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTPropertyManager.h; sourceTree = "<group>"; };
+		B0FE8D2F1EECDBC8004AD639 /* KTPropertyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTPropertyManager.m; sourceTree = "<group>"; };
+		B0FE8D311EECE57C004AD639 /* KTFillTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTFillTransform.h; sourceTree = "<group>"; };
+		B0FE8D321EECE57C004AD639 /* KTFillTransform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTFillTransform.m; sourceTree = "<group>"; };
+		B0FE8D341EECEFB8004AD639 /* KTStrokeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTStrokeStyle.h; sourceTree = "<group>"; };
+		B0FE8D351EECEFB8004AD639 /* KTStrokeStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTStrokeStyle.m; sourceTree = "<group>"; };
+		B0FE8D371EED1758004AD639 /* KTGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTGradient.h; sourceTree = "<group>"; };
+		B0FE8D381EED1758004AD639 /* KTGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTGradient.m; sourceTree = "<group>"; };
+		B0FE8D3A1EED1B39004AD639 /* KTGradientStop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTGradientStop.h; sourceTree = "<group>"; };
+		B0FE8D3B1EED1B39004AD639 /* KTGradientStop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTGradientStop.m; sourceTree = "<group>"; };
+		B0FE8D3D1EED5C9C004AD639 /* KTStylable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTStylable.h; sourceTree = "<group>"; };
+		B0FE8D3E1EED5C9C004AD639 /* KTStylable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTStylable.m; sourceTree = "<group>"; };
+		B0FE8D401EED6DF9004AD639 /* KTAbstractPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTAbstractPath.h; sourceTree = "<group>"; };
+		B0FE8D411EED6DF9004AD639 /* KTAbstractPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTAbstractPath.m; sourceTree = "<group>"; };
+		B0FE8D431EED7170004AD639 /* KTPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTPath.h; sourceTree = "<group>"; };
+		B0FE8D441EED7170004AD639 /* KTPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTPath.m; sourceTree = "<group>"; };
+		B0FE8D461EED7A34004AD639 /* KTArrowhead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTArrowhead.h; sourceTree = "<group>"; };
+		B0FE8D471EED7A34004AD639 /* KTArrowhead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTArrowhead.m; sourceTree = "<group>"; };
+		B0FE8D491EED812D004AD639 /* KTPathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTPathFinder.h; sourceTree = "<group>"; };
+		B0FE8D4A1EED812D004AD639 /* KTPathFinder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KTPathFinder.mm; sourceTree = "<group>"; };
+		B0FE8D4D1EED87EE004AD639 /* AVL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AVL.cpp; sourceTree = "<group>"; };
+		B0FE8D4E1EED87EE004AD639 /* AVL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVL.h; sourceTree = "<group>"; };
+		B0FE8D4F1EED87EE004AD639 /* DblLinked.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DblLinked.cpp; sourceTree = "<group>"; };
+		B0FE8D501EED87EE004AD639 /* DblLinked.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DblLinked.h; sourceTree = "<group>"; };
+		B0FE8D511EED87EE004AD639 /* LivarotDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LivarotDefs.h; sourceTree = "<group>"; };
+		B0FE8D521EED87EE004AD639 /* MyMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMath.h; sourceTree = "<group>"; };
+		B0FE8D531EED87EE004AD639 /* Path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Path.cpp; sourceTree = "<group>"; };
+		B0FE8D541EED87EE004AD639 /* Path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
+		B0FE8D551EED87EE004AD639 /* PathConversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PathConversion.cpp; sourceTree = "<group>"; };
+		B0FE8D561EED87EE004AD639 /* Shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shape.cpp; sourceTree = "<group>"; };
+		B0FE8D571EED87EE004AD639 /* Shape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shape.h; sourceTree = "<group>"; };
+		B0FE8D581EED87EE004AD639 /* ShapeMisc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShapeMisc.cpp; sourceTree = "<group>"; };
+		B0FE8D591EED87EE004AD639 /* ShapeSweep.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShapeSweep.cpp; sourceTree = "<group>"; };
+		B0FE8D5A1EED87EE004AD639 /* ShapeSweepUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShapeSweepUtils.cpp; sourceTree = "<group>"; };
+		B0FE8D5B1EED87EE004AD639 /* ShapeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShapeUtils.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +310,7 @@
 		B012EE9B1ED27AB700198D87 /* LaFerrari */ = {
 			isa = PBXGroup;
 			children = (
+				B0FE8D4C1EED87EE004AD639 /* livarot */,
 				B012EEF61ED27CD700198D87 /* AlphaSolver */,
 				B012EE9C1ED27AB700198D87 /* AppDelegate.h */,
 				B012EE9D1ED27AB700198D87 /* AppDelegate.m */,
@@ -210,8 +343,81 @@
 				B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */,
 				B012EF201ED9837C00198D87 /* KTMatteProcessor.h */,
 				B012EF211ED9837C00198D87 /* KTMatteProcessor.mm */,
+				B02F65531EF0DCA4008196F9 /* KTCanvas.h */,
+				B02F65541EF0DCA4008196F9 /* KTCanvas.m */,
+				B02F65591EF13056008196F9 /* KTSelectionView.h */,
+				B02F655A1EF13056008196F9 /* KTSelectionView.m */,
+				B02F654A1EEFE618008196F9 /* KTDrawingController.h */,
+				B02F654B1EEFE618008196F9 /* KTDrawingController.m */,
+				B012EF3A1EEA7A3A00198D87 /* KTDrawing.h */,
+				B012EF3B1EEA7A3A00198D87 /* KTDrawing.m */,
+				B012EF231EE968A000198D87 /* KTCurveFit.h */,
+				B012EF241EE968A000198D87 /* KTCurveFit.m */,
+				B012EF341EEA466900198D87 /* KTBezierNode.h */,
+				B012EF351EEA466900198D87 /* KTBezierNode.m */,
+				B012EF311EEA19E300198D87 /* KTBezierSegment.h */,
+				B012EF321EEA19E300198D87 /* KTBezierSegment.m */,
+				B0FE8D491EED812D004AD639 /* KTPathFinder.h */,
+				B0FE8D4A1EED812D004AD639 /* KTPathFinder.mm */,
+				B02F654D1EEFEFEA008196F9 /* KTImageData.h */,
+				B02F654E1EEFEFEA008196F9 /* KTImageData.mm */,
+				B012EF261EE96D4B00198D87 /* KTElement.h */,
+				B012EF271EE96D4B00198D87 /* KTElement.m */,
+				B0FE8D3D1EED5C9C004AD639 /* KTStylable.h */,
+				B0FE8D3E1EED5C9C004AD639 /* KTStylable.m */,
+				B0FE8D401EED6DF9004AD639 /* KTAbstractPath.h */,
+				B0FE8D411EED6DF9004AD639 /* KTAbstractPath.m */,
+				B0FE8D431EED7170004AD639 /* KTPath.h */,
+				B0FE8D441EED7170004AD639 /* KTPath.m */,
+				B08027921EED8B1D001851BB /* KTCompoundPath.h */,
+				B08027931EED8B1D001851BB /* KTCompoundPath.m */,
+				B02F653F1EEF9877008196F9 /* KTText.h */,
+				B02F65401EEF9877008196F9 /* KTText.m */,
+				B02F65501EF0C6C1008196F9 /* KTImage.h */,
+				B02F65511EF0C6C1008196F9 /* KTImage.m */,
+				B0FE8D141EEAA8B2004AD639 /* KTColor.h */,
+				B0FE8D151EEAA8B2004AD639 /* KTColor.m */,
+				B0FE8D371EED1758004AD639 /* KTGradient.h */,
+				B0FE8D381EED1758004AD639 /* KTGradient.m */,
+				B0FE8D3A1EED1B39004AD639 /* KTGradientStop.h */,
+				B0FE8D3B1EED1B39004AD639 /* KTGradientStop.m */,
+				B0FE8D191EEAF458004AD639 /* KTPickResult.h */,
+				B0FE8D1A1EEAF458004AD639 /* KTPickResult.m */,
+				B0FE8D461EED7A34004AD639 /* KTArrowhead.h */,
+				B0FE8D471EED7A34004AD639 /* KTArrowhead.m */,
+				B0FE8D1F1EEB66A2004AD639 /* KTShadow.h */,
+				B0FE8D201EEB66A2004AD639 /* KTShadow.m */,
+				B012EF371EEA788800198D87 /* KTLayer.h */,
+				B012EF381EEA788800198D87 /* KTLayer.m */,
+				B0FE8D1C1EEAF6C6004AD639 /* KTGroup.h */,
+				B0FE8D1D1EEAF6C6004AD639 /* KTGroup.m */,
+				B0FE8D171EEAA935004AD639 /* KTPathPainter.h */,
+				B0FE8D181EEAAA18004AD639 /* KTTextRenderer.h */,
+				B012EF3D1EEA87AC00198D87 /* KTXMLElement.h */,
+				B012EF3E1EEA87AC00198D87 /* KTXMLElement.m */,
+				B012EF401EEA891900198D87 /* KTSVGHelper.h */,
+				B012EF411EEA891900198D87 /* KTSVGHelper.m */,
+				B0FE8D2B1EEBB287004AD639 /* KTInspectableProperties.h */,
+				B0FE8D2C1EEBB287004AD639 /* KTInspectableProperties.m */,
+				B0FE8D2E1EECDBC8004AD639 /* KTPropertyManager.h */,
+				B0FE8D2F1EECDBC8004AD639 /* KTPropertyManager.m */,
+				B02F65421EEFAB77008196F9 /* KTUserFont.h */,
+				B02F65431EEFAB77008196F9 /* KTUserFont.m */,
+				B02F65451EEFB6DF008196F9 /* KTFontManager.h */,
+				B02F65461EEFB6DF008196F9 /* KTFontManager.m */,
+				B0FE8D311EECE57C004AD639 /* KTFillTransform.h */,
+				B0FE8D321EECE57C004AD639 /* KTFillTransform.m */,
+				B0FE8D341EECEFB8004AD639 /* KTStrokeStyle.h */,
+				B0FE8D351EECEFB8004AD639 /* KTStrokeStyle.m */,
+				B012EF2E1EEA17AC00198D87 /* KTUtilities.h */,
+				B012EF2F1EEA17AC00198D87 /* KTUtilities.m */,
+				B0FE8D221EEB6F23004AD639 /* KTGLUtilities.h */,
+				B0FE8D231EEB6F23004AD639 /* KTGLUtilities.m */,
+				B0FE8D281EEBADA6004AD639 /* NSColor+Utils.h */,
+				B0FE8D291EEBADA6004AD639 /* NSColor+Utils.m */,
 				B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */,
 				B012EF181ED436B000198D87 /* laferrari.jpg */,
+				B02F65481EEFD360008196F9 /* BlendModes.plist */,
 				B012EEA51ED27AB700198D87 /* Assets.xcassets */,
 				B012EEA71ED27AB700198D87 /* Main.storyboard */,
 				B012EEAA1ED27AB700198D87 /* Info.plist */,
@@ -264,6 +470,28 @@
 			);
 			name = AlphaSolver;
 			sourceTree = "<group>";
+		};
+		B0FE8D4C1EED87EE004AD639 /* livarot */ = {
+			isa = PBXGroup;
+			children = (
+				B0FE8D4D1EED87EE004AD639 /* AVL.cpp */,
+				B0FE8D4E1EED87EE004AD639 /* AVL.h */,
+				B0FE8D4F1EED87EE004AD639 /* DblLinked.cpp */,
+				B0FE8D501EED87EE004AD639 /* DblLinked.h */,
+				B0FE8D511EED87EE004AD639 /* LivarotDefs.h */,
+				B0FE8D521EED87EE004AD639 /* MyMath.h */,
+				B0FE8D531EED87EE004AD639 /* Path.cpp */,
+				B0FE8D541EED87EE004AD639 /* Path.h */,
+				B0FE8D551EED87EE004AD639 /* PathConversion.cpp */,
+				B0FE8D561EED87EE004AD639 /* Shape.cpp */,
+				B0FE8D571EED87EE004AD639 /* Shape.h */,
+				B0FE8D581EED87EE004AD639 /* ShapeMisc.cpp */,
+				B0FE8D591EED87EE004AD639 /* ShapeSweep.cpp */,
+				B0FE8D5A1EED87EE004AD639 /* ShapeSweepUtils.cpp */,
+				B0FE8D5B1EED87EE004AD639 /* ShapeUtils.h */,
+			);
+			path = livarot;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -373,6 +601,7 @@
 				B012EF191ED436B000198D87 /* laferrari.jpg in Resources */,
 				B012EEF41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg in Resources */,
 				B012EEA91ED27AB700198D87 /* Main.storyboard in Resources */,
+				B02F65491EEFD360008196F9 /* BlendModes.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,28 +626,71 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B02F65521EF0C6C1008196F9 /* KTImage.m in Sources */,
 				B012EF021ED27D0B00198D87 /* FBSolver.cpp in Sources */,
+				B02F65411EEF9877008196F9 /* KTText.m in Sources */,
+				B02F654F1EEFEFEA008196F9 /* KTImageData.mm in Sources */,
+				B012EF301EEA17AC00198D87 /* KTUtilities.m in Sources */,
 				B012EEEA1ED27C4500198D87 /* KTCropView.m in Sources */,
+				B0FE8D5E1EED87EE004AD639 /* Path.cpp in Sources */,
 				B012EF1C1ED6D59300198D87 /* GCMattor.cpp in Sources */,
+				B0FE8D361EECEFB8004AD639 /* KTStrokeStyle.m in Sources */,
 				B012EF031ED27D0B00198D87 /* LNSPMattor.cpp in Sources */,
 				B012EF051ED27D0B00198D87 /* SSMattor.cpp in Sources */,
 				B012EEF31ED27C4500198D87 /* ViewController.mm in Sources */,
+				B0FE8D611EED87EE004AD639 /* ShapeMisc.cpp in Sources */,
 				B012EEA11ED27AB700198D87 /* main.m in Sources */,
+				B0FE8D5D1EED87EE004AD639 /* DblLinked.cpp in Sources */,
+				B0FE8D391EED1758004AD639 /* KTGradient.m in Sources */,
+				B0FE8D241EEB6F23004AD639 /* KTGLUtilities.m in Sources */,
+				B0FE8D331EECE57C004AD639 /* KTFillTransform.m in Sources */,
+				B012EF281EE96D4B00198D87 /* KTElement.m in Sources */,
+				B02F655B1EF13056008196F9 /* KTSelectionView.m in Sources */,
+				B0FE8D161EEAA8B2004AD639 /* KTColor.m in Sources */,
 				B012EEF11ED27C4500198D87 /* KTToolbar.m in Sources */,
+				B012EF3F1EEA87AC00198D87 /* KTXMLElement.m in Sources */,
+				B0FE8D5F1EED87EE004AD639 /* PathConversion.cpp in Sources */,
 				B012EE9E1ED27AB700198D87 /* AppDelegate.m in Sources */,
+				B012EF361EEA466900198D87 /* KTBezierNode.m in Sources */,
+				B012EF391EEA788800198D87 /* KTLayer.m in Sources */,
+				B0FE8D421EED6DF9004AD639 /* KTAbstractPath.m in Sources */,
 				B012EF1F1ED918D200198D87 /* KTProgressIndicator.m in Sources */,
 				B012EEF21ED27C4500198D87 /* NSImage+Utils.mm in Sources */,
+				B0FE8D631EED87EE004AD639 /* ShapeSweepUtils.cpp in Sources */,
+				B0FE8D2A1EEBADA6004AD639 /* NSColor+Utils.m in Sources */,
 				B012EEEC1ED27C4500198D87 /* KTImageView.m in Sources */,
+				B02F65551EF0DCA4008196F9 /* KTCanvas.m in Sources */,
+				B0FE8D601EED87EE004AD639 /* Shape.cpp in Sources */,
+				B0FE8D211EEB66A2004AD639 /* KTShadow.m in Sources */,
+				B012EF331EEA19E300198D87 /* KTBezierSegment.m in Sources */,
 				B012EEF51ED27C4500198D87 /* WindowController.m in Sources */,
+				B02F65441EEFAB77008196F9 /* KTUserFont.m in Sources */,
 				B012EEEE1ED27C4500198D87 /* KTListViewItem.m in Sources */,
 				B012EF011ED27D0B00198D87 /* AlphaSolver.cpp in Sources */,
 				B012EEE81ED27C4500198D87 /* KTBrushView.m in Sources */,
+				B012EF3C1EEA7A3A00198D87 /* KTDrawing.m in Sources */,
+				B012EF421EEA891900198D87 /* KTSVGHelper.m in Sources */,
 				B012EEF01ED27C4500198D87 /* KTMattingPickerView.m in Sources */,
+				B0FE8D3F1EED5C9C004AD639 /* KTStylable.m in Sources */,
+				B0FE8D301EECDBC8004AD639 /* KTPropertyManager.m in Sources */,
+				B0FE8D451EED7170004AD639 /* KTPath.m in Sources */,
+				B02F654C1EEFE618008196F9 /* KTDrawingController.m in Sources */,
 				B012EEED1ED27C4500198D87 /* KTListView.m in Sources */,
+				B0FE8D2D1EEBB287004AD639 /* KTInspectableProperties.m in Sources */,
+				B0FE8D481EED7A34004AD639 /* KTArrowhead.m in Sources */,
+				B02F65471EEFB6DF008196F9 /* KTFontManager.m in Sources */,
 				B012EEE91ED27C4500198D87 /* KTButton.m in Sources */,
 				B012EF221ED9837C00198D87 /* KTMatteProcessor.mm in Sources */,
+				B0FE8D3C1EED1B39004AD639 /* KTGradientStop.m in Sources */,
+				B0FE8D1B1EEAF458004AD639 /* KTPickResult.m in Sources */,
 				B012EF041ED27D0B00198D87 /* PLNSPMattor.cpp in Sources */,
 				B012EEE71ED27C4500198D87 /* KTBackgroundPickerView.m in Sources */,
+				B0FE8D4B1EED812D004AD639 /* KTPathFinder.mm in Sources */,
+				B0FE8D5C1EED87EE004AD639 /* AVL.cpp in Sources */,
+				B012EF251EE968A000198D87 /* KTCurveFit.m in Sources */,
+				B0FE8D1E1EEAF6C6004AD639 /* KTGroup.m in Sources */,
+				B0FE8D621EED87EE004AD639 /* ShapeSweep.cpp in Sources */,
+				B08027941EED8B1D001851BB /* KTCompoundPath.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
