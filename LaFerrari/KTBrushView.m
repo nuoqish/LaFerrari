@@ -10,13 +10,19 @@
 
 #import "KTGLUtilities.h"
 
+@interface KTBrushView ()
+
+@end
+
+
 @implementation KTBrushView
 - (instancetype)initWithFrame:(NSRect)frameRect {
     self = [super initWithFrame:frameRect];
     
     if (self) {
+        _lineWith = 10.;
         
-        self.lineWith = 10.;
+        
     }
     
     return self;

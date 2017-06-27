@@ -9,12 +9,12 @@
 #import <Cocoa/Cocoa.h>
 
 @class KTCanvas;
-@class KTDrawing;
+@class KTLayer;
 
 @interface KTSelectionView : NSOpenGLView
 
-@property (nonatomic, weak) KTCanvas *canvas;
-@property (nonatomic, weak, readonly) KTDrawing *drawing;
+@property (nonatomic, strong) KTCanvas *canvas;
+@property (nonatomic, strong) KTLayer *activeLayer;
 
 - (void)drawView;
 

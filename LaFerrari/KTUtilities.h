@@ -71,7 +71,7 @@ static inline CGPoint KTBlendPoints(CGPoint a, CGPoint b, float ratio) {
 }
 
 static inline float KTMagnitudeVector(CGPoint vector) {
-    return vector.x * vector.x + vector.y * vector.y;
+    return sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 
 static inline CGPoint KTNormalizeVector(CGPoint point) {

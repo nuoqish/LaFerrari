@@ -37,6 +37,6 @@ extern NSString *KTInvalidPropertiesKey;
 - (KTStrokeStyle *)activeStrokeStyle;
 - (KTStrokeStyle *)defaultStrokeStyle;
 - (id<KTPathPainter>)activeFillStyle;
-- (id<KTPathPainter>)deafultFillStyle;
+- (id<KTPathPainter>)deafaultFillStyle;
 
 @end

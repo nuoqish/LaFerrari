@@ -19,5 +19,269 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LaFerrari/KTPropertyManager.m"
+            timestampString = "519295591.208694"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "-activeFillStyle"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LaFerrari/KTPropertyManager.m"
+            timestampString = "519295599.451553"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
+            landmarkName = "-activeStrokeStyle"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LaFerrari/KTPropertyManager.m"
+            timestampString = "519296287.31784"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "-defaultValueForProperty:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LaFerrari/KTUtilities.h"
+            timestampString = "519558912.163082"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "KTMultiplyPointScalar(CGPoint p, float s)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTMultiplyPointScalar"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519558912.183439"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTMultiplyPointScalar"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519558912.183612"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTMultiplyPointScalar"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519558912.18373"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTMultiplyPointScalar"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519558912.183839"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTMultiplyPointScalar(CGPoint, float)"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519558912.183948"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTMultiplyPointScalar"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519558912.18405"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "23">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LaFerrari/KTUtilities.h"
+            timestampString = "519558963.170681"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "KTAddPoints(CGPoint a, CGPoint b)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTAddPoints"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519559031.37961"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTAddPoints"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519559031.379807"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTAddPoints"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519559031.379957"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTAddPoints"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519559031.380088"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTAddPoints(CGPoint, CGPoint)"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519559031.380214"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "KTAddPoints"
+                  moduleName = "LaFerrari"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stanshen/Desktop/WorkSpace/ImageSpace/LaFerrari/LaFerrari/KTUtilities.h"
+                  timestampString = "519559031.380331"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

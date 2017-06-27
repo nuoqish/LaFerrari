@@ -24,9 +24,9 @@
         return nil;
     }
     
-    _selectionView = [[KTSelectionView alloc] initWithFrame:frameRect];
-    _selectionView.canvas = self;
-    [self addSubview:_selectionView];
+    //_selectionView = [[KTSelectionView alloc] initWithFrame:frameRect];
+    //_selectionView.canvas = self;
+    //[self addSubview:_selectionView];
     
     _canvasTransform = CGAffineTransformIdentity;
     _selectionTransform = CGAffineTransformIdentity;

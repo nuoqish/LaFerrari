@@ -13,6 +13,13 @@
 #import "KTDrawing.h"
 #import "KTDrawingController.h"
 #import "KTCanvas.h"
+#import "KTLayer.h"
+
+@interface KTSelectionView ()
+
+@property (nonatomic, assign) CGFloat viewScale;
+
+@end
 
 @implementation KTSelectionView {
     // pixel dimension of the backbuffer
@@ -21,18 +28,21 @@
     GLuint colorRenderbuffer, defaultFramebuffer;
 }
 
-- (instancetype)init {
-    self = [super init];
+- (instancetype)initWithFrame:(NSRect)frameRect {
+    self = [super initWithFrame:frameRect];
     
     if (!self) {
         return nil;
     }
     
     NSOpenGLPixelFormatAttribute attrs[] = {
+//        NSOpenGLPFADoubleBuffer,
+//        NSOpenGLPFADepthSize, 24,
+//        NSOpenGLPFAOpenGLProfile,
+//        NSOpenGLProfileVersion3_2Core,
+//        0
         NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFADepthSize, 24,
-        NSOpenGLPFAOpenGLProfile,
-        NSOpenGLProfileVersion3_2Core,
+        NSOpenGLPFAAccelerated, 0,
         0
     };
     
@@ -51,7 +61,8 @@
     [self setPixelFormat:pixelFormat];
     [self setOpenGLContext:context];
     [self setWantsBestResolutionOpenGLSurface:YES];
-
+    
+    
     // Create system framebuffer object
     glGenFramebuffers(1, &defaultFramebuffer);
     glGenRenderbuffers(1, &colorRenderbuffer);
@@ -63,6 +74,8 @@
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnableClientState(GL_VERTEX_ARRAY);
     
+    self.layer.backgroundColor = [NSColor clearColor].CGColor;
+    _canvas = [[KTCanvas alloc] init];
     return self;
 }
 
@@ -104,6 +117,8 @@
     // viewRectPixels will be the same as viewRectPoints for non-retina displays
     NSRect viewRectPixels = [self convertRectToBacking:viewRectPoints];
     
+    self.viewScale = viewRectPixels.size.width / self.bounds.size.width;
+    
     backingWidth = (GLint)viewRectPixels.size.width;
     backingHeight = (GLint)viewRectPixels.size.height;
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, backingWidth, backingHeight);
@@ -111,6 +126,12 @@
     glViewport(0, 0, backingWidth, backingHeight);
     
     CGLUnlockContext([[self openGLContext] CGLContextObj]);
+}
+
+- (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
+    [super resizeSubviewsWithOldSize:oldSize];
+    [self reshape];
+    [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -123,25 +144,32 @@
 - (void)drawView {
     [[self openGLContext] makeCurrentContext];
     
+    CGLLockContext([[self openGLContext] CGLContextObj]);
+    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
-    glOrtho(0, backingWidth, 0, backingHeight, -1, 1); //?
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glClearColor(1, 1, 1, 1);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    
+    glOrtho(0, backingWidth / self.viewScale, 0, backingHeight / self.viewScale, -1, 1); //?
     glClear(GL_COLOR_BUFFER_BIT);
     
-    // draw the selection highlights
-    CGAffineTransform flip = CGAffineTransformMakeTranslation(0, self.bounds.size.height);
-    flip = CGAffineTransformScale(flip, 1.0, -1.0);
-    CGAffineTransform effective = _canvas.canvasTransform;
-    effective = CGAffineTransformConcat(effective, flip);
-    
-    KTDrawingController *drawController = _canvas.drawingController;
-    for (KTElement *element in drawController.selectedObjects) {
-        [element drawOpenGLHighlightWithTransform:_canvas.selectionTransform viewTransform:effective];
-        [element drawOpenGLHandlesWithTransform:_canvas.selectionTransform viewTransform:effective];
+    // draw the selection highlights and handles
+    CGAffineTransform viewTransform = CGAffineTransformIdentity;
+    for (KTElement *element in _activeLayer.elements) {
+        [element drawOpenGLHighlightWithTransform:_canvas.selectionTransform viewTransform:viewTransform];
+        [element drawOpenGLHandlesWithTransform:_canvas.selectionTransform viewTransform:viewTransform];
+        [element drawOpenGLAnchorsWithViewTransform:viewTransform];
     }
+    
+    CGLFlushDrawable([[self openGLContext] CGLContextObj]);
+    CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
 }
 

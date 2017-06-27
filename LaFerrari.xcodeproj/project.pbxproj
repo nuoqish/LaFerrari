@@ -58,6 +58,8 @@
 		B02F65521EF0C6C1008196F9 /* KTImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F65511EF0C6C1008196F9 /* KTImage.m */; };
 		B02F65551EF0DCA4008196F9 /* KTCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F65541EF0DCA4008196F9 /* KTCanvas.m */; };
 		B02F655B1EF13056008196F9 /* KTSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F655A1EF13056008196F9 /* KTSelectionView.m */; };
+		B02F67A51EF268EF008196F9 /* KTCanvasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F67A41EF268EF008196F9 /* KTCanvasViewController.m */; };
+		B02F67A81EF3CC90008196F9 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = B02F67A71EF3CC90008196F9 /* Defaults.plist */; };
 		B08027941EED8B1D001851BB /* KTCompoundPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B08027931EED8B1D001851BB /* KTCompoundPath.m */; };
 		B0FE8D161EEAA8B2004AD639 /* KTColor.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D151EEAA8B2004AD639 /* KTColor.m */; };
 		B0FE8D1B1EEAF458004AD639 /* KTPickResult.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D1A1EEAF458004AD639 /* KTPickResult.m */; };
@@ -199,6 +201,9 @@
 		B02F65541EF0DCA4008196F9 /* KTCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCanvas.m; sourceTree = "<group>"; };
 		B02F65591EF13056008196F9 /* KTSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTSelectionView.h; sourceTree = "<group>"; };
 		B02F655A1EF13056008196F9 /* KTSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTSelectionView.m; sourceTree = "<group>"; };
+		B02F67A31EF268EF008196F9 /* KTCanvasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCanvasViewController.h; sourceTree = "<group>"; };
+		B02F67A41EF268EF008196F9 /* KTCanvasViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCanvasViewController.m; sourceTree = "<group>"; };
+		B02F67A71EF3CC90008196F9 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
 		B08027921EED8B1D001851BB /* KTCompoundPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCompoundPath.h; sourceTree = "<group>"; };
 		B08027931EED8B1D001851BB /* KTCompoundPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCompoundPath.m; sourceTree = "<group>"; };
 		B0FE8D141EEAA8B2004AD639 /* KTColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTColor.h; sourceTree = "<group>"; };
@@ -310,6 +315,7 @@
 		B012EE9B1ED27AB700198D87 /* LaFerrari */ = {
 			isa = PBXGroup;
 			children = (
+				B02F67A61EF26AFE008196F9 /* Kato-Core */,
 				B0FE8D4C1EED87EE004AD639 /* livarot */,
 				B012EEF61ED27CD700198D87 /* AlphaSolver */,
 				B012EE9C1ED27AB700198D87 /* AppDelegate.h */,
@@ -318,6 +324,8 @@
 				B012EEE61ED27C4500198D87 /* WindowController.m */,
 				B012EEA21ED27AB700198D87 /* ViewController.h */,
 				B012EEE31ED27C4500198D87 /* ViewController.mm */,
+				B02F67A31EF268EF008196F9 /* KTCanvasViewController.h */,
+				B02F67A41EF268EF008196F9 /* KTCanvasViewController.m */,
 				B012EECC1ED27C4500198D87 /* KTBackgroundPickerView.h */,
 				B012EECD1ED27C4500198D87 /* KTBackgroundPickerView.m */,
 				B012EECE1ED27C4500198D87 /* KTBrushView.h */,
@@ -418,6 +426,7 @@
 				B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */,
 				B012EF181ED436B000198D87 /* laferrari.jpg */,
 				B02F65481EEFD360008196F9 /* BlendModes.plist */,
+				B02F67A71EF3CC90008196F9 /* Defaults.plist */,
 				B012EEA51ED27AB700198D87 /* Assets.xcassets */,
 				B012EEA71ED27AB700198D87 /* Main.storyboard */,
 				B012EEAA1ED27AB700198D87 /* Info.plist */,
@@ -469,6 +478,13 @@
 				B012EF1B1ED6D59300198D87 /* GCMattor.hpp */,
 			);
 			name = AlphaSolver;
+			sourceTree = "<group>";
+		};
+		B02F67A61EF26AFE008196F9 /* Kato-Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Kato-Core";
 			sourceTree = "<group>";
 		};
 		B0FE8D4C1EED87EE004AD639 /* livarot */ = {
@@ -597,6 +613,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B012EEA61ED27AB700198D87 /* Assets.xcassets in Resources */,
+				B02F67A81EF3CC90008196F9 /* Defaults.plist in Resources */,
 				B012EEEF1ED27C4500198D87 /* KTListViewItem.xib in Resources */,
 				B012EF191ED436B000198D87 /* laferrari.jpg in Resources */,
 				B012EEF41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg in Resources */,
@@ -655,6 +672,7 @@
 				B012EF391EEA788800198D87 /* KTLayer.m in Sources */,
 				B0FE8D421EED6DF9004AD639 /* KTAbstractPath.m in Sources */,
 				B012EF1F1ED918D200198D87 /* KTProgressIndicator.m in Sources */,
+				B02F67A51EF268EF008196F9 /* KTCanvasViewController.m in Sources */,
 				B012EEF21ED27C4500198D87 /* NSImage+Utils.mm in Sources */,
 				B0FE8D631EED87EE004AD639 /* ShapeSweepUtils.cpp in Sources */,
 				B0FE8D2A1EEBADA6004AD639 /* NSColor+Utils.m in Sources */,

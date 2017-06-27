@@ -18,9 +18,14 @@ using namespace cv;
 #import "KTBrushView.h"
 #import "KTCropView.h"
 #import "KTListView.h"
+#import "KTSelectionView.h"
 #import "KTBackgroundPickerView.h"
 #import "KTMattingPickerView.h"
 #import "KTProgressIndicator.h"
+#import "KTLayer.h"
+#import "KTPropertyManager.h"
+#import "KTInspectableProperties.h"
+#import "KTPath.h"
 
 @interface ViewController () <KTCropViewDelegate, KTListViewDelegate , KTBackgroundPickerViewDelegate, KTMattingPickerViewDelegate>
 
@@ -40,6 +45,7 @@ using namespace cv;
 
 @property (nonatomic, strong) KTImageView *editingView;
 @property (nonatomic, strong) NSImageView *maskImageView;
+@property (nonatomic, strong) KTSelectionView *selectionView;
 @property (nonatomic, strong) KTImageView *previewingView;
 @property (nonatomic, strong) KTBrushView *brushView;
 @property (nonatomic, strong) KTCropView *cropView;
@@ -118,6 +124,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
     
     [self.editingView addCustomView:self.maskImageView];
     [self.editingView addCustomView:self.brushView];
+    //[self.editingView addCustomView:self.selectionView];
     [self.editingView addCustomView:self.cropView];
 
 }
@@ -184,6 +191,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
         self.maskImageView.frame = self.editingView.imageFrame;
         self.brushView.frame = self.editingView.imageFrame;
         self.cropView.frame = self.editingView.imageFrame;
+        self.selectionView.frame = self.editingView.imageFrame;
         
         self.previewingView.frame = NSMakeRect(fileListViewWidth + editViewMaxWidth + kMiddleWidth * 2 + (editViewMaxWidth - editViewWidth) / 2, kBottomIndicatorHeight + (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
         self.previewingView.magnification = self.editingImageViewZoomingScale;
@@ -207,6 +215,25 @@ static const CGFloat kBottomIndicatorHeight = 20;
         _previewingView = [[KTImageView alloc] init];
     }
     return _previewingView;
+}
+
+- (KTSelectionView *)selectionView {
+    if (!_selectionView) {
+        _selectionView = [[KTSelectionView alloc] init];
+        KTLayer *_drawlayer = [[KTLayer alloc] init];
+        KTPropertyManager *_propertyManager = [[KTPropertyManager alloc] init];
+        KTPath *_tmpPath = [[KTPath alloc] initWithRoundedRect:CGRectMake(10, 10, 200, 100) cornerRadius:20];
+        
+        _tmpPath.fill = [_propertyManager activeFillStyle];
+        _tmpPath.strokeStyle = [_propertyManager activeStrokeStyle];
+        _tmpPath.opacity = [[_propertyManager defaultValueForProperty:KTOpacityProperty] floatValue];
+        _tmpPath.shadow = [_propertyManager activeShadow];
+        
+        [_drawlayer addObject:_tmpPath];
+        
+        _selectionView.activeLayer = _drawlayer;
+    }
+    return _selectionView;
 }
 
 - (NSImageView *)maskImageView {

@@ -599,12 +599,12 @@ float KtBezierSegmentGetOutAngle(KTBezierSegment seg) {
     return atan2f(delta.y, delta.x);
 }
 
-inline float firstDerivative(float A, float B, float C, float D, float t)
+float firstDerivative(float A, float B, float C, float D, float t)
 {
     return -3*A*(1-t)*(1-t) + 3*B*(1-t)*(1-t) - 6*B*(1-t)*t + 6*C*(1-t)*t - 3*C*t*t + 3*D*t*t;
 }
 
-inline  float secondDerivative(float A, float B, float C, float D, float t)
+float secondDerivative(float A, float B, float C, float D, float t)
 {
     return 6*A*(1-t) - 12*B*(1-t) + 6*C*(1-t) + 6*B*t - 12*C*t + 6*D*t;
 }

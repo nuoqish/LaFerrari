@@ -93,8 +93,9 @@ static KTBezierCurve GenerateBezierCurve(CGPoint *d, int first, int last, double
         
         CGPoint tmp = KTMultiplyPointScalar(d[last], B3(uPrime[i]));
         tmp = KTAddPoints(KTMultiplyPointScalar(d[last], B2(uPrime[i])), tmp);
-        tmp = KTAddPoints(KTMultiplyPointScalar(d[last], B1(uPrime[i])), tmp);
-        tmp = KTAddPoints(KTMultiplyPointScalar(d[last], B0(uPrime[i])), tmp);
+        tmp = KTAddPoints(KTMultiplyPointScalar(d[first], B1(uPrime[i])), tmp);
+        tmp = KTAddPoints(KTMultiplyPointScalar(d[first], B0(uPrime[i])), tmp);
+        tmp = KTSubtractPoints(d[first + i], tmp);
         
         X[0] += KTDotProductVectors(A[i][0], tmp);
         X[1] += KTDotProductVectors(A[i][1], tmp);
@@ -326,7 +327,7 @@ int FitCurve(KTBezierSegment *segments, CGPoint *d, int nPtrs, double error) {
 
 + (KTPath *)pathFromSegments:(KTBezierSegment *)segments numSegments:(NSUInteger)numSegments closePath:(BOOL)closePath {
     
-    NSMutableArray *nodes = @{}.mutableCopy;
+    NSMutableArray *nodes = @[].mutableCopy;
     
     KTBezierNode *node;
     for (int i = 0; i < numSegments; i++) {
