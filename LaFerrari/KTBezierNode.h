@@ -55,4 +55,6 @@ typedef enum {
 
 - (void)drawGLWithViewTransform:(CGAffineTransform)transform color:(NSColor *)color mode:(KTBezierNodeRenderMode)renderMode;
 
+- (void)drawNodeWithCGContext:(CGContextRef) ctx ViewTransform:(CGAffineTransform)transform colosr:(KTColor *)color mode:(KTBezierNodeRenderMode)renderMode;
+
 @end

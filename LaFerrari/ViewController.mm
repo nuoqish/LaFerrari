@@ -26,6 +26,7 @@ using namespace cv;
 #import "KTPropertyManager.h"
 #import "KTInspectableProperties.h"
 #import "KTPath.h"
+#import "KTMaskView.h"
 
 @interface ViewController () <KTCropViewDelegate, KTListViewDelegate , KTBackgroundPickerViewDelegate, KTMattingPickerViewDelegate>
 
@@ -54,6 +55,8 @@ using namespace cv;
 @property (nonatomic, strong) KTMattingPickerView *mattingPicker;
 @property (nonatomic, strong) NSBox *verticalSeparator;
 @property (nonatomic, strong) KTProgressIndicator *progressIndictor;
+
+@property (nonatomic, strong) KTMaskView *maskView;
 
 @end
 
@@ -85,8 +88,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
     [self commonInit];
     [self setupTimerIfNeeded];
     
-    self.sourceImage = [NSImage imageNamed:@"laferrari.jpg"];
-    [self.view.window setTitleWithRepresentedFilename:@"LaFerrari"];
+    self.sourceImage = [NSImage imageNamed:@"VOL3_单品_鞋子_11.jpeg"];
 }
 
 - (void)viewDidLayout {
@@ -122,9 +124,9 @@ static const CGFloat kBottomIndicatorHeight = 20;
     [self.view addSubview:self.previewingView];
     [self.view addSubview:self.mattingPicker];
     
-    [self.editingView addCustomView:self.maskImageView];
+    //[self.editingView addCustomView:self.maskImageView];
     [self.editingView addCustomView:self.brushView];
-    //[self.editingView addCustomView:self.selectionView];
+    [self.editingView addCustomView:self.maskView];
     [self.editingView addCustomView:self.cropView];
 
 }
@@ -172,6 +174,8 @@ static const CGFloat kBottomIndicatorHeight = 20;
     
     self.scaleRatio = imageSizeInPixels.width / resizeImageWidth;
     
+    NSLog(@"scaleRatio:%f",self.scaleRatio);
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         self.verticalSeparator.frame = NSMakeRect(fileListViewWidth + (viewWidth - fileListViewWidth) / 2, 0, 1, viewHeight - kTabbarHeight);
         self.progressIndictor.frame = NSMakeRect(fileListViewWidth, 0, viewWidth - fileListViewWidth, kBottomIndicatorHeight);
@@ -191,7 +195,8 @@ static const CGFloat kBottomIndicatorHeight = 20;
         self.maskImageView.frame = self.editingView.imageFrame;
         self.brushView.frame = self.editingView.imageFrame;
         self.cropView.frame = self.editingView.imageFrame;
-        self.selectionView.frame = self.editingView.imageFrame;
+        self.maskView.frame = self.editingView.imageFrame;
+        self.maskView.scaleRatio = self.scaleRatio;
         
         self.previewingView.frame = NSMakeRect(fileListViewWidth + editViewMaxWidth + kMiddleWidth * 2 + (editViewMaxWidth - editViewWidth) / 2, kBottomIndicatorHeight + (editViewMaxHeight - editViewHeight) / 2, editViewWidth, editViewHeight);
         self.previewingView.magnification = self.editingImageViewZoomingScale;
@@ -234,6 +239,13 @@ static const CGFloat kBottomIndicatorHeight = 20;
         _selectionView.activeLayer = _drawlayer;
     }
     return _selectionView;
+}
+
+- (KTMaskView *)maskView {
+    if (!_maskView) {
+        _maskView = [KTMaskView new];
+    }
+    return _maskView;
 }
 
 - (NSImageView *)maskImageView {
@@ -328,6 +340,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
     self.previewingView.image = sourceImage;
     self.maskImageView.image = nil;
     self.maskImageView.hidden = YES;
+    self.maskView.hidden = YES;
     self.cropView.hidden = YES;
     
     [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
@@ -350,7 +363,9 @@ static const CGFloat kBottomIndicatorHeight = 20;
     if (self.editViewDisplayMode == DisplayModeEditImage) {
         self.editingView.image = self.sourceImage;
         NSImage *alpha = self.matteProcessor.alphaImage;
+        
         if (alpha) {
+            self.maskView.maskImage = alpha;
             Vec4b maskForeColor = Vec4b(0,255,0,255);
             Vec4b maskBackColor = Vec4b(255,0,0,255);
             Vec4b maskUnknownColor = Vec4b(128,128,128,128);
@@ -372,11 +387,13 @@ static const CGFloat kBottomIndicatorHeight = 20;
             }
             self.maskImageView.image = [NSImage imageWithCVMat:maskColor];
             self.maskImageView.hidden = NO;
+            self.maskView.hidden = NO;
         }
         self.maskImageView.alphaValue = 0.5;
     }
     else if (self.editViewDisplayMode == DisplayModeSourceImage) {
         self.maskImageView.hidden = YES;
+        self.maskView.hidden = YES;
         self.cropView.hidden = YES;
     }
     
@@ -430,6 +447,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
                 self.editingView.image = image;
                 self.previewingView.image = matteProcessor.foregroundImage;
                 self.maskImageView.hidden = YES;
+                self.maskView.hidden = YES;
                 self.cropView.cropRect = matteProcessor.cropRect;
                 
             });
@@ -534,7 +552,7 @@ static const CGFloat kBottomIndicatorHeight = 20;
             return;
         }
         
-        NSImage *drawImage = [self.brushView generateMaskWithScale:self.scaleRatio];
+        NSImage *drawImage = [self.brushView genereateMaskWithSize:[self.sourceImage sizeInPixels]];
         
         if (self.selectMode == SelectModeForegroundTarget) {
             [self.matteProcessor updateMaskWithImage:drawImage andPixelMode:PixelModeForeground];
@@ -569,8 +587,8 @@ static const CGFloat kBottomIndicatorHeight = 20;
              self.selectMode == SelectModeUnknownAreaFineTuning){
         
         [self.progressIndictor startAnimation:nil withHintText:@"请稍侯，正在进行抠图处理"];
-        NSImage *drawImage = [self.brushView generateMaskWithScale:self.scaleRatio];
-        
+
+        NSImage *drawImage = [self.brushView genereateMaskWithSize:[self.sourceImage sizeInPixels]];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
             if (self.selectMode == SelectModeForegroundFineTuning) {

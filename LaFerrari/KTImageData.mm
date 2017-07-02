@@ -11,7 +11,7 @@
 #import "KTUtilities.h"
 #import "NSImage+Utils.h"
 
-NSString *KTImageDataKey = @"KTImageDataKey";
+NSString *KTImageDataDataKey = @"KTImageDataKey";
 
 @interface KTImageData ()
 
@@ -24,6 +24,15 @@ NSString *KTImageDataKey = @"KTImageDataKey";
 
 
 @implementation KTImageData
+
++ (KTImageData *)imageDataWithNSImage:(NSImage *)image {
+    
+    NSData *data = [image TIFFRepresentation];
+    //NSData *digest = KTSHA1DigestForData(data);
+    KTImageData *imageData = [KTImageData imageDataWithData:data];
+    
+    return imageData;
+}
 
 + (KTImageData *)imageDataWithData:(NSData *)data {
     return [[KTImageData alloc] initWithData:data];
@@ -39,12 +48,12 @@ NSString *KTImageDataKey = @"KTImageDataKey";
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
-    _data = [aDecoder decodeObjectForKey:KTImageDataKey];
+    _data = [aDecoder decodeObjectForKey:KTImageDataDataKey];
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:_data forKey:KTImageDataKey];
+    [aCoder encodeObject:_data forKey:KTImageDataDataKey];
 }
 
 -(id)copyWithZone:(NSZone *)zone {

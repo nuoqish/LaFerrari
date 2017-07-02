@@ -56,3 +56,11 @@ typedef enum {
 + (KTPickResult *) pickResult;
 
 @end
+
+
+KTPickResult *KTSnapToRectangle(CGRect rect, CGAffineTransform *transform, CGPoint point, float viewScale, int snapFlags);
+
+
+
+
+

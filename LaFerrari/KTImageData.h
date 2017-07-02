@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, KTImageDataFormat) {
 @property (nonatomic, readonly) CGRect naturalBounds;
 @property (nonatomic, readonly) KTImageDataFormat imageFormat;
 
++ (KTImageData *)imageDataWithNSImage:(NSImage *)image;
 + (KTImageData *)imageDataWithData:(NSData *)data;
 - (id)initWithData:(NSData *)data;
 

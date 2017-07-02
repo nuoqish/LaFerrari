@@ -11,12 +11,17 @@
 #import "KTSelectionView.h"
 #import "KTLayer.h"
 #import "KTPath.h"
+#import "KTImage.h"
 #import "KTGradient.h"
 #import "KTColor.h"
 #import "KTInspectableProperties.h"
 #import "KTPropertyManager.h"
 #import "KTBezierNode.h"
 #import "KTCurveFit.h"
+#import "KTGLUtilities.h"
+#import "KTBezierProcessor.h"
+#import "KTBezierNode.h"
+#import "KTMatteProcessor.h"
 
 @interface KTCanvasViewController ()
 
@@ -24,7 +29,7 @@
 
 @property (nonatomic, strong) KTLayer *drawlayer;
 @property (nonatomic, strong) KTPropertyManager *propertyManager;
-@property (nonatomic, strong) KTPath *tmpPath;
+
 @property (nonatomic, strong) NSMutableArray *points;
 
 @end
@@ -43,16 +48,30 @@
     _points = @[].mutableCopy;
     _drawlayer = [[KTLayer alloc] init];
     _propertyManager = [[KTPropertyManager alloc] init];
-    _tmpPath = [[KTPath alloc] initWithRoundedRect:CGRectMake(100, 10, 200, 400) cornerRadius:50];
-    
-    _tmpPath.fill = [_propertyManager activeFillStyle];
-    _tmpPath.strokeStyle = [_propertyManager activeStrokeStyle];
-    _tmpPath.opacity = [[_propertyManager defaultValueForProperty:KTOpacityProperty] floatValue];
-    _tmpPath.shadow = [_propertyManager activeShadow];
-    
-    //[_drawlayer addObject:_tmpPath];
     
     _selectionView.activeLayer = _drawlayer;
+    
+    
+    
+    NSImage *img = [NSImage imageNamed:@"VOL3_单品_鞋子_11.jpeg"];
+    
+    KTMatteProcessor *matteProcessor = [[KTMatteProcessor alloc] init];
+    [matteProcessor processImage:img andMode:MatteModeInitRect andRadius:5];
+    NSImage *alpha = matteProcessor.alphaImage;
+    
+    
+    
+    NSArray<NSArray<KTBezierNode *> *> *allNodes = [KTBezierProcessor processImage:alpha];
+    
+    [allNodes enumerateObjectsUsingBlock:^(NSArray<KTBezierNode *> * _Nonnull nodes, NSUInteger idx, BOOL * _Nonnull stop) {
+    //NSArray<KTBezierNode *> *nodes = allNodes[1];
+        KTPath *path = [[KTPath alloc] init];
+        path.nodes = nodes.mutableCopy;
+        path.closed = YES;
+        [path setDisplayColor:[KTColor randomColor]];
+        [_drawlayer addObject:path];
+    }];
+    
     
     
 }
@@ -65,8 +84,6 @@
     
     [_points addObject:[NSValue valueWithPoint:theEvent.locationInWindow]];
     
-    
-    [_selectionView drawView];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
@@ -75,8 +92,6 @@
     
     [_points addObject:[NSValue valueWithPoint:theEvent.locationInWindow]];
 
-    
-    [_selectionView drawView];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {

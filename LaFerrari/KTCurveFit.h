@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @class KTPath;
-
+@class KTBezierNode;
 @interface KTCurveFit : NSObject
 
 + (KTPath *)smoothPathForPoints:(NSArray *)points error:(float)epsilon attemptToClose:(BOOL)shouldClose;
++ (NSArray<KTBezierNode *> *)bezierNodesFromPoints:(NSArray *)points error:(float)epsilon attempToClose:(BOOL)shouldClose;
 
 @end

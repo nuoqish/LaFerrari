@@ -16,8 +16,11 @@
 @property (nonatomic, assign) CGAffineTransform transform;
 @property (nonatomic, readonly) KTImageData *imageData;
 
-+ (KTImage *)imageWithNSImage:(NSImage *)image inDrawing:(KTDrawing *)drawing;
-- (id)initWithNSImage:(NSImage *)image inDrawing:(KTDrawing *)drawing;
++ (KTImage *)imageWithNSImage:(NSImage *)image;
+- (id)initWithNSImage:(NSImage *)image;
+
+//+ (KTImage *)imageWithNSImage:(NSImage *)image inDrawing:(KTDrawing *)drawing;
+//- (id)initWithNSImage:(NSImage *)image inDrawing:(KTDrawing *)drawing;
 
 - (CGRect)naturalBounds;
 - (void)useTrackedImageData;

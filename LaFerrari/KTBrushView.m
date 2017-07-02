@@ -68,6 +68,8 @@
     }
     
     KTCGDrawBrushWithPoints(contextRef, self.pointsArray, self.lineWith);
+    //KTCGDrawTransparencyDiamondInRect(contextRef, CGRectMake(0, 0, 50, 50));
+    
     
     return contextRef;
 }

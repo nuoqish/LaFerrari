@@ -25,7 +25,6 @@
 		B012EEF11ED27C4500198D87 /* KTToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEE01ED27C4500198D87 /* KTToolbar.m */; };
 		B012EEF21ED27C4500198D87 /* NSImage+Utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */; };
 		B012EEF31ED27C4500198D87 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B012EEE31ED27C4500198D87 /* ViewController.mm */; };
-		B012EEF41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */; };
 		B012EEF51ED27C4500198D87 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = B012EEE61ED27C4500198D87 /* WindowController.m */; };
 		B012EF011ED27D0B00198D87 /* AlphaSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EEF71ED27D0B00198D87 /* AlphaSolver.cpp */; };
 		B012EF021ED27D0B00198D87 /* FBSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B012EEF91ED27D0B00198D87 /* FBSolver.cpp */; };
@@ -60,6 +59,8 @@
 		B02F655B1EF13056008196F9 /* KTSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F655A1EF13056008196F9 /* KTSelectionView.m */; };
 		B02F67A51EF268EF008196F9 /* KTCanvasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F67A41EF268EF008196F9 /* KTCanvasViewController.m */; };
 		B02F67A81EF3CC90008196F9 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = B02F67A71EF3CC90008196F9 /* Defaults.plist */; };
+		B02F67B51F04B07B008196F9 /* KTMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = B02F67B41F04B07B008196F9 /* KTMaskView.m */; };
+		B02F67B81F04DCF5008196F9 /* KTBezierProcessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = B02F67B71F04DCF5008196F9 /* KTBezierProcessor.mm */; };
 		B08027941EED8B1D001851BB /* KTCompoundPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B08027931EED8B1D001851BB /* KTCompoundPath.m */; };
 		B0FE8D161EEAA8B2004AD639 /* KTColor.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D151EEAA8B2004AD639 /* KTColor.m */; };
 		B0FE8D1B1EEAF458004AD639 /* KTPickResult.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FE8D1A1EEAF458004AD639 /* KTPickResult.m */; };
@@ -142,7 +143,6 @@
 		B012EEE11ED27C4500198D87 /* NSImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Utils.h"; sourceTree = "<group>"; };
 		B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSImage+Utils.mm"; sourceTree = "<group>"; };
 		B012EEE31ED27C4500198D87 /* ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
-		B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "VOL3_单品_鞋子_11.jpeg"; sourceTree = "<group>"; };
 		B012EEE51ED27C4500198D87 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
 		B012EEE61ED27C4500198D87 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 		B012EEF71ED27D0B00198D87 /* AlphaSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AlphaSolver.cpp; path = AlphaMattor/AlphaMattor/AlphaSolver/AlphaSolver.cpp; sourceTree = SOURCE_ROOT; };
@@ -204,6 +204,10 @@
 		B02F67A31EF268EF008196F9 /* KTCanvasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCanvasViewController.h; sourceTree = "<group>"; };
 		B02F67A41EF268EF008196F9 /* KTCanvasViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCanvasViewController.m; sourceTree = "<group>"; };
 		B02F67A71EF3CC90008196F9 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
+		B02F67B31F04B07B008196F9 /* KTMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTMaskView.h; sourceTree = "<group>"; };
+		B02F67B41F04B07B008196F9 /* KTMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTMaskView.m; sourceTree = "<group>"; };
+		B02F67B61F04DCF5008196F9 /* KTBezierProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTBezierProcessor.h; sourceTree = "<group>"; };
+		B02F67B71F04DCF5008196F9 /* KTBezierProcessor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KTBezierProcessor.mm; sourceTree = "<group>"; };
 		B08027921EED8B1D001851BB /* KTCompoundPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCompoundPath.h; sourceTree = "<group>"; };
 		B08027931EED8B1D001851BB /* KTCompoundPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCompoundPath.m; sourceTree = "<group>"; };
 		B0FE8D141EEAA8B2004AD639 /* KTColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTColor.h; sourceTree = "<group>"; };
@@ -330,6 +334,8 @@
 				B012EECD1ED27C4500198D87 /* KTBackgroundPickerView.m */,
 				B012EECE1ED27C4500198D87 /* KTBrushView.h */,
 				B012EECF1ED27C4500198D87 /* KTBrushView.m */,
+				B02F67B31F04B07B008196F9 /* KTMaskView.h */,
+				B02F67B41F04B07B008196F9 /* KTMaskView.m */,
 				B012EED01ED27C4500198D87 /* KTButton.h */,
 				B012EED11ED27C4500198D87 /* KTButton.m */,
 				B012EED21ED27C4500198D87 /* KTCropView.h */,
@@ -351,6 +357,8 @@
 				B012EEE21ED27C4500198D87 /* NSImage+Utils.mm */,
 				B012EF201ED9837C00198D87 /* KTMatteProcessor.h */,
 				B012EF211ED9837C00198D87 /* KTMatteProcessor.mm */,
+				B02F67B61F04DCF5008196F9 /* KTBezierProcessor.h */,
+				B02F67B71F04DCF5008196F9 /* KTBezierProcessor.mm */,
 				B02F65531EF0DCA4008196F9 /* KTCanvas.h */,
 				B02F65541EF0DCA4008196F9 /* KTCanvas.m */,
 				B02F65591EF13056008196F9 /* KTSelectionView.h */,
@@ -423,7 +431,6 @@
 				B0FE8D231EEB6F23004AD639 /* KTGLUtilities.m */,
 				B0FE8D281EEBADA6004AD639 /* NSColor+Utils.h */,
 				B0FE8D291EEBADA6004AD639 /* NSColor+Utils.m */,
-				B012EEE41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg */,
 				B012EF181ED436B000198D87 /* laferrari.jpg */,
 				B02F65481EEFD360008196F9 /* BlendModes.plist */,
 				B02F67A71EF3CC90008196F9 /* Defaults.plist */,
@@ -616,7 +623,6 @@
 				B02F67A81EF3CC90008196F9 /* Defaults.plist in Resources */,
 				B012EEEF1ED27C4500198D87 /* KTListViewItem.xib in Resources */,
 				B012EF191ED436B000198D87 /* laferrari.jpg in Resources */,
-				B012EEF41ED27C4500198D87 /* VOL3_单品_鞋子_11.jpeg in Resources */,
 				B012EEA91ED27AB700198D87 /* Main.storyboard in Resources */,
 				B02F65491EEFD360008196F9 /* BlendModes.plist in Resources */,
 			);
@@ -667,6 +673,7 @@
 				B012EEF11ED27C4500198D87 /* KTToolbar.m in Sources */,
 				B012EF3F1EEA87AC00198D87 /* KTXMLElement.m in Sources */,
 				B0FE8D5F1EED87EE004AD639 /* PathConversion.cpp in Sources */,
+				B02F67B51F04B07B008196F9 /* KTMaskView.m in Sources */,
 				B012EE9E1ED27AB700198D87 /* AppDelegate.m in Sources */,
 				B012EF361EEA466900198D87 /* KTBezierNode.m in Sources */,
 				B012EF391EEA788800198D87 /* KTLayer.m in Sources */,
@@ -700,6 +707,7 @@
 				B012EEE91ED27C4500198D87 /* KTButton.m in Sources */,
 				B012EF221ED9837C00198D87 /* KTMatteProcessor.mm in Sources */,
 				B0FE8D3C1EED1B39004AD639 /* KTGradientStop.m in Sources */,
+				B02F67B81F04DCF5008196F9 /* KTBezierProcessor.mm in Sources */,
 				B0FE8D1B1EEAF458004AD639 /* KTPickResult.m in Sources */,
 				B012EF041ED27D0B00198D87 /* PLNSPMattor.cpp in Sources */,
 				B012EEE71ED27C4500198D87 /* KTBackgroundPickerView.m in Sources */,

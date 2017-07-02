@@ -318,6 +318,49 @@ void KTGLDrawLineStrip(GLfloat *vertices, NSUInteger count) {
 }
 
 
+void KTCGDrawLineFromPointToPoint(CGContextRef ctx, CGPoint a, CGPoint b, CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha) {
+    
+    CGContextSaveGState(ctx);
+    
+    CGContextSetRGBStrokeColor(ctx, red, green, blue, alpha);
+    CGContextSetLineWidth(ctx, 1);
+    CGContextSetLineCap(ctx, kCGLineCapRound);
+    CGContextSetLineJoin(ctx, kCGLineJoinRound);
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, a.x, a.y);
+    CGPathAddLineToPoint(path, NULL, b.x, b.y);
+    CGPathCloseSubpath(path);
+    
+    CGContextAddPath(ctx, path);
+    CGContextStrokePath(ctx);
+    
+    CGContextRestoreGState(ctx);
+}
+
+void KTCGDrawRect(CGContextRef ctx, CGRect dest) {
+    CGContextSaveGState(ctx);
+    
+    CGContextSetGrayFillColor(ctx, 1.0, 1.0);
+    CGContextFillRect(ctx, dest);
+    
+    CGContextSetGrayFillColor(ctx, 0.5, 1.0);
+    CGContextStrokeRect(ctx, dest);
+    
+    CGContextRestoreGState(ctx);
+}
+
+void KTCGDrawCircle(CGContextRef ctx, CGRect dest) {
+    
+    CGContextSaveGState(ctx);
+    
+    CGContextSetGrayFillColor(ctx, 0.5, 1.0);
+    CGContextFillEllipseInRect(ctx, dest);
+
+    CGContextRestoreGState(ctx);
+}
+
+
 void KTCGDrawBrushWithPoints(CGContextRef ctx, NSArray *points, CGFloat brushWidth) {
     
     CGFloat red = 1.0, green = 1., blue = 1., alpha = 1.0;

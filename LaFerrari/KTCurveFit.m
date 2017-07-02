@@ -325,8 +325,47 @@ int FitCurve(KTBezierSegment *segments, CGPoint *d, int nPtrs, double error) {
     
 }
 
++ (NSArray<KTBezierNode *> *)bezierNodesFromPoints:(NSArray *)inPoints error:(float)epsilon attempToClose:(BOOL)shouldClose {
+    NSMutableArray *points = inPoints.mutableCopy;
+    CGPoint unboxedPts[points.count];
+    BOOL closePath = NO;
+    int ix = 0;
+    
+    // transfer the wrapped CGPoints to an unboxed array
+    for (NSValue *value in points) {
+        unboxedPts[ix++] = [value pointValue];
+    }
+    
+    // see if this path should be closed, and if so, average the first and last points
+    if (shouldClose && points.count > 3) {
+        CGPoint first = unboxedPts[0];
+        CGPoint last = unboxedPts[points.count - 1];
+        
+        if (KTDistanceL2(first, last) < (epsilon * 2)) {
+            closePath = YES;
+            unboxedPts[0] = KTAveragePoints(first, last);
+            unboxedPts[points.count - 1] = unboxedPts[0];
+        }
+    }
+    
+    // do the actual curve fitting
+    KTBezierSegment segments[points.count];
+    int numSegments = FitCurve(segments, unboxedPts, (int)points.count, epsilon);
+    
+    return [KTCurveFit bezierNodesFromSegments:segments numSegments:numSegments closePath:closePath];
+}
+
 + (KTPath *)pathFromSegments:(KTBezierSegment *)segments numSegments:(NSUInteger)numSegments closePath:(BOOL)closePath {
     
+    NSMutableArray *nodes = [KTCurveFit bezierNodesFromSegments:segments numSegments:numSegments closePath:closePath];
+    KTPath *path = [[KTPath alloc] init];
+    path.nodes = nodes;
+    path.closed = closePath;
+    
+    return path;
+}
+
++ (NSMutableArray<KTBezierNode *> *)bezierNodesFromSegments:(KTBezierSegment *)segments numSegments:(NSUInteger)numSegments closePath:(BOOL)closePath {
     NSMutableArray *nodes = @[].mutableCopy;
     
     KTBezierNode *node;
@@ -372,12 +411,7 @@ int FitCurve(KTBezierSegment *segments, CGPoint *d, int nPtrs, double error) {
                                               outPoint:KTAddPoints(node.anchorPoint, newOut)];
         
     }
-    
-    KTPath *path = [[KTPath alloc] init];
-    path.nodes = nodes;
-    path.closed = closePath;
-    
-    return path;
+    return nodes;
 }
 
 

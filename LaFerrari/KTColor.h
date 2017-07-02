@@ -61,4 +61,7 @@
 - (NSString *)hexValue;
 - (KTColor *)blendedColorWithFraction:(float)fraction ofColor:(KTColor *)color;
 
+
+- (void)getRed:(float *)red Green:(float *)green Blue:(float *)blue Alpha:(float *)alpha;
+
 @end

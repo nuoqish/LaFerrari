@@ -31,6 +31,9 @@ void KTGLRenderCGPathRef(CGPathRef pathRef);
 
 void KTGLDrawLineStrip(GLfloat *vertices, NSUInteger count);
 
+void KTCGDrawLineFromPointToPoint(CGContextRef ctx, CGPoint a, CGPoint b, CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha);
+void KTCGDrawRect(CGContextRef ctx, CGRect dest);
+void KTCGDrawCircle(CGContextRef ctx, CGRect dest);
 
 void KTCGDrawCheckersInRect(CGContextRef ctx, CGRect dest, int size);
 void KTCGDrawTransparencyDiamondInRect(CGContextRef ctx, CGRect dest);

@@ -306,6 +306,11 @@ void RGB2HSV(float r, float g, float b, float *h, float *s, float *v);
     return adjustment(self);
 }
 
+- (void)getRed:(float *)red Green:(float *)green Blue:(float *)blue Alpha:(float *)alpha {
+    
+    HSV2RGB(_hue, _saturation, _brightness, red, green, blue);
+    *alpha = 1.0;
+}
 
 @end
 

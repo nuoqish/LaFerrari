@@ -11,6 +11,7 @@
 #import "KTUtilities.h"
 #import "KTGLUtilities.h"
 #import "NSColor+Utils.h"
+#import "KTColor.h"
 
 NSString *KTPointArrayKey = @"KTPointArrayKey";
 
@@ -279,6 +280,38 @@ NSString *KTPointArrayKey = @"KTPointArrayKey";
     }
 }
 
+- (void)drawNodeWithCGContext:(CGContextRef)ctx ViewTransform:(CGAffineTransform)transform colosr:(KTColor *)color mode:(KTBezierNodeRenderMode)renderMode {
+    
+    CGPoint anchorPoint, inPoint, outPoint;
+    anchorPoint = CGPointApplyAffineTransform(_anchorPoint, transform);
+    inPoint = CGPointApplyAffineTransform(_inPoint, transform);
+    outPoint = CGPointApplyAffineTransform(_outPoint, transform);
+    
+    float red, green, blue, alpha;
+    [color getRed:&red Green:&green Blue:&blue Alpha:&alpha];
+    
+    if (renderMode == KTBezierNodeRenderSelected) {
+        
+        if ([self hasInPoint]) {
+            KTCGDrawLineFromPointToPoint(ctx, inPoint, anchorPoint, red, green, blue, alpha);
+        }
+        if ([self hasOutPoint]) {
+            KTCGDrawLineFromPointToPoint(ctx, outPoint, anchorPoint, red, green, blue, alpha);
+        }
+    }
+    
+    CGRect anchorRect = CGRectMake(_anchorPoint.x - kKTAnchorRadius, _anchorPoint.y - kKTAnchorRadius, kKTAnchorRadius * 2, kKTAnchorRadius * 2);
+    anchorRect = CGRectApplyAffineTransform(anchorRect, transform);
+    KTCGDrawRect(ctx, anchorRect);
+    
+    CGRect inRect = CGRectMake(_inPoint.x - kKTAnchorRadius, _inPoint.y - kKTAnchorRadius, kKTAnchorRadius * 2, kKTAnchorRadius * 2);
+    inRect = CGRectApplyAffineTransform(inRect, transform);
+    CGRect outRect = CGRectMake(_outPoint.x - kKTAnchorRadius, _outPoint.y - kKTAnchorRadius, kKTAnchorRadius * 2, kKTAnchorRadius * 2);
+    outRect = CGRectApplyAffineTransform(outRect, transform);
+    KTCGDrawCircle(ctx, inRect);
+    KTCGDrawCircle(ctx, outRect);
+    
+}
 
 
 @end

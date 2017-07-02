@@ -15,6 +15,8 @@
 #import "KTCanvas.h"
 #import "KTLayer.h"
 
+#import "KTGLUtilities.h"
+
 @interface KTSelectionView ()
 
 @property (nonatomic, assign) CGFloat viewScale;
@@ -139,6 +141,10 @@
     
     // Drawing code here.
     [self drawView];
+    
+    CGContextRef ctx = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    KTCGDrawTransparencyDiamondInRect(ctx, CGRectMake(50, 50, 100, 30));
+    
 }
 
 - (void)drawView {
@@ -154,11 +160,13 @@
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glClearColor(1, 1, 1, 1);
+    glClearColor(1, 1, 1, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
     
     glOrtho(0, backingWidth / self.viewScale, 0, backingHeight / self.viewScale, -1, 1); //?
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    //KTGLFillCircle(CGPointMake(50, 50),7, 20);
     
     // draw the selection highlights and handles
     CGAffineTransform viewTransform = CGAffineTransformIdentity;
